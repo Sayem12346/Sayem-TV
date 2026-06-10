@@ -1,0 +1,2551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sayem TV - Live Channels</title>
+<meta name="description" content="Sayem TV - Live TV Channels, Sports and More">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<style>
+/* ===== CSS VARIABLES ===== */
+:root {
+  --primary: #7c3aed;
+  --bg: #0a0a0f;
+  --accent: #22c55e;
+  --highlight: #f97316;
+  --text: #ffffff;
+  --border: #000000;
+  --card-bg: #13131a;
+  --sidebar-bg: #0f0f18;
+  --shadow-sm: 4px 4px 0px #000;
+  --shadow-lg: 8px 8px 0px #000;
+  --border-w: 2px;
+}
+.light-mode {
+  --bg: #f0f0f0;
+  --card-bg: #ffffff;
+  --sidebar-bg: #e0e0e8;
+  --text: #0a0a0f;
+}
+
+/* ===== RESET ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.3s, color 0.3s;
+}
+h1,h2,h3,h4,h5 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
+img { max-width: 100%; display: block; }
+input, select, textarea { font-family: 'DM Sans', sans-serif; }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+
+/* ===== LAYOUT ===== */
+.app-shell { display: flex; flex-direction: column; min-height: 100vh; }
+.main-layout { display: flex; flex: 1; margin-top: 64px; }
+
+/* ===== HEADER / NAVBAR ===== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  height: 64px;
+  background: var(--bg);
+  border-bottom: var(--border-w) solid var(--border);
+  box-shadow: 0 4px 0px #000;
+  display: flex; align-items: center;
+  padding: 0 20px;
+  gap: 16px;
+}
+.navbar-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--primary);
+  border: var(--border-w) solid var(--border);
+  padding: 6px 14px;
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.navbar-brand span { color: var(--accent); }
+.nav-links {
+  display: flex; gap: 4px; list-style: none; align-items: center;
+  overflow-x: auto; scrollbar-width: none; flex: 1;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a {
+  padding: 8px 14px;
+  font-weight: 700;
+  font-size: 13px;
+  border: var(--border-w) solid transparent;
+  white-space: nowrap;
+  display: block;
+  transition: all 0.15s;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.nav-links a:hover, .nav-links a.active {
+  background: var(--primary);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.navbar-actions { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
+.search-bar {
+  display: flex; align-items: center;
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  background: var(--card-bg);
+  overflow: hidden;
+  border-radius: 8px;
+}
+.search-bar input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 14px;
+  width: 180px;
+}
+.search-bar input::placeholder { color: #666; }
+.search-bar button {
+  background: var(--primary);
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  font-weight: 700;
+  font-size: 12px;
+  transition: all 0.15s;
+}
+.search-bar button:hover { background: var(--highlight); }
+.btn-icon {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.15s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-icon:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 #000; }
+.hamburger {
+  display: none;
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: var(--sidebar-bg);
+  border-right: var(--border-w) solid var(--border);
+  padding: 20px 0;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  flex-shrink: 0;
+  transition: transform 0.3s;
+}
+.sidebar-section { margin-bottom: 24px; }
+.sidebar-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #666;
+  padding: 0 16px;
+  margin-bottom: 8px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+.sidebar-item:hover, .sidebar-item.active {
+  background: rgba(124,58,237,0.15);
+  border-left-color: var(--primary);
+  color: var(--primary);
+}
+.sidebar-item .cat-count {
+  margin-left: auto;
+  background: var(--card-bg);
+  border: 1px solid #333;
+  padding: 2px 7px;
+  font-size: 11px;
+  border-radius: 20px;
+  font-weight: 700;
+}
+.sidebar-item.active .cat-count { background: var(--primary); border-color: var(--border); }
+.sidebar-icon { width: 20px; text-align: center; font-size: 15px; }
+
+/* ===== MAIN CONTENT ===== */
+.main-content { flex: 1; padding: 24px; overflow-x: hidden; }
+
+/* ===== HERO BANNER ===== */
+.hero-banners { margin-bottom: 32px; }
+.banner-container { position: relative; overflow: hidden; }
+.banner-slide {
+  display: none;
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-lg);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  min-height: 220px;
+  background: linear-gradient(135deg, #1a0a2e, #0a1a0f);
+  padding: 40px;
+  cursor: pointer;
+}
+.banner-slide.active { display: flex; align-items: center; gap: 32px; }
+.banner-slide::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.01) 40px,rgba(255,255,255,0.01) 80px);
+  pointer-events: none;
+}
+.banner-badge {
+  background: var(--highlight);
+  color: #000;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.banner-title { font-size: clamp(24px, 4vw, 40px); margin-bottom: 8px; }
+.banner-desc { color: #aaa; font-size: 14px; max-width: 400px; margin-bottom: 20px; }
+.banner-cta {
+  background: var(--accent);
+  color: #000;
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  padding: 10px 24px;
+  font-weight: 800;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: all 0.15s;
+  display: inline-block;
+}
+.banner-cta:hover { transform: translate(4px,4px); box-shadow: none; }
+.banner-img {
+  width: 160px; height: 120px;
+  object-fit: cover;
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: #1a1a2e;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+}
+.banner-dots {
+  display: flex; gap: 8px; margin-top: 16px; justify-content: center;
+}
+.banner-dot {
+  width: 12px; height: 12px;
+  border: var(--border-w) solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s;
+}
+.banner-dot.active { background: var(--primary); box-shadow: var(--shadow-sm); }
+
+/* ===== SECTION HEADERS ===== */
+.section-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: var(--border-w) solid var(--border);
+}
+.section-header h2 { font-size: 20px; }
+.section-header .section-line {
+  flex: 1; height: 2px; background: var(--border);
+}
+.section-header .count-badge {
+  background: var(--primary);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  border-radius: 4px;
+}
+.view-all-btn {
+  background: transparent;
+  border: var(--border-w) solid var(--border);
+  color: var(--text);
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.15s;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.view-all-btn:hover { transform: translate(2px,2px); box-shadow: none; background: var(--primary); }
+
+/* ===== CHANNEL GRID ===== */
+.channel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.channel-card {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+}
+.channel-card:hover { transform: translate(-4px,-4px); box-shadow: var(--shadow-lg); }
+.channel-thumb {
+  height: 130px;
+  background: #1a1a2e;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: var(--border-w) solid var(--border);
+}
+.channel-thumb img { width: 80px; height: 60px; object-fit: contain; }
+.channel-thumb .logo-placeholder {
+  width: 80px; height: 60px;
+  background: var(--primary);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  color: white;
+}
+.live-badge {
+  position: absolute; top: 8px; right: 8px;
+  background: var(--highlight);
+  color: #000;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  border: 1px solid #000;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 4px;
+}
+.live-badge::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #000; border-radius: 50%; margin-right: 4px; }
+.trending-badge {
+  position: absolute; top: 8px; left: 8px;
+  background: var(--primary);
+  color: white;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  border: 1px solid #000;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+.channel-info { padding: 12px; }
+.channel-name { font-size: 14px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.channel-cat { font-size: 11px; color: #888; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
+.channel-views { font-size: 11px; color: #666; margin-top: 4px; }
+
+/* ===== STATS BAR ===== */
+.stats-bar {
+  display: flex; gap: 16px; margin-bottom: 32px;
+  overflow-x: auto; scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.stats-bar::-webkit-scrollbar { display: none; }
+.stat-card {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  padding: 16px 20px;
+  flex-shrink: 0;
+  min-width: 140px;
+}
+.stat-number { font-size: 28px; font-weight: 800; color: var(--primary); }
+.stat-label { font-size: 12px; color: #888; font-weight: 500; text-transform: uppercase; margin-top: 2px; }
+
+/* ===== PLAYER PAGE ===== */
+.player-page { display: none; }
+.player-page.visible { display: block; }
+.player-wrapper {
+  background: #000;
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-lg);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  position: relative;
+}
+.player-wrapper video { width: 100%; max-height: 500px; display: block; }
+.player-controls-bar {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.player-channel-info { display: flex; align-items: center; gap: 12px; flex: 1; }
+.player-logo {
+  width: 48px; height: 48px;
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 8px;
+  background: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.player-logo img { width: 100%; height: 100%; object-fit: contain; }
+.player-channel-name { font-size: 18px; font-weight: 800; }
+.player-channel-cat { font-size: 12px; color: #888; font-weight: 600; }
+.player-btn {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  padding: 10px 20px;
+  font-weight: 700;
+  font-size: 13px;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+.player-btn:hover { transform: translate(2px,2px); box-shadow: none; }
+.player-btn.primary { background: var(--primary); color: white; }
+.player-btn.danger { background: var(--highlight); color: #000; }
+.player-error {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--highlight);
+  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.player-error-title { font-size: 16px; font-weight: 800; color: var(--highlight); margin-bottom: 8px; }
+.player-error-msg { font-size: 13px; color: #aaa; }
+
+/* ===== MINI PLAYER ===== */
+.mini-player {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 320px;
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-lg);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 900;
+  display: none;
+}
+.mini-player.visible { display: block; }
+.mini-player video { width: 100%; height: 180px; object-fit: cover; display: block; }
+.mini-player-info {
+  padding: 10px 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.mini-player-name { font-size: 13px; font-weight: 700; flex: 1; }
+.mini-close {
+  background: transparent; border: none; color: #888;
+  font-size: 18px; cursor: pointer; padding: 4px;
+}
+.mini-close:hover { color: var(--highlight); }
+.mini-expand {
+  background: var(--primary);
+  border: var(--border-w) solid var(--border);
+  box-shadow: 2px 2px 0 #000;
+  color: white;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ===== ADMIN PANEL ===== */
+.admin-page { display: none; }
+.admin-page.visible { display: flex; flex-direction: column; min-height: 100vh; background: var(--bg); }
+.admin-navbar {
+  background: var(--card-bg);
+  border-bottom: var(--border-w) solid var(--border);
+  box-shadow: 0 4px 0 #000;
+  padding: 0 24px;
+  height: 64px;
+  display: flex; align-items: center; gap: 16px;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 2000;
+}
+.admin-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--primary);
+  border: var(--border-w) solid var(--border);
+  padding: 5px 12px;
+  box-shadow: var(--shadow-sm);
+}
+.admin-body { display: flex; flex: 1; margin-top: 64px; }
+.admin-sidebar {
+  width: 220px;
+  background: var(--sidebar-bg);
+  border-right: var(--border-w) solid var(--border);
+  padding: 20px 0;
+  position: sticky; top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+.admin-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+.admin-nav-item:hover, .admin-nav-item.active {
+  background: rgba(124,58,237,0.15);
+  border-left-color: var(--primary);
+  color: var(--primary);
+}
+.admin-main { flex: 1; padding: 24px; overflow-x: hidden; }
+.admin-panel { display: none; }
+.admin-panel.visible { display: block; }
+
+/* ===== ADMIN CARDS ===== */
+.admin-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.admin-stat-card {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  padding: 20px;
+}
+.admin-stat-card .num { font-size: 32px; font-weight: 800; color: var(--primary); }
+.admin-stat-card .lbl { font-size: 11px; color: #888; font-weight: 700; text-transform: uppercase; margin-top: 4px; }
+
+/* ===== FORMS ===== */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 12px; font-weight: 800; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.06em; }
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  background: var(--bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 8px;
+  outline: none;
+  transition: box-shadow 0.15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  box-shadow: 4px 4px 0 var(--primary);
+  border-color: var(--primary);
+}
+.form-textarea { min-height: 100px; resize: vertical; }
+.form-select option { background: var(--card-bg); }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.btn-primary {
+  background: var(--primary);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: white;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 800;
+  border-radius: 8px;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.btn-primary:hover { transform: translate(4px,4px); box-shadow: none; }
+.btn-danger {
+  background: #ef4444;
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: white;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 800;
+  border-radius: 8px;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.btn-danger:hover { transform: translate(4px,4px); box-shadow: none; }
+.btn-success {
+  background: var(--accent);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: #000;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 800;
+  border-radius: 8px;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.btn-success:hover { transform: translate(4px,4px); box-shadow: none; }
+.btn-warning {
+  background: var(--highlight);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: #000;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 800;
+  border-radius: 8px;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+.btn-warning:hover { transform: translate(4px,4px); box-shadow: none; }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+
+/* ===== TABLES ===== */
+.admin-table-wrap {
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  overflow: hidden;
+  overflow-x: auto;
+}
+.admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.admin-table th {
+  background: var(--primary);
+  color: white;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 800;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.admin-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  vertical-align: middle;
+}
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-table tr:hover td { background: rgba(124,58,237,0.08); }
+.admin-table .logo-cell { width: 36px; height: 36px; object-fit: contain; border-radius: 4px; }
+
+/* ===== UPLOAD ZONE ===== */
+.upload-zone {
+  border: 3px dashed var(--primary);
+  background: rgba(124,58,237,0.05);
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.upload-zone:hover { background: rgba(124,58,237,0.12); }
+.upload-zone.dragover { background: rgba(124,58,237,0.2); border-style: solid; }
+.upload-zone-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+.upload-zone-sub { font-size: 13px; color: #888; }
+#m3u-file-input { display: none; }
+
+/* ===== NOTIFICATIONS ===== */
+.toast-container {
+  position: fixed; top: 80px; right: 20px; z-index: 9999;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  max-width: 300px;
+  animation: slideIn 0.2s ease;
+  display: flex; align-items: center; gap: 10px;
+}
+.toast.success { border-left: 4px solid var(--accent); }
+.toast.error { border-left: 4px solid #ef4444; }
+.toast.warning { border-left: 4px solid var(--highlight); }
+@keyframes slideIn {
+  from { transform: translateX(120%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ===== LOGIN SCREEN ===== */
+.login-screen {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  padding: 20px;
+}
+.login-card {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-lg);
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+}
+.login-logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 8px;
+}
+.login-logo span { color: var(--accent); }
+.login-subtitle { text-align: center; color: #888; font-size: 13px; margin-bottom: 32px; }
+
+/* ===== SECTION / PANEL ===== */
+.panel {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+.panel-title {
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: var(--border-w) solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.panel-icon {
+  width: 32px; height: 32px;
+  background: var(--primary);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+}
+
+/* ===== BADGE ===== */
+.badge {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #000;
+  border-radius: 4px;
+}
+.badge-primary { background: var(--primary); color: white; }
+.badge-success { background: var(--accent); color: #000; }
+.badge-warning { background: var(--highlight); color: #000; }
+.badge-danger { background: #ef4444; color: white; }
+
+/* ===== ACTIVITY LOG ===== */
+.log-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 13px;
+}
+.log-item:last-child { border-bottom: none; }
+.log-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: var(--accent); }
+.log-time { color: #666; font-size: 11px; margin-left: auto; white-space: nowrap; }
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 3000;
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.visible { display: flex; }
+.modal {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-lg);
+  border-radius: 12px;
+  width: 100%; max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: var(--border-w) solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-header h3 { font-size: 18px; font-weight: 800; }
+.modal-close {
+  background: transparent; border: none; color: #888;
+  font-size: 24px; cursor: pointer; line-height: 1;
+}
+.modal-close:hover { color: var(--highlight); }
+.modal-body { padding: 24px; }
+.modal-footer {
+  padding: 16px 24px;
+  border-top: var(--border-w) solid var(--border);
+  display: flex; gap: 10px; justify-content: flex-end;
+}
+
+/* ===== BOTTOM NAV (Mobile) ===== */
+.bottom-nav {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--sidebar-bg);
+  border-top: var(--border-w) solid var(--border);
+  box-shadow: 0 -4px 0 #000;
+  z-index: 800;
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+}
+.bottom-nav-items { display: flex; justify-content: space-around; }
+.bottom-nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  min-width: 44px; min-height: 44px; justify-content: center;
+  border-radius: 8px;
+  transition: all 0.15s;
+}
+.bottom-nav-item.active, .bottom-nav-item:hover { color: var(--primary); }
+.bottom-nav-icon { font-size: 20px; }
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+.empty-state-icon {
+  width: 64px; height: 64px;
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  margin: 0 auto 16px;
+}
+.empty-state h3 { font-size: 18px; margin-bottom: 8px; }
+.empty-state p { color: #888; font-size: 14px; }
+
+/* ===== TOGGLE ===== */
+.toggle-wrap { display: flex; align-items: center; gap: 10px; }
+.toggle { position: relative; width: 44px; height: 24px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: #333;
+  border: var(--border-w) solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 16px; height: 16px;
+  left: 3px; bottom: 2px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+.toggle input:checked + .toggle-slider { background: var(--primary); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+/* ===== PROGRESS ===== */
+.progress-bar {
+  height: 8px;
+  background: var(--card-bg);
+  border: 1px solid #333;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* ===== SEARCH RESULTS ===== */
+.search-results-list { display: flex; flex-direction: column; gap: 8px; }
+.search-result-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px;
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.search-result-item:hover { transform: translate(-2px,-2px); box-shadow: var(--shadow-lg); }
+.search-result-logo {
+  width: 44px; height: 44px;
+  border: var(--border-w) solid var(--border);
+  border-radius: 8px;
+  background: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.search-result-logo img { width: 100%; height: 100%; object-fit: contain; }
+
+/* ===== CATEGORY FILTER ===== */
+.cat-filter-bar {
+  display: flex; gap: 8px;
+  overflow-x: auto; scrollbar-width: none;
+  margin-bottom: 20px;
+  padding-bottom: 4px;
+}
+.cat-filter-bar::-webkit-scrollbar { display: none; }
+.cat-filter-btn {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  color: var(--text);
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+.cat-filter-btn:hover, .cat-filter-btn.active { background: var(--primary); transform: translate(2px,2px); box-shadow: none; }
+
+/* ===== FOOTER ===== */
+.site-footer {
+  background: var(--sidebar-bg);
+  border-top: var(--border-w) solid var(--border);
+  box-shadow: 0 -4px 0 #000;
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+}
+.site-footer strong { color: var(--primary); }
+
+/* ===== PAGE VIEWS ===== */
+.page-view { display: none; }
+.page-view.visible { display: block; }
+
+/* ===== DRAG DROP WIDGETS ===== */
+.widget-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px;
+  margin-bottom: 24px;
+}
+.widget {
+  background: var(--card-bg);
+  border: var(--border-w) solid var(--border);
+  box-shadow: var(--shadow-sm);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: grab;
+}
+.widget:active { cursor: grabbing; opacity: 0.7; }
+.widget-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.widget-title { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+.widget-drag-handle { color: #555; font-size: 16px; cursor: grab; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1023px) {
+  .sidebar { width: 200px; min-width: 200px; }
+  .channel-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+}
+@media (max-width: 767px) {
+  .navbar-brand { font-size: 16px; }
+  .nav-links { display: none; }
+  .search-bar input { width: 120px; }
+  .hamburger { display: block; }
+  .sidebar {
+    position: fixed; top: 64px; left: 0;
+    z-index: 700;
+    transform: translateX(-100%);
+    width: 260px;
+    height: calc(100vh - 64px);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .main-content { padding: 16px; padding-bottom: 80px; }
+  .channel-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .bottom-nav { display: block; }
+  .mini-player { width: 260px; bottom: 80px; right: 12px; }
+  .form-row { grid-template-columns: 1fr; }
+  .stats-bar { gap: 10px; }
+  .stat-card { min-width: 120px; padding: 12px 16px; }
+}
+@media (min-width: 1920px) {
+  body { font-size: 18px; }
+  .channel-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .channel-thumb { height: 160px; }
+  .sidebar { width: 280px; min-width: 280px; }
+  .navbar { height: 72px; }
+  .main-layout { margin-top: 72px; }
+  .navbar-brand { font-size: 26px; }
+  .sidebar-item { padding: 14px 20px; font-size: 16px; }
+  .channel-name { font-size: 16px; }
+  .live-badge { font-size: 12px; padding: 4px 10px; }
+  .btn-icon, .nav-links a { font-size: 15px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ===== ADMIN LOGIN ===== -->
+<div class="login-screen" id="adminLoginScreen" style="display:none;">
+  <div class="login-card">
+    <div class="login-logo">Sayem<span>TV</span></div>
+    <div class="login-subtitle">Admin Panel - Secure Login</div>
+    <div class="form-group">
+      <label class="form-label">Email</label>
+      <input type="email" id="loginEmail" class="form-input" placeholder="admin@sayemtv.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" id="loginPassword" class="form-input" placeholder="Enter password">
+    </div>
+    <button class="btn-primary" style="width:100%;margin-top:8px;" onclick="doAdminLogin()">Sign In</button>
+    <div style="margin-top:16px;text-align:center;">
+      <a href="#" onclick="showPublicSite()" style="font-size:13px;color:#888;">Back to Sayem TV</a>
+    </div>
+    <div style="margin-top:12px;padding:10px;background:rgba(124,58,237,0.1);border:1px solid var(--primary);border-radius:8px;font-size:12px;color:#aaa;text-align:center;">
+      Demo: admin@sayemtv.com / admin123
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div class="admin-page" id="adminPage">
+  <div class="admin-navbar">
+    <div class="admin-brand">Sayem<span style="color:var(--accent)">TV</span> Admin</div>
+    <span style="color:#888;font-size:13px;margin-left:8px;">Control Panel</span>
+    <div style="margin-left:auto;display:flex;gap:10px;align-items:center;">
+      <span id="adminUserLabel" style="font-size:13px;color:#aaa;"></span>
+      <button class="btn-icon" onclick="adminLogout()">Logout</button>
+      <button class="btn-icon" onclick="showPublicSite()">View Site</button>
+    </div>
+  </div>
+  <div class="admin-body">
+    <!-- Admin Sidebar -->
+    <div class="admin-sidebar" id="adminSidebar">
+      <div style="padding:0 10px;margin-bottom:8px;">
+        <div class="sidebar-title">Main</div>
+      </div>
+      <div class="admin-nav-item active" onclick="showAdminPanel('dashboard')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="admin-nav-item" onclick="showAdminPanel('channels')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg>
+        Channels
+      </div>
+      <div class="admin-nav-item" onclick="showAdminPanel('categories')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Categories
+      </div>
+      <div class="admin-nav-item" onclick="showAdminPanel('import')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        M3U Import
+      </div>
+      <div class="admin-nav-item" onclick="showAdminPanel('banners')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Banners
+      </div>
+      <div style="padding:0 10px;margin:16px 0 8px;">
+        <div class="sidebar-title">System</div>
+      </div>
+      <div class="admin-nav-item" onclick="showAdminPanel('settings')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 1 0 0 14.14"/></svg>
+        Settings
+      </div>
+      <div class="admin-nav-item" onclick="showAdminPanel('logs')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Activity Logs
+      </div>
+      <div class="admin-nav-item" onclick="showAdminPanel('backup')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Backup / Restore
+      </div>
+    </div>
+
+    <!-- Admin Main Area -->
+    <div class="admin-main">
+
+      <!-- Dashboard -->
+      <div class="admin-panel visible" id="panel-dashboard">
+        <h2 style="font-size:24px;margin-bottom:6px;">Dashboard</h2>
+        <p style="color:#888;font-size:13px;margin-bottom:24px;">Overview of Sayem TV platform</p>
+        <div class="admin-stat-grid" id="adminStatGrid"></div>
+        <div class="widget-grid" id="dashWidgets">
+          <div class="widget" draggable="true" data-widget="recent">
+            <div class="widget-header">
+              <span class="widget-title">Recent Channels</span>
+              <span class="widget-drag-handle">&#8942;</span>
+            </div>
+            <div id="widgetRecentChannels" style="font-size:13px;"></div>
+          </div>
+          <div class="widget" draggable="true" data-widget="cats">
+            <div class="widget-header">
+              <span class="widget-title">Category Breakdown</span>
+              <span class="widget-drag-handle">&#8942;</span>
+            </div>
+            <div id="widgetCatBreakdown" style="font-size:13px;"></div>
+          </div>
+          <div class="widget" draggable="true" data-widget="logs">
+            <div class="widget-header">
+              <span class="widget-title">Activity Feed</span>
+              <span class="widget-drag-handle">&#8942;</span>
+            </div>
+            <div id="widgetActivityFeed"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Channels -->
+      <div class="admin-panel" id="panel-channels">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
+          <div>
+            <h2 style="font-size:24px;margin-bottom:4px;">Channels</h2>
+            <p style="color:#888;font-size:13px;">Manage all TV channels</p>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn-primary btn-sm" onclick="openChannelModal()">Add Channel</button>
+            <button class="btn-danger btn-sm" onclick="confirmDeleteAll()">Delete All Channels</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
+            <input class="form-input" id="channelSearch" placeholder="Search channels..." style="max-width:260px;" oninput="renderAdminChannels()">
+            <select class="form-select" id="channelCatFilter" style="max-width:180px;" onchange="renderAdminChannels()">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Logo</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Status</th>
+                  <th>Views</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminChannelTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories -->
+      <div class="admin-panel" id="panel-categories">
+        <h2 style="font-size:24px;margin-bottom:24px;">Categories</h2>
+        <div class="panel">
+          <div class="panel-title">Add Category</div>
+          <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+            <div class="form-group" style="flex:1;min-width:200px;margin:0;">
+              <label class="form-label">Category Name</label>
+              <input class="form-input" id="newCatName" placeholder="e.g. Bangladesh">
+            </div>
+            <button class="btn-primary" onclick="addCategory()">Add Category</button>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">All Categories</div>
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr><th>Name</th><th>Slug</th><th>Channels</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="adminCatTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- M3U Import -->
+      <div class="admin-panel" id="panel-import">
+        <h2 style="font-size:24px;margin-bottom:8px;">M3U Import</h2>
+        <p style="color:#888;font-size:13px;margin-bottom:24px;">Upload M3U or M3U8 playlist to auto-import channels and categories</p>
+        <div class="panel">
+          <div class="panel-title">Upload Playlist File</div>
+          <div class="upload-zone" id="m3uDropZone" onclick="document.getElementById('m3u-file-input').click()">
+            <input type="file" id="m3u-file-input" accept=".m3u,.m3u8,.txt" onchange="handleM3UFile(this)">
+            <div class="upload-zone-title">Drop M3U / M3U8 file here</div>
+            <div class="upload-zone-sub" style="margin-top:8px;">or click to browse — .m3u, .m3u8, .txt supported</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Or Paste M3U Content</div>
+          <textarea class="form-textarea" id="m3uPasteArea" placeholder="#EXTM3U&#10;#EXTINF:-1 group-title=&quot;Bangladesh&quot; tvg-logo=&quot;https://example.com/logo.png&quot;,Somoy TV&#10;https://example.com/somoy.m3u8" style="min-height:160px;"></textarea>
+          <button class="btn-primary" style="margin-top:12px;" onclick="parseM3UText()">Import from Text</button>
+        </div>
+        <div class="panel" id="importResultPanel" style="display:none;">
+          <div class="panel-title">Import Results</div>
+          <div id="importResultContent"></div>
+        </div>
+      </div>
+
+      <!-- Banners -->
+      <div class="admin-panel" id="panel-banners">
+        <h2 style="font-size:24px;margin-bottom:24px;">Banners</h2>
+        <div class="panel">
+          <div class="panel-title">Add Banner</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Banner Title</label>
+              <input class="form-input" id="bannerTitle" placeholder="Banner heading">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Subtitle</label>
+              <input class="form-input" id="bannerSubtitle" placeholder="Short description">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Link (channel name or URL)</label>
+            <input class="form-input" id="bannerLink" placeholder="Channel name or #url">
+          </div>
+          <button class="btn-primary" onclick="addBanner()">Add Banner</button>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Manage Banners (drag to reorder)</div>
+          <div id="adminBannerList"></div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="admin-panel" id="panel-settings">
+        <h2 style="font-size:24px;margin-bottom:24px;">Settings</h2>
+        <div class="panel">
+          <div class="panel-title">Site Settings</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Site Name</label>
+              <input class="form-input" id="settingSiteName" value="Sayem TV">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Footer Text</label>
+              <input class="form-input" id="settingFooter" value="Sayem">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Default Language</label>
+              <select class="form-select" id="settingLang">
+                <option value="en">English</option>
+                <option value="bn">Bangla</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Timezone</label>
+              <select class="form-select" id="settingTZ">
+                <option value="Asia/Dhaka">Asia/Dhaka (UTC+6)</option>
+                <option value="UTC">UTC</option>
+                <option value="Asia/Kolkata">Asia/Kolkata (UTC+5:30)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Theme</label>
+            <div style="display:flex;gap:10px;">
+              <button class="btn-primary btn-sm" onclick="setTheme('dark')">Dark Mode</button>
+              <button class="btn-warning btn-sm" onclick="setTheme('light')">Light Mode</button>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Custom CSS Injection</div>
+          <textarea class="form-textarea" id="settingCSS" placeholder="/* Custom CSS here */" style="min-height:120px;font-family:monospace;font-size:12px;"></textarea>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Admin Credentials</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Admin Email</label>
+              <input class="form-input" id="settingAdminEmail" value="admin@sayemtv.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input type="password" class="form-input" id="settingAdminPass" placeholder="Leave blank to keep current">
+            </div>
+          </div>
+          <button class="btn-primary" onclick="saveSettings()">Save All Settings</button>
+        </div>
+      </div>
+
+      <!-- Activity Logs -->
+      <div class="admin-panel" id="panel-logs">
+        <h2 style="font-size:24px;margin-bottom:24px;">Activity Logs</h2>
+        <div class="panel">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+            <span style="font-size:13px;color:#888;">Recent admin activity</span>
+            <button class="btn-danger btn-sm" onclick="clearLogs()">Clear Logs</button>
+          </div>
+          <div id="activityLogList"></div>
+        </div>
+      </div>
+
+      <!-- Backup -->
+      <div class="admin-panel" id="panel-backup">
+        <h2 style="font-size:24px;margin-bottom:24px;">Backup / Restore</h2>
+        <div class="panel">
+          <div class="panel-title">Export Data</div>
+          <p style="font-size:13px;color:#888;margin-bottom:16px;">Download all channels, categories, and settings as JSON</p>
+          <button class="btn-success" onclick="exportBackup()">Download Backup</button>
+        </div>
+        <div class="panel">
+          <div class="panel-title">Import Data</div>
+          <p style="font-size:13px;color:#888;margin-bottom:16px;">Restore from a previously exported JSON backup</p>
+          <input type="file" id="restoreFile" accept=".json" style="display:none;" onchange="importBackup(this)">
+          <button class="btn-warning" onclick="document.getElementById('restoreFile').click()">Upload Backup File</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== PUBLIC SITE ===== -->
+<div id="publicSite">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+    <div class="navbar-brand">Sayem<span>TV</span></div>
+    <ul class="nav-links" id="mainNavLinks">
+      <li><a href="#" class="active" onclick="navTo('home',this)">Home</a></li>
+      <li><a href="#" onclick="navTo('live',this)">Live TV</a></li>
+      <li><a href="#" onclick="navTo('sports',this)">Sports</a></li>
+      <li><a href="#" onclick="navTo('trending',this)">Trending</a></li>
+      <li><a href="#" onclick="navTo('recent',this)">Recently Added</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <div class="search-bar">
+        <input type="text" id="globalSearch" placeholder="Search channels..." oninput="handleGlobalSearch()">
+        <button onclick="handleGlobalSearch()">Search</button>
+      </div>
+      <button class="btn-icon" onclick="toggleTheme()" title="Toggle Theme">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Sidebar Overlay -->
+  <div id="sidebarOverlay" style="display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:699;" onclick="closeSidebar()"></div>
+
+  <!-- Main Layout -->
+  <div class="main-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="mainSidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-title">Navigate</div>
+        <div class="sidebar-item active" onclick="navTo('home',null,this)">
+          <div class="sidebar-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          Home
+        </div>
+        <div class="sidebar-item" onclick="navTo('live',null,this)">
+          <div class="sidebar-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg></div>
+          Live TV
+        </div>
+        <div class="sidebar-item" onclick="navTo('sports',null,this)">
+          <div class="sidebar-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div>
+          Sports
+        </div>
+        <div class="sidebar-item" onclick="navTo('trending',null,this)">
+          <div class="sidebar-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          Trending
+        </div>
+        <div class="sidebar-item" onclick="navTo('recent',null,this)">
+          <div class="sidebar-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          Recently Added
+        </div>
+        <div class="sidebar-item" onclick="navTo('history',null,this)">
+          <div class="sidebar-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="13" x2="15" y2="15"/></svg></div>
+          Watch History
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Categories</div>
+        <div id="sidebarCats"></div>
+      </div>
+    </aside>
+
+    <!-- Content -->
+    <main class="main-content">
+      <!-- HOME -->
+      <div class="page-view visible" id="page-home">
+        <div class="hero-banners" id="heroBannersSection">
+          <div class="banner-container" id="bannerContainer"></div>
+          <div class="banner-dots" id="bannerDots"></div>
+        </div>
+        <div class="stats-bar" id="statsBar"></div>
+        <div id="homeContent"></div>
+      </div>
+
+      <!-- LIVE TV -->
+      <div class="page-view" id="page-live">
+        <div class="section-header"><h2>Live TV</h2><div class="section-line"></div></div>
+        <div class="cat-filter-bar" id="liveCatFilter"></div>
+        <div class="channel-grid" id="liveChannelGrid"></div>
+      </div>
+
+      <!-- SPORTS -->
+      <div class="page-view" id="page-sports">
+        <div class="section-header"><h2>Sports</h2><div class="section-line"></div></div>
+        <div class="channel-grid" id="sportsChannelGrid"></div>
+      </div>
+
+      <!-- TRENDING -->
+      <div class="page-view" id="page-trending">
+        <div class="section-header"><h2>Trending</h2><div class="section-line"></div></div>
+        <div class="channel-grid" id="trendingChannelGrid"></div>
+      </div>
+
+      <!-- RECENTLY ADDED -->
+      <div class="page-view" id="page-recent">
+        <div class="section-header"><h2>Recently Added</h2><div class="section-line"></div></div>
+        <div class="channel-grid" id="recentChannelGrid"></div>
+      </div>
+
+      <!-- WATCH HISTORY -->
+      <div class="page-view" id="page-history">
+        <div class="section-header" style="justify-content:space-between;">
+          <h2>Watch History</h2>
+          <button class="view-all-btn" onclick="clearHistory()">Clear History</button>
+        </div>
+        <div id="historyContent"></div>
+      </div>
+
+      <!-- SEARCH RESULTS -->
+      <div class="page-view" id="page-search">
+        <div class="section-header">
+          <h2>Search Results</h2>
+          <div class="section-line"></div>
+          <span id="searchResultCount" class="count-badge"></span>
+        </div>
+        <div id="searchResults"></div>
+      </div>
+
+      <!-- PLAYER -->
+      <div class="page-view" id="page-player">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+          <button class="player-btn" onclick="goBackFromPlayer()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:4px;"><polyline points="15 18 9 12 15 6"/></svg>
+            Back
+          </button>
+          <div id="playerBreadcrumb" style="font-size:13px;color:#888;"></div>
+        </div>
+        <div class="player-wrapper" id="playerWrapper">
+          <video id="mainVideo" controls autoplay playsinline></video>
+        </div>
+        <div id="playerErrorBox" style="display:none;" class="player-error">
+          <div class="player-error-title">Stream Unavailable</div>
+          <div class="player-error-msg" id="playerErrorMsg">This channel stream could not be loaded. It may be offline.</div>
+        </div>
+        <div class="player-controls-bar">
+          <div class="player-channel-info">
+            <div class="player-logo" id="playerLogo"></div>
+            <div>
+              <div class="player-channel-name" id="playerChannelName"></div>
+              <div class="player-channel-cat" id="playerChannelCat"></div>
+            </div>
+          </div>
+          <span class="live-badge" style="position:relative;top:0;right:0;">LIVE</span>
+          <div class="toggle-wrap">
+            <label class="toggle"><input type="checkbox" id="autoNextToggle"><span class="toggle-slider"></span></label>
+            <span style="font-size:12px;font-weight:700;">Auto Next</span>
+          </div>
+        </div>
+        <div>
+          <div class="section-header"><h2>Related Channels</h2><div class="section-line"></div></div>
+          <div class="channel-grid" id="relatedChannels"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div style="margin-bottom:8px;"><strong id="footerBrandName">Sayem TV</strong> — Your Live TV Platform</div>
+    <div>© <strong id="footerOwner">Sayem</strong> — All rights reserved</div>
+  </footer>
+</div>
+
+<!-- ===== BOTTOM NAV ===== -->
+<div class="bottom-nav">
+  <div class="bottom-nav-items">
+    <div class="bottom-nav-item active" onclick="navTo('home')">
+      <div class="bottom-nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+      Home
+    </div>
+    <div class="bottom-nav-item" onclick="navTo('live')">
+      <div class="bottom-nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49"/></svg></div>
+      Live
+    </div>
+    <div class="bottom-nav-item" onclick="navTo('sports')">
+      <div class="bottom-nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20"/><path d="M2 12h20"/></svg></div>
+      Sports
+    </div>
+    <div class="bottom-nav-item" onclick="navTo('trending')">
+      <div class="bottom-nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg></div>
+      Trending
+    </div>
+    <div class="bottom-nav-item" onclick="navTo('history')">
+      <div class="bottom-nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+      History
+    </div>
+  </div>
+</div>
+
+<!-- ===== MINI PLAYER ===== -->
+<div class="mini-player" id="miniPlayer">
+  <video id="miniVideo" autoplay muted playsinline style="pointer-events:none;"></video>
+  <div class="mini-player-info">
+    <div class="mini-player-name" id="miniPlayerName"></div>
+    <button class="mini-expand" onclick="expandMiniPlayer()">Expand</button>
+    <button class="mini-close" onclick="closeMiniPlayer()">&#x2715;</button>
+  </div>
+</div>
+
+<!-- ===== CHANNEL MODAL ===== -->
+<div class="modal-overlay" id="channelModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="channelModalTitle">Add Channel</h3>
+      <button class="modal-close" onclick="closeChannelModal()">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editChannelId">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Channel Name</label>
+          <input class="form-input" id="chName" placeholder="e.g. Somoy TV">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-select" id="chCat"></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stream URL (.m3u8)</label>
+        <input class="form-input" id="chStream" placeholder="https://example.com/stream.m3u8">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Logo URL</label>
+        <input class="form-input" id="chLogo" placeholder="https://example.com/logo.png">
+      </div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap;">
+        <div class="toggle-wrap">
+          <label class="toggle"><input type="checkbox" id="chIsLive" checked><span class="toggle-slider"></span></label>
+          <span style="font-size:13px;font-weight:700;">Is Live</span>
+        </div>
+        <div class="toggle-wrap">
+          <label class="toggle"><input type="checkbox" id="chIsTrending"><span class="toggle-slider"></span></label>
+          <span style="font-size:13px;font-weight:700;">Trending</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="player-btn" onclick="closeChannelModal()">Cancel</button>
+      <button class="btn-primary" onclick="saveChannel()">Save Channel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CONFIRM MODAL ===== -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="confirmTitle">Confirm Action</h3>
+      <button class="modal-close" onclick="closeConfirmModal()">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirmMsg" style="font-size:14px;color:#ccc;"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="player-btn" onclick="closeConfirmModal()">Cancel</button>
+      <button class="btn-danger" id="confirmOkBtn">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+//  SAYEM TV - COMPLETE FRONTEND APP
+// ============================================================
+
+// ===== STATE =====
+const STATE = {
+  channels: [],
+  categories: [],
+  banners: [],
+  settings: { siteName:'Sayem TV', footer:'Sayem', lang:'en', tz:'Asia/Dhaka' },
+  logs: [],
+  adminCreds: { email:'admin@sayemtv.com', password:'admin123' },
+  currentPage: 'home',
+  currentChannel: null,
+  miniActive: false,
+  miniChannelId: null,
+  hlsInstance: null,
+  miniHls: null,
+  bannerTimer: null,
+  currentBanner: 0,
+  theme: 'dark',
+};
+
+// ===== SEED DATA =====
+function initData(){
+  if(!localStorage.getItem('sayemtv_channels')){
+    STATE.categories = [
+      {id:1,name:'Bangladesh',slug:'bangladesh',sort_order:0},
+      {id:2,name:'Sports',slug:'sports',sort_order:1},
+      {id:3,name:'News',slug:'news',sort_order:2},
+      {id:4,name:'Entertainment',slug:'entertainment',sort_order:3},
+    ];
+    STATE.channels = [
+      {id:1,name:'Somoy TV',stream_url:'https://live.somoy.tv/hls/stream.m3u8',logo_url:'',category_id:1,is_live:true,is_trending:true,is_recent:false,view_count:1240,sort_order:0},
+      {id:2,name:'Jamuna TV',stream_url:'https://live.jamuna.tv/hls/stream.m3u8',logo_url:'',category_id:1,is_live:true,is_trending:false,is_recent:true,view_count:980,sort_order:1},
+      {id:3,name:'Channel i',stream_url:'https://stream.channeli.tv/hls/live.m3u8',logo_url:'',category_id:4,is_live:true,is_trending:true,is_recent:false,view_count:760,sort_order:2},
+      {id:4,name:'T Sports',stream_url:'https://bss.com.bd/hls/tsports.m3u8',logo_url:'',category_id:2,is_live:true,is_trending:true,is_recent:true,view_count:2100,sort_order:3},
+      {id:5,name:'Gazi TV Sports',stream_url:'https://live.gazitv.com/hls/sports.m3u8',logo_url:'',category_id:2,is_live:true,is_trending:false,is_recent:false,view_count:890,sort_order:4},
+      {id:6,name:'Ekhon TV',stream_url:'https://live.ekhontv.com/hls/stream.m3u8',logo_url:'',category_id:3,is_live:true,is_trending:false,is_recent:true,view_count:440,sort_order:5},
+      {id:7,name:'NTV',stream_url:'https://live.ntvbd.com/hls/ntv.m3u8',logo_url:'',category_id:1,is_live:true,is_trending:false,is_recent:false,view_count:1500,sort_order:6},
+      {id:8,name:'RTV',stream_url:'https://live.rtvonline.com/hls/rtv.m3u8',logo_url:'',category_id:1,is_live:true,is_trending:true,is_recent:false,view_count:700,sort_order:7},
+    ];
+    STATE.banners = [
+      {id:1,title:'Live Sports Coverage',subtitle:'Watch T Sports, Gazi TV Sports and more live action',link:'T Sports',sort_order:0},
+      {id:2,title:'Bangladesh News 24/7',subtitle:'Stay updated with Somoy TV, Jamuna TV, NTV and more',link:'Somoy TV',sort_order:1},
+      {id:3,title:'Entertainment Channels',subtitle:'Channel i and more entertainment live now',link:'Channel i',sort_order:2},
+    ];
+    saveToStorage();
+  } else {
+    loadFromStorage();
+  }
+}
+
+function saveToStorage(){
+  localStorage.setItem('sayemtv_channels', JSON.stringify(STATE.channels));
+  localStorage.setItem('sayemtv_categories', JSON.stringify(STATE.categories));
+  localStorage.setItem('sayemtv_banners', JSON.stringify(STATE.banners));
+  localStorage.setItem('sayemtv_settings', JSON.stringify(STATE.settings));
+  localStorage.setItem('sayemtv_logs', JSON.stringify(STATE.logs.slice(0,100)));
+  localStorage.setItem('sayemtv_creds', JSON.stringify(STATE.adminCreds));
+}
+
+function loadFromStorage(){
+  STATE.channels = JSON.parse(localStorage.getItem('sayemtv_channels')||'[]');
+  STATE.categories = JSON.parse(localStorage.getItem('sayemtv_categories')||'[]');
+  STATE.banners = JSON.parse(localStorage.getItem('sayemtv_banners')||'[]');
+  STATE.settings = JSON.parse(localStorage.getItem('sayemtv_settings')||'{}');
+  STATE.logs = JSON.parse(localStorage.getItem('sayemtv_logs')||'[]');
+  STATE.adminCreds = JSON.parse(localStorage.getItem('sayemtv_creds')||'{"email":"admin@sayemtv.com","password":"admin123"}');
+}
+
+// ===== HELPERS =====
+function getCatName(id){ const c=STATE.categories.find(x=>x.id==id); return c?c.name:'Unknown'; }
+function getCatByName(name){ return STATE.categories.find(x=>x.name.toLowerCase()===name.toLowerCase()); }
+function getInitials(name){ return name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase(); }
+function slugify(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
+function nextId(arr){ return arr.length>0?Math.max(...arr.map(x=>x.id))+1:1; }
+function addLog(msg, type='info'){
+  STATE.logs.unshift({msg, type, time:new Date().toLocaleTimeString()});
+  saveToStorage();
+}
+function toast(msg, type='success'){
+  const c=document.getElementById('toastContainer');
+  const t=document.createElement('div');
+  t.className=`toast ${type}`;
+  const icon = type==='success'?'&#10003;':type==='error'?'&#x2715;':'&#33;';
+  t.innerHTML=`<span>${icon}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(120%)';setTimeout(()=>t.remove(),300);},3000);
+}
+
+// ===== LOGO RENDERER =====
+function renderLogo(ch, size=60){
+  if(ch.logo_url){
+    return `<img src="${ch.logo_url}" alt="${ch.name}" style="width:${size}px;height:${size*.7}px;object-fit:contain;" onerror="this.parentNode.innerHTML='<div class=logo-placeholder>${getInitials(ch.name)}</div>'">`;
+  }
+  return `<div class="logo-placeholder" style="width:${size}px;height:${Math.round(size*.7)}px;font-size:${size*0.22}px;">${getInitials(ch.name)}</div>`;
+}
+
+// ===== CHANNEL CARD =====
+function channelCard(ch){
+  const catName = getCatName(ch.category_id);
+  return `
+  <div class="channel-card" onclick="openPlayer(${ch.id})" tabindex="0" role="button" aria-label="Watch ${ch.name}" onkeydown="if(event.key==='Enter')openPlayer(${ch.id})">
+    <div class="channel-thumb">
+      ${renderLogo(ch,80)}
+      ${ch.is_live?`<div class="live-badge">LIVE</div>`:''}
+      ${ch.is_trending?`<div class="trending-badge">HOT</div>`:''}
+    </div>
+    <div class="channel-info">
+      <div class="channel-name" title="${ch.name}">${ch.name}</div>
+      <div class="channel-cat">${catName}</div>
+      <div class="channel-views">${(ch.view_count||0).toLocaleString()} views</div>
+    </div>
+  </div>`;
+}
+
+function renderGrid(containerId, channels){
+  const el=document.getElementById(containerId);
+  if(!el) return;
+  if(!channels.length){
+    el.innerHTML=`<div class="empty-state" style="grid-column:1/-1;">
+      <div class="empty-state-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/></svg></div>
+      <h3>No Channels Found</h3>
+      <p>Add channels from the Admin panel or import an M3U file.</p>
+    </div>`;
+  } else {
+    el.innerHTML = channels.map(channelCard).join('');
+  }
+}
+
+// ===== NAVIGATION =====
+function navTo(page, linkEl, sidebarEl){
+  STATE.currentPage = page;
+  document.querySelectorAll('.page-view').forEach(p=>p.classList.remove('visible'));
+  const pg = document.getElementById('page-'+page);
+  if(pg) pg.classList.add('visible');
+
+  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.remove('active'));
+  if(linkEl) linkEl.classList.add('active');
+
+  document.querySelectorAll('.sidebar-item').forEach(s=>s.classList.remove('active'));
+  if(sidebarEl) sidebarEl.classList.add('active');
+
+  document.querySelectorAll('.bottom-nav-item').forEach(b=>b.classList.remove('active'));
+
+  if(page==='home') renderHomePage();
+  if(page==='live') renderLivePage();
+  if(page==='sports') renderSportsPage();
+  if(page==='trending') renderTrendingPage();
+  if(page==='recent') renderRecentPage();
+  if(page==='history') renderHistoryPage();
+
+  closeSidebar();
+  window.scrollTo(0,0);
+}
+
+// ===== HOME =====
+function renderHomePage(){
+  renderBanners();
+  renderStatsBar();
+  const homeContent = document.getElementById('homeContent');
+  let html = '';
+  // Trending section
+  const trending = STATE.channels.filter(c=>c.is_trending);
+  if(trending.length){
+    html += `<div class="section-header"><h2>Trending</h2><div class="section-line"></div><span class="count-badge">${trending.length}</span><button class="view-all-btn" onclick="navTo('trending')">View All</button></div>
+    <div class="channel-grid">${trending.slice(0,8).map(channelCard).join('')}</div>`;
+  }
+  // Categories
+  STATE.categories.forEach(cat=>{
+    const chs = STATE.channels.filter(c=>c.category_id===cat.id);
+    if(!chs.length) return;
+    html += `<div class="section-header"><h2>${cat.name}</h2><div class="section-line"></div><span class="count-badge">${chs.length}</span><button class="view-all-btn" onclick="filterByCategory(${cat.id})">View All</button></div>
+    <div class="channel-grid">${chs.slice(0,8).map(channelCard).join('')}</div>`;
+  });
+  if(!html) html = `<div class="empty-state"><div class="empty-state-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg></div><h3>No Channels Yet</h3><p>Go to /admin to add channels or import an M3U playlist.</p></div>`;
+  homeContent.innerHTML = html;
+}
+
+function renderStatsBar(){
+  const el = document.getElementById('statsBar');
+  const liveCount = STATE.channels.filter(c=>c.is_live).length;
+  const totalViews = STATE.channels.reduce((a,b)=>a+(b.view_count||0),0);
+  el.innerHTML = [
+    {n:STATE.channels.length, l:'Total Channels'},
+    {n:liveCount, l:'Live Now'},
+    {n:STATE.categories.length, l:'Categories'},
+    {n:totalViews.toLocaleString(), l:'Total Views'},
+  ].map(s=>`<div class="stat-card"><div class="stat-number">${s.n}</div><div class="stat-label">${s.l}</div></div>`).join('');
+}
+
+// ===== BANNERS =====
+function renderBanners(){
+  const container = document.getElementById('bannerContainer');
+  const dots = document.getElementById('bannerDots');
+  if(!STATE.banners.length){
+    document.getElementById('heroBannersSection').style.display='none'; return;
+  }
+  document.getElementById('heroBannersSection').style.display='block';
+  container.innerHTML = STATE.banners.map((b,i)=>`
+  <div class="banner-slide ${i===0?'active':''}" onclick="bannerClick(${b.id})">
+    <div style="flex:1;">
+      <div class="banner-badge">LIVE NOW</div>
+      <h2 class="banner-title">${b.title}</h2>
+      <p class="banner-desc">${b.subtitle||''}</p>
+      <span class="banner-cta">Watch Now</span>
+    </div>
+    <div class="banner-img">${getInitials(b.title)}</div>
+  </div>`).join('');
+  dots.innerHTML = STATE.banners.map((_,i)=>`<div class="banner-dot ${i===0?'active':''}" onclick="goToBanner(${i})"></div>`).join('');
+  STATE.currentBanner = 0;
+  clearInterval(STATE.bannerTimer);
+  if(STATE.banners.length>1){
+    STATE.bannerTimer = setInterval(()=>goToBanner((STATE.currentBanner+1)%STATE.banners.length),5000);
+  }
+}
+function goToBanner(idx){
+  document.querySelectorAll('.banner-slide').forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.querySelectorAll('.banner-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+  STATE.currentBanner=idx;
+}
+function bannerClick(bannerId){
+  const banner = STATE.banners.find(b=>b.id===bannerId);
+  if(!banner) return;
+  const ch = STATE.channels.find(c=>c.name.toLowerCase().includes(banner.link.toLowerCase()));
+  if(ch) openPlayer(ch.id);
+}
+
+// ===== LIVE/SPORTS/TRENDING/RECENT =====
+function renderLivePage(){
+  const bar = document.getElementById('liveCatFilter');
+  bar.innerHTML = `<button class="cat-filter-btn active" onclick="filterLiveByCat(0,this)">All</button>`
+    + STATE.categories.map(c=>`<button class="cat-filter-btn" onclick="filterLiveByCat(${c.id},this)">${c.name}</button>`).join('');
+  renderGrid('liveChannelGrid', STATE.channels.filter(c=>c.is_live));
+}
+function filterLiveByCat(catId, btn){
+  document.querySelectorAll('#liveCatFilter .cat-filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  const chs = catId===0?STATE.channels.filter(c=>c.is_live):STATE.channels.filter(c=>c.is_live&&c.category_id===catId);
+  renderGrid('liveChannelGrid', chs);
+}
+function renderSportsPage(){ renderGrid('sportsChannelGrid', STATE.channels.filter(c=>getCatName(c.category_id).toLowerCase().includes('sport'))); }
+function renderTrendingPage(){ renderGrid('trendingChannelGrid', STATE.channels.filter(c=>c.is_trending)); }
+function renderRecentPage(){
+  const sorted = [...STATE.channels].sort((a,b)=>b.id-a.id).slice(0,20);
+  renderGrid('recentChannelGrid', sorted);
+}
+function filterByCategory(catId){
+  navTo('live');
+  setTimeout(()=>filterLiveByCat(catId, null),50);
+}
+
+// ===== SIDEBAR CATS =====
+function renderSidebarCats(){
+  const el = document.getElementById('sidebarCats');
+  el.innerHTML = STATE.categories.map(cat=>{
+    const count = STATE.channels.filter(c=>c.category_id===cat.id).length;
+    return `<div class="sidebar-item" onclick="filterByCategory(${cat.id})">
+      <div class="sidebar-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+      ${cat.name}
+      <span class="cat-count">${count}</span>
+    </div>`;
+  }).join('');
+}
+
+// ===== SEARCH =====
+function handleGlobalSearch(){
+  const q = document.getElementById('globalSearch').value.trim().toLowerCase();
+  if(!q) return;
+  const results = STATE.channels.filter(c=>c.name.toLowerCase().includes(q)||getCatName(c.category_id).toLowerCase().includes(q));
+  navTo('search');
+  document.getElementById('searchResultCount').textContent = results.length + ' results';
+  const el = document.getElementById('searchResults');
+  if(!results.length){
+    el.innerHTML=`<div class="empty-state"><h3>No Results</h3><p>No channels match "${q}".</p></div>`; return;
+  }
+  el.innerHTML = `<div class="search-results-list">${results.map(ch=>`
+  <div class="search-result-item" onclick="openPlayer(${ch.id})">
+    <div class="search-result-logo">${ch.logo_url?`<img src="${ch.logo_url}" onerror="this.style.display='none'">`:''}
+      <span>${getInitials(ch.name)}</span></div>
+    <div style="flex:1;">
+      <div style="font-weight:700;font-size:14px;">${ch.name}</div>
+      <div style="font-size:11px;color:#888;text-transform:uppercase;font-weight:700;">${getCatName(ch.category_id)}</div>
+    </div>
+    ${ch.is_live?`<span class="live-badge" style="position:relative;top:0;right:0;">LIVE</span>`:''}
+  </div>`).join('')}</div>`;
+}
+
+// ===== WATCH HISTORY =====
+function addToHistory(channelId){
+  let hist = JSON.parse(localStorage.getItem('sayemtv_history')||'[]');
+  hist = hist.filter(x=>x.id!==channelId);
+  hist.unshift({id:channelId, time:Date.now()});
+  hist = hist.slice(0,50);
+  localStorage.setItem('sayemtv_history', JSON.stringify(hist));
+}
+function renderHistoryPage(){
+  const hist = JSON.parse(localStorage.getItem('sayemtv_history')||'[]');
+  const el = document.getElementById('historyContent');
+  if(!hist.length){
+    el.innerHTML=`<div class="empty-state"><h3>No History</h3><p>Channels you watch will appear here.</p></div>`; return;
+  }
+  const channels = hist.map(h=>STATE.channels.find(c=>c.id===h.id)).filter(Boolean);
+  el.innerHTML = `<div class="channel-grid">${channels.map(channelCard).join('')}</div>`;
+}
+function clearHistory(){
+  localStorage.removeItem('sayemtv_history');
+  renderHistoryPage();
+  toast('Watch history cleared');
+}
+
+// ===== PLAYER =====
+function openPlayer(channelId){
+  const ch = STATE.channels.find(c=>c.id===channelId);
+  if(!ch) return;
+  STATE.currentChannel = ch;
+  ch.view_count = (ch.view_count||0)+1;
+  saveToStorage();
+  addToHistory(channelId);
+  navTo('player');
+
+  document.getElementById('playerBreadcrumb').textContent = `${getCatName(ch.category_id)} > ${ch.name}`;
+  document.getElementById('playerChannelName').textContent = ch.name;
+  document.getElementById('playerChannelCat').textContent = getCatName(ch.category_id);
+  const logoEl = document.getElementById('playerLogo');
+  logoEl.innerHTML = ch.logo_url?`<img src="${ch.logo_url}" style="width:100%;height:100%;object-fit:contain;" onerror="this.parentNode.innerHTML='${getInitials(ch.name)}'">`:getInitials(ch.name);
+
+  document.getElementById('playerErrorBox').style.display='none';
+  const video = document.getElementById('mainVideo');
+  initHLSPlayer(video, ch.stream_url, 'main');
+
+  // Related channels
+  const related = STATE.channels.filter(c=>c.category_id===ch.category_id&&c.id!==ch.id).slice(0,8);
+  renderGrid('relatedChannels', related);
+
+  // Mini player sync
+  if(STATE.miniActive){
+    STATE.miniChannelId = channelId;
+    document.getElementById('miniPlayerName').textContent = ch.name;
+  }
+}
+
+function initHLSPlayer(videoEl, url, type){
+  if(type==='main' && STATE.hlsInstance){ STATE.hlsInstance.destroy(); STATE.hlsInstance=null; }
+  if(type==='mini' && STATE.miniHls){ STATE.miniHls.destroy(); STATE.miniHls=null; }
+  if(!url){ showPlayerError('No stream URL configured.'); return; }
+
+  if(Hls.isSupported()){
+    const hls = new Hls({ enableWorker:true, lowLatencyMode:true });
+    hls.loadSource(url);
+    hls.attachMedia(videoEl);
+    hls.on(Hls.Events.MANIFEST_PARSED, ()=>{ videoEl.play().catch(()=>{}); });
+    hls.on(Hls.Events.ERROR, (e, data)=>{
+      if(data.fatal && type==='main') showPlayerError('Stream could not be loaded. The channel may be offline.');
+    });
+    if(type==='main') STATE.hlsInstance=hls;
+    else STATE.miniHls=hls;
+  } else if(videoEl.canPlayType('application/vnd.apple.mpegurl')){
+    videoEl.src = url;
+    videoEl.play().catch(()=>{});
+  } else {
+    if(type==='main') showPlayerError('HLS is not supported in this browser.');
+  }
+}
+function showPlayerError(msg){
+  document.getElementById('playerErrorBox').style.display='block';
+  document.getElementById('playerErrorMsg').textContent=msg;
+}
+function goBackFromPlayer(){
+  // Collapse to mini player
+  const ch = STATE.currentChannel;
+  if(ch){
+    STATE.miniActive=true;
+    STATE.miniChannelId=ch.id;
+    const miniPlayer=document.getElementById('miniPlayer');
+    miniPlayer.classList.add('visible');
+    document.getElementById('miniPlayerName').textContent=ch.name;
+    const miniVideo=document.getElementById('miniVideo');
+    initHLSPlayer(miniVideo, ch.stream_url, 'mini');
+  }
+  navTo('home');
+}
+function expandMiniPlayer(){
+  if(STATE.miniChannelId){ openPlayer(STATE.miniChannelId); closeMiniPlayer(); }
+}
+function closeMiniPlayer(){
+  STATE.miniActive=false;
+  document.getElementById('miniPlayer').classList.remove('visible');
+  if(STATE.miniHls){ STATE.miniHls.destroy(); STATE.miniHls=null; }
+  document.getElementById('miniVideo').src='';
+}
+
+// ===== SIDEBAR TOGGLE =====
+function toggleSidebar(){
+  const s=document.getElementById('mainSidebar');
+  const ov=document.getElementById('sidebarOverlay');
+  s.classList.toggle('open');
+  ov.style.display=s.classList.contains('open')?'block':'none';
+}
+function closeSidebar(){
+  const s=document.getElementById('mainSidebar');
+  const ov=document.getElementById('sidebarOverlay');
+  s.classList.remove('open');
+  ov.style.display='none';
+}
+
+// ===== THEME =====
+function toggleTheme(){
+  STATE.theme = STATE.theme==='dark'?'light':'dark';
+  applyTheme();
+}
+function setTheme(t){
+  STATE.theme=t;
+  applyTheme();
+  toast('Theme changed to '+t+' mode');
+}
+function applyTheme(){
+  if(STATE.theme==='light') document.body.classList.add('light-mode');
+  else document.body.classList.remove('light-mode');
+  localStorage.setItem('sayemtv_theme', STATE.theme);
+}
+
+// ===== ADMIN AUTH =====
+function isAdminPath(){ return window.location.hash==='#admin'; }
+function doAdminLogin(){
+  const email = document.getElementById('loginEmail').value;
+  const pass = document.getElementById('loginPassword').value;
+  if(email===STATE.adminCreds.email && pass===STATE.adminCreds.password){
+    sessionStorage.setItem('sayemtv_admin_auth','1');
+    showAdminPanel_full();
+    addLog('Admin logged in: '+email, 'success');
+  } else {
+    toast('Invalid credentials', 'error');
+  }
+}
+function adminLogout(){
+  sessionStorage.removeItem('sayemtv_admin_auth');
+  document.getElementById('adminPage').classList.remove('visible');
+  document.getElementById('adminLoginScreen').style.display='none';
+  document.getElementById('publicSite').style.display='flex';
+  document.getElementById('publicSite').style.flexDirection='column';
+  window.location.hash='';
+}
+function showPublicSite(){
+  document.getElementById('adminPage').classList.remove('visible');
+  document.getElementById('adminLoginScreen').style.display='none';
+  document.getElementById('publicSite').style.display='';
+  window.location.hash='';
+}
+function showAdminPanel_full(){
+  document.getElementById('adminLoginScreen').style.display='none';
+  document.getElementById('publicSite').style.display='none';
+  const ap = document.getElementById('adminPage');
+  ap.classList.add('visible');
+  document.getElementById('adminUserLabel').textContent = STATE.adminCreds.email;
+  renderAdminDashboard();
+  renderAdminChannels();
+  renderAdminCats();
+  renderAdminBanners();
+  renderAdminLogs();
+}
+
+// ===== ADMIN PANEL SWITCHING =====
+function showAdminPanel(name){
+  document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('visible'));
+  document.querySelectorAll('.admin-nav-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('visible');
+  event.currentTarget.classList.add('active');
+}
+
+// ===== DASHBOARD =====
+function renderAdminDashboard(){
+  const grid=document.getElementById('adminStatGrid');
+  const liveCount=STATE.channels.filter(c=>c.is_live).length;
+  grid.innerHTML=[
+    {n:STATE.channels.length,l:'Total Channels',c:'var(--primary)'},
+    {n:liveCount,l:'Live Channels',c:'var(--accent)'},
+    {n:STATE.categories.length,l:'Categories',c:'var(--highlight)'},
+    {n:STATE.banners.length,l:'Banners',c:'#a855f7'},
+  ].map(s=>`<div class="admin-stat-card"><div class="num" style="color:${s.c};">${s.n}</div><div class="lbl">${s.l}</div></div>`).join('');
+
+  // Widget: recent channels
+  document.getElementById('widgetRecentChannels').innerHTML=
+    STATE.channels.slice(-5).reverse().map(c=>`<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:8px;"><span style="font-weight:700;">${c.name}</span><span style="margin-left:auto;font-size:11px;color:#888;">${getCatName(c.category_id)}</span></div>`).join('') || '<p style="color:#888;font-size:12px;">No channels yet</p>';
+
+  // Widget: cat breakdown
+  document.getElementById('widgetCatBreakdown').innerHTML=
+    STATE.categories.map(cat=>{
+      const cnt=STATE.channels.filter(c=>c.category_id===cat.id).length;
+      const pct=STATE.channels.length?Math.round(cnt/STATE.channels.length*100):0;
+      return `<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span>${cat.name}</span><span style="font-weight:700;">${cnt}</span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%;"></div></div></div>`;
+    }).join('') || '<p style="color:#888;font-size:12px;">No categories</p>';
+
+  // Widget: activity
+  document.getElementById('widgetActivityFeed').innerHTML=
+    STATE.logs.slice(0,5).map(l=>`<div class="log-item"><div class="log-dot" style="background:${l.type==='error'?'#ef4444':l.type==='warning'?'var(--highlight)':'var(--accent)'}"></div><span>${l.msg}</span><span class="log-time">${l.time}</span></div>`).join('')||'<p style="color:#888;font-size:12px;">No activity yet</p>';
+}
+
+// ===== ADMIN CHANNELS =====
+function renderAdminChannels(){
+  const q=(document.getElementById('channelSearch')?.value||'').toLowerCase();
+  const catF=document.getElementById('channelCatFilter')?.value||'';
+
+  // Populate cat filter
+  const catSel=document.getElementById('channelCatFilter');
+  if(catSel) {
+    const prev=catSel.value;
+    catSel.innerHTML='<option value="">All Categories</option>'+STATE.categories.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+    catSel.value=prev;
+  }
+
+  let chs=STATE.channels;
+  if(q) chs=chs.filter(c=>c.name.toLowerCase().includes(q));
+  if(catF) chs=chs.filter(c=>c.category_id==catF);
+
+  const tbody=document.getElementById('adminChannelTable');
+  if(!chs.length){
+    tbody.innerHTML=`<tr><td colspan="6" style="text-align:center;color:#888;padding:24px;">No channels found</td></tr>`; return;
+  }
+  tbody.innerHTML=chs.map(ch=>`<tr>
+    <td><div style="width:36px;height:36px;background:var(--primary);border:1px solid #000;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;overflow:hidden;">${ch.logo_url?`<img src="${ch.logo_url}" style="width:100%;height:100%;object-fit:contain;" onerror="this.style.display='none'">`:''}${getInitials(ch.name)}</div></td>
+    <td style="font-weight:700;">${ch.name}</td>
+    <td><span class="badge badge-primary">${getCatName(ch.category_id)}</span></td>
+    <td><span class="badge ${ch.is_live?'badge-success':'badge-danger'}">${ch.is_live?'Live':'Offline'}</span></td>
+    <td>${(ch.view_count||0).toLocaleString()}</td>
+    <td><div style="display:flex;gap:6px;">
+      <button class="btn-warning btn-sm" onclick="openChannelModal(${ch.id})">Edit</button>
+      <button class="btn-danger btn-sm" onclick="deleteChannel(${ch.id})">Delete</button>
+    </div></td>
+  </tr>`).join('');
+}
+
+function openChannelModal(id){
+  const modal=document.getElementById('channelModal');
+  const catSel=document.getElementById('chCat');
+  catSel.innerHTML=STATE.categories.map(c=>`<option value="${c.id}">${c.name}</option>`).join('');
+  if(id){
+    const ch=STATE.channels.find(c=>c.id===id);
+    if(!ch) return;
+    document.getElementById('channelModalTitle').textContent='Edit Channel';
+    document.getElementById('editChannelId').value=id;
+    document.getElementById('chName').value=ch.name;
+    document.getElementById('chCat').value=ch.category_id;
+    document.getElementById('chStream').value=ch.stream_url;
+    document.getElementById('chLogo').value=ch.logo_url||'';
+    document.getElementById('chIsLive').checked=ch.is_live;
+    document.getElementById('chIsTrending').checked=ch.is_trending;
+  } else {
+    document.getElementById('channelModalTitle').textContent='Add Channel';
+    document.getElementById('editChannelId').value='';
+    document.getElementById('chName').value='';
+    document.getElementById('chStream').value='';
+    document.getElementById('chLogo').value='';
+    document.getElementById('chIsLive').checked=true;
+    document.getElementById('chIsTrending').checked=false;
+  }
+  modal.classList.add('visible');
+}
+function closeChannelModal(){ document.getElementById('channelModal').classList.remove('visible'); }
+function saveChannel(){
+  const editId=document.getElementById('editChannelId').value;
+  const name=document.getElementById('chName').value.trim();
+  const catId=parseInt(document.getElementById('chCat').value);
+  const stream=document.getElementById('chStream').value.trim();
+  const logo=document.getElementById('chLogo').value.trim();
+  const isLive=document.getElementById('chIsLive').checked;
+  const isTrending=document.getElementById('chIsTrending').checked;
+  if(!name||!stream){ toast('Name and stream URL are required','error'); return; }
+  if(editId){
+    const idx=STATE.channels.findIndex(c=>c.id==editId);
+    if(idx>-1) STATE.channels[idx]={...STATE.channels[idx],name,category_id:catId,stream_url:stream,logo_url:logo,is_live:isLive,is_trending:isTrending};
+    addLog('Channel updated: '+name);
+    toast('Channel updated');
+  } else {
+    STATE.channels.push({id:nextId(STATE.channels),name,stream_url:stream,logo_url:logo,category_id:catId,is_live:isLive,is_trending:isTrending,is_recent:true,view_count:0,sort_order:STATE.channels.length});
+    addLog('Channel added: '+name,'success');
+    toast('Channel added');
+  }
+  saveToStorage();
+  closeChannelModal();
+  renderAdminChannels();
+  renderAdminDashboard();
+}
+function deleteChannel(id){
+  openConfirmModal('Delete Channel','Are you sure you want to delete this channel? This cannot be undone.',()=>{
+    const ch=STATE.channels.find(c=>c.id===id);
+    STATE.channels=STATE.channels.filter(c=>c.id!==id);
+    addLog('Channel deleted: '+(ch?ch.name:'#'+id),'warning');
+    saveToStorage(); renderAdminChannels(); renderAdminDashboard();
+    toast('Channel deleted','warning');
+  });
+}
+function confirmDeleteAll(){
+  openConfirmModal('Delete ALL Channels','WARNING: This will permanently delete all '+STATE.channels.length+' channels. This cannot be undone.',()=>{
+    const count=STATE.channels.length;
+    STATE.channels=[];
+    addLog('All channels deleted ('+count+')', 'error');
+    saveToStorage(); renderAdminChannels(); renderAdminDashboard();
+    toast('All channels deleted','error');
+  });
+}
+
+// ===== ADMIN CATEGORIES =====
+function renderAdminCats(){
+  const tbody=document.getElementById('adminCatTable');
+  tbody.innerHTML=STATE.categories.map(cat=>{
+    const cnt=STATE.channels.filter(c=>c.category_id===cat.id).length;
+    return `<tr>
+      <td style="font-weight:700;">${cat.name}</td>
+      <td style="color:#888;font-size:12px;">${cat.slug}</td>
+      <td><span class="badge badge-primary">${cnt}</span></td>
+      <td><button class="btn-danger btn-sm" onclick="deleteCat(${cat.id})">Delete</button></td>
+    </tr>`;
+  }).join('')||`<tr><td colspan="4" style="text-align:center;color:#888;padding:24px;">No categories</td></tr>`;
+}
+function addCategory(){
+  const name=document.getElementById('newCatName').value.trim();
+  if(!name){ toast('Enter a category name','error'); return; }
+  if(getCatByName(name)){ toast('Category already exists','warning'); return; }
+  STATE.categories.push({id:nextId(STATE.categories),name,slug:slugify(name),sort_order:STATE.categories.length});
+  document.getElementById('newCatName').value='';
+  addLog('Category added: '+name,'success');
+  saveToStorage(); renderAdminCats(); renderSidebarCats();
+  toast('Category added');
+}
+function deleteCat(id){
+  const inUse=STATE.channels.some(c=>c.category_id===id);
+  if(inUse){ toast('Cannot delete: category has channels','error'); return; }
+  const cat=STATE.categories.find(c=>c.id===id);
+  openConfirmModal('Delete Category','Delete category "'+cat.name+'"?',()=>{
+    STATE.categories=STATE.categories.filter(c=>c.id!==id);
+    addLog('Category deleted: '+cat.name,'warning');
+    saveToStorage(); renderAdminCats(); renderSidebarCats();
+    toast('Category deleted','warning');
+  });
+}
+
+// ===== ADMIN BANNERS =====
+function addBanner(){
+  const title=document.getElementById('bannerTitle').value.trim();
+  const subtitle=document.getElementById('bannerSubtitle').value.trim();
+  const link=document.getElementById('bannerLink').value.trim();
+  if(!title){ toast('Banner title required','error'); return; }
+  STATE.banners.push({id:nextId(STATE.banners),title,subtitle,link,sort_order:STATE.banners.length});
+  document.getElementById('bannerTitle').value='';
+  document.getElementById('bannerSubtitle').value='';
+  document.getElementById('bannerLink').value='';
+  addLog('Banner added: '+title,'success');
+  saveToStorage(); renderAdminBanners();
+  toast('Banner added');
+}
+function renderAdminBanners(){
+  const el=document.getElementById('adminBannerList');
+  el.innerHTML=STATE.banners.map((b,i)=>`
+  <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border:var(--border-w) solid var(--border);box-shadow:var(--shadow-sm);border-radius:8px;margin-bottom:8px;" draggable="true">
+    <span style="font-size:20px;cursor:grab;color:#555;">&#8942;</span>
+    <div style="flex:1;">
+      <div style="font-weight:700;font-size:14px;">${b.title}</div>
+      <div style="font-size:12px;color:#888;">${b.subtitle||''}</div>
+    </div>
+    <button class="btn-danger btn-sm" onclick="deleteBanner(${b.id})">Delete</button>
+  </div>`).join('')||'<p style="color:#888;font-size:13px;">No banners. Add one above.</p>';
+}
+function deleteBanner(id){
+  STATE.banners=STATE.banners.filter(b=>b.id!==id);
+  saveToStorage(); renderAdminBanners();
+  toast('Banner removed','warning');
+}
+
+// ===== ADMIN LOGS =====
+function renderAdminLogs(){
+  const el=document.getElementById('activityLogList');
+  el.innerHTML=STATE.logs.map(l=>`<div class="log-item">
+    <div class="log-dot" style="background:${l.type==='error'?'#ef4444':l.type==='warning'?'var(--highlight)':'var(--accent)'}"></div>
+    <span>${l.msg}</span>
+    <span class="log-time">${l.time}</span>
+  </div>`).join('')||'<p style="color:#888;font-size:13px;">No activity logged yet.</p>';
+}
+function clearLogs(){
+  STATE.logs=[];
+  saveToStorage(); renderAdminLogs();
+  toast('Logs cleared');
+}
+
+// ===== SETTINGS =====
+function saveSettings(){
+  STATE.settings.siteName=document.getElementById('settingSiteName').value;
+  STATE.settings.footer=document.getElementById('settingFooter').value;
+  STATE.settings.lang=document.getElementById('settingLang').value;
+  STATE.settings.tz=document.getElementById('settingTZ').value;
+  const newPass=document.getElementById('settingAdminPass').value;
+  const newEmail=document.getElementById('settingAdminEmail').value;
+  if(newEmail) STATE.adminCreds.email=newEmail;
+  if(newPass) STATE.adminCreds.password=newPass;
+  const css=document.getElementById('settingCSS').value;
+  if(css){ let s=document.getElementById('custom-css-el')||document.createElement('style'); s.id='custom-css-el'; s.textContent=css; document.head.appendChild(s); }
+  applyBranding();
+  addLog('Settings saved','success');
+  saveToStorage();
+  toast('Settings saved');
+}
+function applyBranding(){
+  const fn=document.getElementById('footerBrandName');
+  const fo=document.getElementById('footerOwner');
+  if(fn) fn.textContent=STATE.settings.siteName||'Sayem TV';
+  if(fo) fo.textContent=STATE.settings.footer||'Sayem';
+}
+
+// ===== M3U IMPORT =====
+function handleM3UFile(input){
+  const file=input.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{ document.getElementById('m3uPasteArea').value=e.target.result; parseM3UText(); };
+  reader.readAsText(file);
+}
+function parseM3UText(){
+  const text=document.getElementById('m3uPasteArea').value.trim();
+  if(!text){ toast('No M3U content to parse','error'); return; }
+  const lines=text.split('\n');
+  let created={channels:0,categories:0};
+  let i=0;
+  while(i<lines.length){
+    const line=lines[i].trim();
+    if(line.startsWith('#EXTINF')){
+      const groupMatch=line.match(/group-title="([^"]+)"/);
+      const logoMatch=line.match(/tvg-logo="([^"]+)"/);
+      const nameMatch=line.match(/,(.+)$/);
+      const groupName=groupMatch?groupMatch[1].trim():'Uncategorized';
+      const logo=logoMatch?logoMatch[1].trim():'';
+      const name=nameMatch?nameMatch[1].trim():'';
+      const streamLine=lines[i+1]?lines[i+1].trim():'';
+      if(name&&streamLine&&!streamLine.startsWith('#')){
+        // Ensure category exists
+        let cat=getCatByName(groupName);
+        if(!cat){
+          cat={id:nextId(STATE.categories),name:groupName,slug:slugify(groupName),sort_order:STATE.categories.length};
+          STATE.categories.push(cat);
+          created.categories++;
+        }
+        // Check duplicate
+        const exists=STATE.channels.find(c=>c.stream_url===streamLine);
+        if(!exists){
+          STATE.channels.push({id:nextId(STATE.channels),name,stream_url:streamLine,logo_url:logo,category_id:cat.id,is_live:true,is_trending:false,is_recent:true,view_count:0,sort_order:STATE.channels.length});
+          created.channels++;
+        }
+        i+=2; continue;
+      }
+    }
+    i++;
+  }
+  saveToStorage();
+  addLog(`M3U import: ${created.channels} channels, ${created.categories} categories`,'success');
+  renderAdminChannels();
+  renderAdminCats();
+  renderSidebarCats();
+  renderAdminDashboard();
+  // Show result
+  const resultPanel=document.getElementById('importResultPanel');
+  const resultContent=document.getElementById('importResultContent');
+  resultPanel.style.display='block';
+  resultContent.innerHTML=`<div style="display:flex;gap:16px;flex-wrap:wrap;">
+    <div class="admin-stat-card" style="flex:1;min-width:140px;"><div class="num">${created.channels}</div><div class="lbl">Channels Imported</div></div>
+    <div class="admin-stat-card" style="flex:1;min-width:140px;"><div class="num">${created.categories}</div><div class="lbl">Categories Created</div></div>
+    <div class="admin-stat-card" style="flex:1;min-width:140px;"><div class="num">${STATE.channels.length}</div><div class="lbl">Total Channels</div></div>
+  </div>`;
+  toast(`Import complete: ${created.channels} channels added`);
+}
+
+// ===== DRAG-DROP M3U =====
+function initDragDrop(){
+  const zone=document.getElementById('m3uDropZone');
+  if(!zone) return;
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('dragover');
+    const file=e.dataTransfer.files[0];
+    if(file){ const reader=new FileReader(); reader.onload=ev=>{document.getElementById('m3uPasteArea').value=ev.target.result;parseM3UText();}; reader.readAsText(file); }
+  });
+}
+
+// ===== BACKUP/RESTORE =====
+function exportBackup(){
+  const data={channels:STATE.channels,categories:STATE.categories,banners:STATE.banners,settings:STATE.settings,exported:new Date().toISOString()};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='sayemtv-backup-'+Date.now()+'.json';
+  a.click();
+  addLog('Backup exported','success');
+  toast('Backup downloaded');
+}
+function importBackup(input){
+  const file=input.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(data.channels) STATE.channels=data.channels;
+      if(data.categories) STATE.categories=data.categories;
+      if(data.banners) STATE.banners=data.banners;
+      if(data.settings) STATE.settings=data.settings;
+      saveToStorage();
+      renderAdminDashboard(); renderAdminChannels(); renderAdminCats(); renderAdminBanners();
+      addLog('Backup restored','success');
+      toast('Backup restored successfully');
+    } catch(err){ toast('Invalid backup file','error'); }
+  };
+  reader.readAsText(file);
+}
+
+// ===== CONFIRM MODAL =====
+let _confirmCb=null;
+function openConfirmModal(title,msg,cb){
+  document.getElementById('confirmTitle').textContent=title;
+  document.getElementById('confirmMsg').textContent=msg;
+  _confirmCb=cb;
+  document.getElementById('confirmModal').classList.add('visible');
+}
+function closeConfirmModal(){ document.getElementById('confirmModal').classList.remove('visible'); _confirmCb=null; }
+document.getElementById('confirmOkBtn').addEventListener('click',()=>{ if(_confirmCb){_confirmCb(); _confirmCb=null;} closeConfirmModal(); });
+
+// ===== DRAG WIDGETS =====
+function initDragWidgets(){
+  const grid=document.getElementById('dashWidgets');
+  if(!grid) return;
+  let dragged=null;
+  grid.addEventListener('dragstart',e=>{dragged=e.target.closest('.widget');});
+  grid.addEventListener('dragover',e=>{e.preventDefault();const over=e.target.closest('.widget');if(over&&over!==dragged){over.style.outline='2px dashed var(--primary)';}});
+  grid.addEventListener('dragleave',e=>{const over=e.target.closest('.widget');if(over) over.style.outline='';});
+  grid.addEventListener('drop',e=>{
+    e.preventDefault();
+    const over=e.target.closest('.widget');
+    if(over&&over!==dragged){
+      over.style.outline='';
+      const all=[...grid.children];
+      const di=all.indexOf(dragged), oi=all.indexOf(over);
+      if(di<oi) grid.insertBefore(dragged,over.nextSibling);
+      else grid.insertBefore(dragged,over);
+    }
+  });
+}
+
+// ===== ROUTING =====
+function checkRoute(){
+  const hash=window.location.hash;
+  if(hash==='#admin'){
+    document.getElementById('publicSite').style.display='none';
+    if(sessionStorage.getItem('sayemtv_admin_auth')==='1'){
+      showAdminPanel_full();
+    } else {
+      document.getElementById('adminLoginScreen').style.display='flex';
+    }
+  }
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    closeMiniPlayer();
+    closeConfirmModal();
+    closeChannelModal();
+    document.querySelectorAll('.modal-overlay.visible').forEach(m=>m.classList.remove('visible'));
+  }
+  if(e.key==='f'||e.key==='F'){
+    const v=document.getElementById('mainVideo');
+    if(v&&document.getElementById('page-player').classList.contains('visible')){
+      if(document.fullscreenElement) document.exitFullscreen();
+      else v.requestFullscreen();
+    }
+  }
+});
+
+// ===== TV D-PAD SUPPORT =====
+document.addEventListener('keydown',e=>{
+  const isTV=window.innerWidth>=1920;
+  if(!isTV) return;
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
+    const focused=document.activeElement;
+    const cards=[...document.querySelectorAll('.channel-card[tabindex="0"]')];
+    const idx=cards.indexOf(focused);
+    if(idx===-1) return;
+    let next;
+    const cols=Math.round(document.querySelector('.channel-grid')?.offsetWidth/240)||4;
+    if(e.key==='ArrowRight') next=cards[idx+1];
+    if(e.key==='ArrowLeft') next=cards[idx-1];
+    if(e.key==='ArrowDown') next=cards[idx+cols];
+    if(e.key==='ArrowUp') next=cards[idx-cols];
+    if(next){next.focus();e.preventDefault();}
+  }
+});
+
+// ===== INIT =====
+(function init(){
+  initData();
+  const savedTheme=localStorage.getItem('sayemtv_theme');
+  if(savedTheme){STATE.theme=savedTheme;applyTheme();}
+  renderHomePage();
+  renderSidebarCats();
+  applyBranding();
+  initDragDrop();
+  initDragWidgets();
+  checkRoute();
+  window.addEventListener('hashchange', checkRoute);
+  // Auto-banner
+  document.getElementById('bannerContainer').addEventListener('click',()=>{});
+})();
+</script>
+</body>
+</html>
