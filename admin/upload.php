@@ -1,1 +1,0 @@
-<form method='post' enctype='multipart/form-data'><input type='file' name='playlist' accept='.m3u,.m3u8'><button>Upload</button></form><?php echo 'Implement parser for authorized content.';?>
