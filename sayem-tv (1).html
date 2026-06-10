@@ -1,0 +1,2242 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sayem TV — Stream Everything</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;700;800;900&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/video.js@8.10.0/dist/video-js.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/videojs-contrib-hls@5.15.0/dist/videojs-contrib-hls.min.js"></script>
+
+<style>
+/* ============================================
+   SAYEM TV — NEO-BRUTALIST DESIGN SYSTEM
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@800;900&family=Satoshi:wght@400;500;700&display=swap');
+
+:root {
+  --yellow: #ffe17c;
+  --bg: #171e19;
+  --sage: #b7c6c2;
+  --white: #ffffff;
+  --black: #000000;
+  --shadow-sm: 4px 4px 0px #000;
+  --shadow-lg: 8px 8px 0px #000;
+  --border: 2px solid #000;
+  --radius: 8px;
+  --font-head: 'Cabinet Grotesk', sans-serif;
+  --font-body: 'Satoshi', sans-serif;
+}
+
+[data-theme="light"] {
+  --bg: #f5f0e8;
+  --white: #171e19;
+  --black: #000000;
+  --sage: #3a4a46;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ====== SCROLLBAR ====== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--yellow); border: 2px solid #000; }
+
+/* ====== TYPOGRAPHY ====== */
+h1,h2,h3,h4,h5 {
+  font-family: var(--font-head);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+/* ====== LAYOUT ====== */
+.container { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+
+/* ====== NAV ====== */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg);
+  border-bottom: var(--border);
+  box-shadow: 0 4px 0px #000;
+}
+.nav-inner {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 20px;
+  max-width: 1400px; margin: 0 auto;
+}
+.nav-logo {
+  font-family: var(--font-head);
+  font-weight: 900;
+  font-size: 1.6rem;
+  background: var(--yellow);
+  color: #000;
+  padding: 4px 14px;
+  border: var(--border);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  user-select: none;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+.nav-links {
+  display: flex; gap: 4px; flex: 1; overflow-x: auto;
+  scrollbar-width: none;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-link {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 6px 14px;
+  border: var(--border);
+  background: transparent;
+  color: var(--white);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.1s;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: var(--shadow-sm);
+}
+.nav-link:hover { background: var(--sage); color: #000; transform: translate(2px,2px); box-shadow: 2px 2px 0 #000; }
+.nav-link.active { background: var(--yellow); color: #000; }
+
+.nav-right { display: flex; gap: 8px; align-items: center; margin-left: auto; }
+.nav-search-wrap { position: relative; }
+.nav-search {
+  background: transparent; border: var(--border);
+  color: var(--white); padding: 6px 12px 6px 32px;
+  font-family: var(--font-body); font-size: 0.85rem;
+  width: 180px; box-shadow: var(--shadow-sm);
+  outline: none;
+}
+.nav-search::placeholder { color: var(--sage); }
+.nav-search:focus { background: var(--yellow); color: #000; }
+.nav-search:focus::placeholder { color: #555; }
+.search-icon {
+  position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
+  font-size: 0.85rem; pointer-events: none; opacity: 0.6;
+}
+.btn-icon {
+  width: 36px; height: 36px;
+  border: var(--border); box-shadow: var(--shadow-sm);
+  background: transparent; color: var(--white);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; transition: all 0.1s;
+}
+.btn-icon:hover { background: var(--yellow); color: #000; transform: translate(2px,2px); box-shadow: 2px 2px 0 #000; }
+
+/* ====== PAGES ====== */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ====== HERO / FEATURED BANNER ====== */
+.hero {
+  margin: 20px;
+  border: var(--border);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  background: linear-gradient(135deg, #1a2a1e 0%, #0d1510 100%);
+  display: flex; align-items: flex-end;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: #1a2a1e;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 8rem; opacity: 0.07;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 40px;
+  max-width: 700px;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #ff3b3b; color: #fff;
+  border: var(--border); box-shadow: var(--shadow-sm);
+  padding: 4px 12px;
+  font-family: var(--font-body); font-weight: 700; font-size: 0.75rem;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+.live-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #fff;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--yellow);
+  text-shadow: 4px 4px 0 #000;
+  margin-bottom: 12px;
+}
+.hero p {
+  font-size: 1rem; color: var(--sage);
+  margin-bottom: 24px; line-height: 1.6;
+}
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* ====== BUTTONS ====== */
+.btn {
+  font-family: var(--font-body); font-weight: 700;
+  padding: 10px 24px;
+  border: var(--border); box-shadow: var(--shadow-sm);
+  cursor: pointer; transition: all 0.1s;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  font-size: 0.85rem;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.btn:hover { transform: translate(4px,4px); box-shadow: 0 0 0 #000; }
+.btn-primary { background: var(--yellow); color: #000; }
+.btn-secondary { background: transparent; color: var(--white); }
+.btn-secondary:hover { background: var(--sage); color: #000; }
+.btn-danger { background: #ff3b3b; color: #fff; }
+.btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+
+/* ====== SECTION ====== */
+.section { padding: 30px 20px; }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: var(--border);
+  padding-bottom: 12px;
+}
+.section-title {
+  font-family: var(--font-head);
+  font-size: 1.4rem; font-weight: 800;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title .tag {
+  font-size: 0.7rem; background: var(--yellow); color: #000;
+  border: var(--border); padding: 2px 8px;
+  font-family: var(--font-body); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+
+/* ====== CARD GRID ====== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.card-grid-wide {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* ====== CHANNEL CARD ====== */
+.channel-card {
+  border: var(--border);
+  box-shadow: var(--shadow-sm);
+  background: #1e2820;
+  cursor: pointer;
+  transition: all 0.1s;
+  position: relative;
+  overflow: hidden;
+}
+.channel-card:hover { transform: translate(-4px,-4px); box-shadow: 8px 8px 0 #000; }
+[data-theme="light"] .channel-card { background: #e8e0d0; }
+
+.card-thumb {
+  width: 100%; aspect-ratio: 16/9;
+  background: #0d1510;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+  position: relative;
+  border-bottom: var(--border);
+  overflow: hidden;
+}
+.card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.card-live-badge {
+  position: absolute; top: 8px; left: 8px;
+  background: #ff3b3b; color: #fff;
+  border: var(--border); padding: 2px 8px;
+  font-family: var(--font-body); font-weight: 700; font-size: 0.68rem;
+  text-transform: uppercase; display: flex; align-items: center; gap: 4px;
+}
+.card-body { padding: 12px; }
+.card-title {
+  font-family: var(--font-head); font-weight: 800;
+  font-size: 0.95rem; margin-bottom: 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.card-meta {
+  font-size: 0.78rem; color: var(--sage);
+  display: flex; align-items: center; gap: 8px;
+}
+.card-cat {
+  background: var(--yellow); color: #000;
+  border: var(--border); padding: 1px 6px;
+  font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ====== CATEGORY PILLS ====== */
+.cat-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.cat-pill {
+  border: var(--border); box-shadow: var(--shadow-sm);
+  padding: 6px 16px;
+  font-family: var(--font-body); font-weight: 700; font-size: 0.82rem;
+  cursor: pointer; transition: all 0.1s; text-transform: uppercase; letter-spacing: 0.04em;
+  background: transparent; color: var(--white);
+}
+.cat-pill:hover, .cat-pill.active { background: var(--yellow); color: #000; transform: translate(2px,2px); box-shadow: 2px 2px 0 #000; }
+
+/* ====== TRENDING TICKER ====== */
+.ticker-wrap {
+  background: var(--yellow); color: #000;
+  border-top: var(--border); border-bottom: var(--border);
+  box-shadow: 0 4px 0 #000;
+  overflow: hidden; display: flex; align-items: center;
+  padding: 0;
+}
+.ticker-label {
+  background: #000; color: var(--yellow);
+  padding: 8px 16px;
+  font-family: var(--font-head); font-weight: 800; font-size: 0.8rem;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  white-space: nowrap; flex-shrink: 0;
+  border-right: var(--border);
+}
+.ticker-content {
+  display: flex; gap: 0; overflow: hidden; flex: 1;
+}
+.ticker-inner {
+  display: flex; gap: 40px;
+  animation: ticker 25s linear infinite;
+  white-space: nowrap;
+  font-family: var(--font-body); font-weight: 700; font-size: 0.82rem;
+  padding: 8px 20px;
+}
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+.ticker-item { display: flex; align-items: center; gap: 8px; }
+.ticker-dot { width: 6px; height: 6px; border-radius: 50%; background: #000; }
+
+/* ====== PLAYER PAGE ====== */
+.player-wrap {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  padding: 20px;
+}
+@media(max-width:900px) {
+  .player-wrap { grid-template-columns: 1fr; }
+}
+.player-main {}
+.player-box {
+  border: var(--border); box-shadow: var(--shadow-lg);
+  background: #000;
+  aspect-ratio: 16/9;
+  position: relative;
+  overflow: hidden;
+}
+.player-box video { width: 100%; height: 100%; }
+.video-js { width: 100% !important; height: 100% !important; }
+
+.player-info { margin-top: 16px; }
+.player-title {
+  font-family: var(--font-head); font-size: 1.8rem; font-weight: 800;
+  margin-bottom: 8px;
+}
+.player-meta {
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.player-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.player-sidebar {}
+.related-title {
+  font-family: var(--font-head); font-weight: 800; font-size: 1rem;
+  border-bottom: var(--border); padding-bottom: 10px; margin-bottom: 12px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.related-card {
+  display: flex; gap: 10px;
+  border: var(--border); box-shadow: var(--shadow-sm);
+  padding: 10px; margin-bottom: 10px;
+  cursor: pointer; transition: all 0.1s;
+  background: #1e2820;
+}
+.related-card:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 #000; }
+[data-theme="light"] .related-card { background: #e8e0d0; }
+.related-thumb {
+  width: 80px; height: 50px; flex-shrink: 0;
+  background: #0d1510; border: var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; overflow: hidden;
+}
+.related-info {}
+.related-name { font-family: var(--font-head); font-weight: 700; font-size: 0.85rem; }
+.related-cat { font-size: 0.73rem; color: var(--sage); margin-top: 2px; }
+
+/* ====== MINI PLAYER ====== */
+.mini-player {
+  position: fixed; bottom: 80px; right: 20px; z-index: 200;
+  width: 300px;
+  border: var(--border); box-shadow: var(--shadow-lg);
+  background: #000;
+  display: none;
+}
+.mini-player.visible { display: block; }
+.mini-player-header {
+  background: var(--yellow); color: #000;
+  padding: 6px 10px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: var(--border);
+}
+.mini-player-title {
+  font-family: var(--font-head); font-weight: 700; font-size: 0.8rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;
+}
+.mini-player-controls { display: flex; gap: 4px; }
+.mini-ctrl {
+  width: 24px; height: 24px;
+  border: var(--border); background: transparent;
+  cursor: pointer; font-size: 0.8rem;
+  display: flex; align-items: center; justify-content: center;
+  color: #000; transition: all 0.1s;
+}
+.mini-ctrl:hover { background: #000; color: var(--yellow); }
+.mini-player-video { width: 100%; aspect-ratio: 16/9; background: #111; }
+
+/* ====== SEARCH PAGE ====== */
+.search-hero {
+  padding: 40px 20px;
+  border-bottom: var(--border);
+}
+.search-big {
+  display: flex; gap: 0;
+  border: var(--border); box-shadow: var(--shadow-lg);
+  max-width: 700px;
+}
+.search-big input {
+  flex: 1; padding: 14px 20px;
+  font-family: var(--font-head); font-size: 1.2rem; font-weight: 700;
+  background: var(--yellow); border: none; outline: none; color: #000;
+}
+.search-big input::placeholder { color: #777; }
+.search-big button {
+  padding: 14px 28px;
+  background: #000; color: var(--yellow);
+  border: none; border-left: var(--border);
+  font-family: var(--font-head); font-weight: 800; font-size: 1rem;
+  cursor: pointer; text-transform: uppercase;
+}
+.search-big button:hover { background: var(--sage); }
+
+/* ====== ADMIN PANEL ====== */
+.admin-page {
+  min-height: 100vh;
+  background: #0a0f0b;
+}
+.admin-login {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+}
+.admin-login-box {
+  width: 400px;
+  border: var(--border); box-shadow: var(--shadow-lg);
+  background: #1e2820;
+}
+.admin-login-head {
+  background: var(--yellow); color: #000;
+  padding: 20px 24px;
+  border-bottom: var(--border);
+  font-family: var(--font-head); font-weight: 800; font-size: 1.3rem;
+}
+.admin-login-body { padding: 28px 24px; }
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block; margin-bottom: 6px;
+  font-family: var(--font-body); font-weight: 700; font-size: 0.83rem;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.form-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: var(--border); box-shadow: var(--shadow-sm);
+  background: #0d1510; color: var(--white);
+  font-family: var(--font-body); font-size: 0.9rem;
+  outline: none;
+}
+.form-input:focus { background: var(--yellow); color: #000; }
+.form-input::placeholder { color: var(--sage); }
+[data-theme="light"] .form-input { background: #ddd8cc; color: #000; }
+[data-theme="light"] .form-input:focus { background: var(--yellow); }
+
+/* ====== ADMIN LAYOUT ====== */
+.admin-layout { display: flex; min-height: 100vh; }
+.admin-sidebar {
+  width: 260px; flex-shrink: 0;
+  border-right: var(--border);
+  background: #0d1510;
+  padding: 0;
+}
+.admin-sidebar-head {
+  background: var(--yellow); color: #000;
+  padding: 16px 20px;
+  border-bottom: var(--border);
+  font-family: var(--font-head); font-weight: 800; font-size: 1.2rem;
+  display: flex; align-items: center; gap: 10px;
+}
+.admin-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 20px;
+  cursor: pointer; transition: all 0.1s;
+  border-bottom: 1px solid #1a2a1e;
+  font-family: var(--font-body); font-weight: 600; font-size: 0.88rem;
+  color: var(--sage);
+}
+.admin-nav-item:hover, .admin-nav-item.active {
+  background: var(--yellow); color: #000;
+  border-left: 4px solid #000;
+  padding-left: 16px;
+}
+.admin-content { flex: 1; padding: 24px; overflow-y: auto; }
+.admin-section { display: none; }
+.admin-section.active { display: block; }
+.admin-section-title {
+  font-family: var(--font-head); font-weight: 800; font-size: 1.5rem;
+  border-bottom: var(--border); padding-bottom: 12px; margin-bottom: 20px;
+}
+
+/* ====== ADMIN STATS ====== */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.stat-card {
+  border: var(--border); box-shadow: var(--shadow-sm);
+  padding: 20px; background: #1e2820;
+}
+[data-theme="light"] .stat-card { background: #e0dcd0; }
+.stat-num { font-family: var(--font-head); font-size: 2rem; font-weight: 800; color: var(--yellow); }
+.stat-label { font-size: 0.8rem; color: var(--sage); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+
+/* ====== ADMIN TABLE ====== */
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table th {
+  background: var(--yellow); color: #000;
+  border: var(--border); padding: 10px 14px;
+  font-family: var(--font-body); font-weight: 700; font-size: 0.82rem;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  text-align: left;
+}
+.admin-table td {
+  border: var(--border); padding: 10px 14px;
+  font-size: 0.88rem;
+}
+.admin-table tr:nth-child(even) td { background: #1a2a1e; }
+[data-theme="light"] .admin-table tr:nth-child(even) td { background: #ddd8cc; }
+.admin-table tr:hover td { background: #1e3020; }
+[data-theme="light"] .admin-table tr:hover td { background: #d0c8b8; }
+
+/* ====== M3U UPLOAD ====== */
+.upload-zone {
+  border: 3px dashed var(--sage);
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #0d1510;
+  margin-bottom: 20px;
+}
+.upload-zone:hover { border-color: var(--yellow); background: #1a2a1e; }
+.upload-zone.drag { border-color: var(--yellow); background: #1e2820; }
+.upload-icon { font-size: 3rem; margin-bottom: 12px; }
+.upload-text { font-family: var(--font-head); font-weight: 700; font-size: 1rem; color: var(--sage); }
+[data-theme="light"] .upload-zone { background: #ddd8cc; }
+
+/* ====== TOAST ====== */
+.toast-container {
+  position: fixed; top: 80px; right: 20px; z-index: 999;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  border: var(--border); box-shadow: var(--shadow-sm);
+  padding: 12px 20px;
+  font-family: var(--font-body); font-weight: 600; font-size: 0.85rem;
+  min-width: 240px;
+  animation: toast-in 0.2s ease;
+}
+@keyframes toast-in { from{transform:translateX(100%);opacity:0} to{transform:translateX(0);opacity:1} }
+.toast-success { background: var(--yellow); color: #000; }
+.toast-error { background: #ff3b3b; color: #fff; }
+.toast-info { background: var(--sage); color: #000; }
+
+/* ====== WATCH HISTORY BAR ====== */
+.continue-bar {
+  margin: 0 20px 20px;
+  border: var(--border); box-shadow: var(--shadow-sm);
+  background: #1e2820;
+  overflow: hidden;
+}
+[data-theme="light"] .continue-bar { background: #e0dcd0; }
+.continue-head {
+  background: var(--yellow); color: #000;
+  padding: 8px 16px;
+  font-family: var(--font-head); font-weight: 800; font-size: 0.88rem;
+  border-bottom: var(--border); text-transform: uppercase; letter-spacing: 0.05em;
+}
+.continue-list { display: flex; gap: 0; overflow-x: auto; padding: 12px; gap: 10px; }
+.continue-item {
+  flex-shrink: 0; width: 140px;
+  border: var(--border); box-shadow: var(--shadow-sm);
+  cursor: pointer; transition: all 0.1s; background: #0d1510;
+}
+[data-theme="light"] .continue-item { background: #d0c8b8; }
+.continue-item:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 #000; }
+.continue-thumb {
+  width: 100%; aspect-ratio: 16/9;
+  background: #0a0f0b;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  border-bottom: var(--border); overflow: hidden;
+}
+.continue-prog {
+  height: 4px; background: var(--sage);
+}
+.continue-prog-fill {
+  height: 100%; background: var(--yellow);
+}
+.continue-name {
+  padding: 6px 8px;
+  font-family: var(--font-head); font-weight: 700; font-size: 0.78rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* ====== FOOTER ====== */
+.footer {
+  border-top: var(--border);
+  margin-top: 40px;
+  padding: 24px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-logo {
+  font-family: var(--font-head); font-weight: 900; font-size: 1.2rem;
+  background: var(--yellow); color: #000;
+  padding: 4px 12px; border: var(--border); box-shadow: var(--shadow-sm);
+}
+.footer-copy { font-size: 0.83rem; color: var(--sage); }
+.footer-links { display: flex; gap: 12px; }
+.footer-link {
+  font-size: 0.82rem; color: var(--sage); text-decoration: none;
+  border-bottom: 1px solid var(--sage); cursor: pointer;
+}
+.footer-link:hover { color: var(--yellow); border-color: var(--yellow); }
+
+/* ====== MODAL ====== */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.8);
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--bg);
+  border: var(--border); box-shadow: var(--shadow-lg);
+  width: 100%; max-width: 560px;
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-head {
+  background: var(--yellow); color: #000;
+  padding: 16px 20px;
+  border-bottom: var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--font-head); font-weight: 800; font-size: 1.1rem;
+}
+.modal-close {
+  width: 28px; height: 28px;
+  border: var(--border); background: transparent;
+  cursor: pointer; font-size: 1rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  color: #000; transition: all 0.1s;
+}
+.modal-close:hover { background: #000; color: var(--yellow); }
+.modal-body { padding: 24px; }
+
+/* ====== ACTIVITY LOG ====== */
+.log-item {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid #1a2a1e;
+  font-size: 0.85rem;
+}
+.log-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 4px;
+}
+.log-dot.green { background: #4ade80; }
+.log-dot.yellow { background: var(--yellow); }
+.log-dot.red { background: #ff3b3b; }
+.log-time { color: var(--sage); font-size: 0.75rem; margin-top: 2px; }
+
+/* ====== RESPONSIVE ====== */
+@media(max-width:768px) {
+  .hero { margin: 10px; min-height: 260px; }
+  .hero-content { padding: 20px; }
+  .nav-links { display: none; }
+  .section { padding: 16px 10px; }
+  .player-wrap { padding: 10px; gap: 10px; }
+  .admin-sidebar { display: none; }
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .mini-player { width: 240px; }
+}
+
+/* ====== CATEGORY PAGE ====== */
+.cat-page-header {
+  padding: 30px 20px 16px;
+  display: flex; align-items: flex-end; gap: 20px; flex-wrap: wrap;
+}
+.cat-page-icon {
+  width: 80px; height: 80px;
+  border: var(--border); box-shadow: var(--shadow-sm);
+  background: var(--yellow); color: #000;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem;
+}
+.cat-page-info h2 { font-size: 2rem; color: var(--yellow); }
+.cat-page-info p { color: var(--sage); font-size: 0.9rem; margin-top: 4px; }
+
+/* ====== NOTICE BANNER ====== */
+.notice-bar {
+  background: #ff3b3b; color: #fff;
+  border-bottom: var(--border);
+  padding: 8px 20px;
+  font-family: var(--font-body); font-weight: 600; font-size: 0.83rem;
+  display: flex; align-items: center; gap: 10px;
+  justify-content: center;
+}
+
+/* ====== SCROLL SNAP FOR HEROES ====== */
+.hero-carousel {
+  position: relative;
+}
+.hero-nav {
+  position: absolute; bottom: 16px; right: 20px; z-index: 5;
+  display: flex; gap: 6px;
+}
+.hero-dot {
+  width: 10px; height: 10px;
+  border: var(--border); background: transparent;
+  cursor: pointer; transition: background 0.2s;
+}
+.hero-dot.active { background: var(--yellow); }
+
+/* ====== TAG CLOUD ====== */
+.tag-cloud { display: flex; gap: 8px; flex-wrap: wrap; }
+.tag {
+  border: var(--border); box-shadow: var(--shadow-sm);
+  padding: 4px 12px;
+  font-size: 0.78rem; font-family: var(--font-body); font-weight: 700;
+  cursor: pointer; transition: all 0.1s; text-transform: uppercase;
+  background: transparent; color: var(--white);
+}
+.tag:hover { background: var(--yellow); color: #000; transform: translate(2px,2px); box-shadow: 2px 2px 0 #000; }
+
+/* ====== NO CONTENT EMPTY STATE ====== */
+.empty-state {
+  text-align: center; padding: 60px 20px;
+  border: 3px dashed var(--sage);
+}
+.empty-icon { font-size: 4rem; margin-bottom: 16px; }
+.empty-title { font-family: var(--font-head); font-size: 1.3rem; color: var(--sage); }
+.empty-sub { color: var(--sage); opacity: 0.6; font-size: 0.88rem; margin-top: 8px; }
+
+/* ====== PAGE TRANSITIONS ====== */
+.page { animation: page-in 0.2s ease; }
+@keyframes page-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* ADMIN MOBILE TOGGLE */
+.admin-mobile-menu {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 99;
+  background: #0d1510; border-top: var(--border);
+  padding: 8px; overflow-x: auto;
+  flex-direction: row; gap: 4px;
+}
+@media(max-width:768px) { .admin-mobile-menu { display: flex; } }
+.admin-mob-btn {
+  border: var(--border); padding: 6px 12px;
+  background: transparent; color: var(--white);
+  font-size: 0.72rem; font-weight: 700; cursor: pointer;
+  white-space: nowrap; font-family: var(--font-body);
+  text-transform: uppercase;
+}
+.admin-mob-btn.active { background: var(--yellow); color: #000; }
+</style>
+</head>
+<body>
+
+<!-- ====== TOAST CONTAINER ====== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ====== MINI PLAYER ====== -->
+<div class="mini-player" id="miniPlayer">
+  <div class="mini-player-header">
+    <span class="mini-player-title" id="miniTitle">Channel Name</span>
+    <div class="mini-player-controls">
+      <button class="mini-ctrl" onclick="expandPlayer()" title="Expand">⬆</button>
+      <button class="mini-ctrl" onclick="closeMiniPlayer()" title="Close">✕</button>
+    </div>
+  </div>
+  <div class="mini-player-video" id="miniVideoWrap">
+    <video id="miniVideo" style="width:100%;height:100%;background:#000;" controls muted></video>
+  </div>
+</div>
+
+<!-- ====== MODAL ====== -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-head">
+      <span id="modalTitle">Add Channel</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- ====== PUBLIC WEBSITE ====== -->
+<div id="publicSite">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="nav-logo" onclick="navigateTo('home')">▶ SAYEM TV</div>
+      <div class="nav-links">
+        <button class="nav-link active" data-page="home" onclick="navigateTo('home')">Home</button>
+        <button class="nav-link" data-page="live" onclick="navigateTo('live')">📡 Live TV</button>
+        <button class="nav-link" data-page="movies" onclick="navigateTo('movies')">🎬 Movies</button>
+        <button class="nav-link" data-page="sports" onclick="navigateTo('sports')">⚽ Sports</button>
+        <button class="nav-link" data-page="trending" onclick="navigateTo('trending')">🔥 Trending</button>
+        <button class="nav-link" data-page="recent" onclick="navigateTo('recent')">🆕 Recent</button>
+      </div>
+      <div class="nav-right">
+        <div class="nav-search-wrap">
+          <span class="search-icon">🔍</span>
+          <input class="nav-search" type="text" placeholder="Search..." id="navSearchInput" onkeyup="handleNavSearch(event)"/>
+        </div>
+        <button class="btn-icon" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-label">🔴 LIVE NOW</div>
+    <div class="ticker-content">
+      <div class="ticker-inner" id="tickerInner"></div>
+    </div>
+  </div>
+
+  <!-- HOME PAGE -->
+  <div class="page active" id="page-home">
+    <div class="hero-carousel">
+      <div class="hero" id="heroBanner">
+        <div class="hero-bg">📺</div>
+        <div class="hero-content">
+          <div class="hero-badge"><span class="live-dot"></span> LIVE NOW</div>
+          <h1 id="heroTitle">Sony Sports 1 HD</h1>
+          <p id="heroDesc">Watch live sports, breaking news, and exclusive content 24/7 on Sayem TV. The best streams, always free.</p>
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="watchFeatured()">▶ Watch Now</button>
+            <button class="btn btn-secondary" onclick="navigateTo('live')">📡 All Channels</button>
+          </div>
+        </div>
+      </div>
+      <div class="hero-nav" id="heroNav"></div>
+    </div>
+
+    <!-- Continue Watching -->
+    <div class="continue-bar" id="continueBar" style="display:none">
+      <div class="continue-head">⏯ Continue Watching</div>
+      <div class="continue-list" id="continueList"></div>
+    </div>
+
+    <!-- Live TV Section -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">📡 Live TV <span class="tag">LIVE</span></div>
+        <button class="btn btn-secondary btn-sm" onclick="navigateTo('live')">View All →</button>
+      </div>
+      <div class="cat-pills" id="homeCatPills"></div>
+      <div class="card-grid" id="liveGrid"></div>
+    </div>
+
+    <!-- Movies Section -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">🎬 Movies <span class="tag">NEW</span></div>
+        <button class="btn btn-secondary btn-sm" onclick="navigateTo('movies')">View All →</button>
+      </div>
+      <div class="card-grid card-grid-wide" id="moviesGridHome"></div>
+    </div>
+
+    <!-- Sports Section -->
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">⚽ Sports <span class="tag">HOT</span></div>
+        <button class="btn btn-secondary btn-sm" onclick="navigateTo('sports')">View All →</button>
+      </div>
+      <div class="card-grid" id="sportsGridHome"></div>
+    </div>
+  </div>
+
+  <!-- LIVE TV PAGE -->
+  <div class="page" id="page-live">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">📡 Live TV <span class="tag">ALL CHANNELS</span></div>
+      </div>
+      <div class="cat-pills" id="liveCatPills"></div>
+      <div class="card-grid" id="livePageGrid"></div>
+    </div>
+  </div>
+
+  <!-- MOVIES PAGE -->
+  <div class="page" id="page-movies">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">🎬 Movies <span class="tag">LIBRARY</span></div>
+      </div>
+      <div class="cat-pills" id="movieCatPills"></div>
+      <div class="card-grid card-grid-wide" id="moviesPageGrid"></div>
+    </div>
+  </div>
+
+  <!-- SPORTS PAGE -->
+  <div class="page" id="page-sports">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">⚽ Sports <span class="tag">LIVE & REPLAYS</span></div>
+      </div>
+      <div class="card-grid" id="sportsPageGrid"></div>
+    </div>
+  </div>
+
+  <!-- TRENDING PAGE -->
+  <div class="page" id="page-trending">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">🔥 Trending <span class="tag">TOP 50</span></div>
+      </div>
+      <div class="card-grid" id="trendingGrid"></div>
+    </div>
+  </div>
+
+  <!-- RECENTLY ADDED PAGE -->
+  <div class="page" id="page-recent">
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title">🆕 Recently Added <span class="tag">FRESH</span></div>
+      </div>
+      <div class="card-grid" id="recentGrid"></div>
+    </div>
+  </div>
+
+  <!-- SEARCH PAGE -->
+  <div class="page" id="page-search">
+    <div class="search-hero">
+      <h2 style="font-size:2rem;margin-bottom:16px">Search Everything</h2>
+      <div class="search-big">
+        <input type="text" id="searchBigInput" placeholder="Channels, movies, sports..." oninput="doSearch(this.value)"/>
+        <button onclick="doSearch(document.getElementById('searchBigInput').value)">Search</button>
+      </div>
+      <div style="margin-top:20px">
+        <div style="font-size:0.82rem;color:var(--sage);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.05em;font-weight:700">Popular tags</div>
+        <div class="tag-cloud" id="tagCloud"></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-header">
+        <div class="section-title" id="searchResultTitle">All Content</div>
+      </div>
+      <div class="card-grid" id="searchGrid"></div>
+    </div>
+  </div>
+
+  <!-- PLAYER PAGE -->
+  <div class="page" id="page-player">
+    <div style="padding:12px 20px;border-bottom:var(--border)">
+      <button class="btn btn-secondary btn-sm" onclick="goBackFromPlayer()">← Back</button>
+    </div>
+    <div class="player-wrap">
+      <div class="player-main">
+        <div class="player-box" id="playerBox">
+          <video id="mainVideo" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" style="width:100%;height:100%;"></video>
+        </div>
+        <div class="player-info">
+          <div class="player-meta">
+            <span class="card-live-badge" id="playerLiveBadge" style="position:static"><span class="live-dot"></span> LIVE</span>
+            <span class="card-cat" id="playerCat">Sports</span>
+          </div>
+          <div class="player-title" id="playerTitle">Channel Name</div>
+          <div class="player-actions">
+            <button class="btn btn-primary btn-sm" id="pipBtn" onclick="togglePiP()">⧉ Picture in Picture</button>
+            <button class="btn btn-secondary btn-sm" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+            <button class="btn btn-secondary btn-sm" onclick="shareChannel()">⎋ Share</button>
+          </div>
+        </div>
+      </div>
+      <div class="player-sidebar">
+        <div class="related-title">Related Channels</div>
+        <div id="relatedList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORY PAGE -->
+  <div class="page" id="page-category">
+    <div class="cat-page-header">
+      <div class="cat-page-icon" id="catPageIcon">📺</div>
+      <div class="cat-page-info">
+        <h2 id="catPageName">Category</h2>
+        <p id="catPageCount">0 channels</p>
+      </div>
+    </div>
+    <div class="section">
+      <div class="card-grid" id="catPageGrid"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo">▶ SAYEM TV</div>
+    <div class="footer-copy">© Sayem — All streams are property of their respective owners.</div>
+    <div class="footer-links">
+      <span class="footer-link" onclick="navigateTo('home')">Home</span>
+      <span class="footer-link" onclick="navigateTo('live')">Live TV</span>
+      <span class="footer-link" onclick="navigateTo('movies')">Movies</span>
+      <span class="footer-link" onclick="navigateTo('sports')">Sports</span>
+    </div>
+  </footer>
+
+</div><!-- end #publicSite -->
+
+<!-- ====== ADMIN PANEL ====== -->
+<div id="adminPanel" style="display:none">
+
+  <!-- ADMIN LOGIN -->
+  <div id="adminLogin" class="admin-page">
+    <div class="admin-login">
+      <div class="admin-login-box">
+        <div class="admin-login-head">🔐 Sayem TV — Admin</div>
+        <div class="admin-login-body">
+          <div class="form-group">
+            <label class="form-label">Username</label>
+            <input class="form-input" type="text" id="adminUser" placeholder="admin" value="admin"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input class="form-input" type="password" id="adminPass" placeholder="••••••••" value="admin123" onkeydown="if(event.key==='Enter')doAdminLogin()"/>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="doAdminLogin()">Login →</button>
+          <p style="margin-top:12px;font-size:0.78rem;color:var(--sage)">Default: admin / admin123</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN DASHBOARD -->
+  <div id="adminDash" style="display:none" class="admin-page">
+    <div class="admin-layout">
+      <div class="admin-sidebar">
+        <div class="admin-sidebar-head">⚙ Admin Panel</div>
+        <div class="admin-nav-item active" data-sec="dashboard" onclick="adminNav('dashboard')">📊 Dashboard</div>
+        <div class="admin-nav-item" data-sec="channels" onclick="adminNav('channels')">📺 Channels</div>
+        <div class="admin-nav-item" data-sec="categories" onclick="adminNav('categories')">🗂 Categories</div>
+        <div class="admin-nav-item" data-sec="movies" onclick="adminNav('movies')">🎬 Movies</div>
+        <div class="admin-nav-item" data-sec="banners" onclick="adminNav('banners')">🖼 Banners</div>
+        <div class="admin-nav-item" data-sec="m3u" onclick="adminNav('m3u')">📥 M3U Import</div>
+        <div class="admin-nav-item" data-sec="settings" onclick="adminNav('settings')">⚙ Settings</div>
+        <div class="admin-nav-item" data-sec="logs" onclick="adminNav('logs')">📋 Activity Logs</div>
+        <div style="margin-top:auto;padding:16px;">
+          <button class="btn btn-secondary btn-sm" style="width:100%;justify-content:center" onclick="adminLogout()">Logout</button>
+        </div>
+      </div>
+      <div class="admin-content">
+        <!-- DASHBOARD -->
+        <div class="admin-section active" id="sec-dashboard">
+          <div class="admin-section-title">📊 Dashboard</div>
+          <div class="stats-grid" id="statsGrid"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;flex-wrap:wrap">
+            <div>
+              <div style="font-family:var(--font-head);font-weight:800;margin-bottom:12px;font-size:1rem">Recent Channels</div>
+              <div id="dashRecentChannels"></div>
+            </div>
+            <div>
+              <div style="font-family:var(--font-head);font-weight:800;margin-bottom:12px;font-size:1rem">Top Categories</div>
+              <div id="dashTopCats"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHANNELS -->
+        <div class="admin-section" id="sec-channels">
+          <div class="admin-section-title">📺 Channels</div>
+          <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
+            <button class="btn btn-primary btn-sm" onclick="openAddChannel()">+ Add Channel</button>
+            <input class="form-input" type="text" placeholder="Search channels..." id="adminChSearch" oninput="renderAdminChannels()" style="max-width:280px;padding:6px 12px"/>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table" id="channelsTable">
+              <thead>
+                <tr><th>#</th><th>Name</th><th>Category</th><th>Stream URL</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="channelsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CATEGORIES -->
+        <div class="admin-section" id="sec-categories">
+          <div class="admin-section-title">🗂 Categories</div>
+          <div style="display:flex;gap:10px;margin-bottom:16px">
+            <button class="btn btn-primary btn-sm" onclick="openAddCategory()">+ Add Category</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>#</th><th>Name</th><th>Icon</th><th>Channels</th><th>Actions</th></tr></thead>
+              <tbody id="catsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- MOVIES -->
+        <div class="admin-section" id="sec-movies">
+          <div class="admin-section-title">🎬 Movies</div>
+          <div style="display:flex;gap:10px;margin-bottom:16px">
+            <button class="btn btn-primary btn-sm" onclick="openAddMovie()">+ Add Movie</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>#</th><th>Title</th><th>Category</th><th>Year</th><th>Stream URL</th><th>Actions</th></tr></thead>
+              <tbody id="moviesTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- BANNERS -->
+        <div class="admin-section" id="sec-banners">
+          <div class="admin-section-title">🖼 Banners</div>
+          <div style="display:flex;gap:10px;margin-bottom:16px">
+            <button class="btn btn-primary btn-sm" onclick="openAddBanner()">+ Add Banner</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="admin-table">
+              <thead><tr><th>#</th><th>Title</th><th>Subtitle</th><th>Channel</th><th>Active</th><th>Actions</th></tr></thead>
+              <tbody id="bannersTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- M3U IMPORT -->
+        <div class="admin-section" id="sec-m3u">
+          <div class="admin-section-title">📥 M3U Import Engine</div>
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('m3uFileInput').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondrop="handleM3UDrop(event)" ondragleave="this.classList.remove('drag')">
+            <div class="upload-icon">📂</div>
+            <div class="upload-text">Click or drag & drop your .m3u / .m3u8 file here</div>
+            <p style="color:var(--sage);font-size:0.8rem;margin-top:8px">Supports EXTINF format with group-title</p>
+          </div>
+          <input type="file" id="m3uFileInput" accept=".m3u,.m3u8,.txt" style="display:none" onchange="handleM3UFile(event)"/>
+          <div style="margin-bottom:20px">
+            <label class="form-label" style="margin-bottom:8px">Or paste M3U content / URL:</label>
+            <textarea class="form-input" id="m3uText" rows="8" placeholder="#EXTM3U&#10;#EXTINF:-1 group-title=&quot;Sports&quot;,Sony Sports 1&#10;https://example.com/live.m3u8&#10;#EXTINF:-1 group-title=&quot;News&quot;,BBC News&#10;https://example.com/bbc.m3u8" style="resize:vertical;font-size:0.82rem;font-family:monospace"></textarea>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="parseM3U()">🚀 Parse & Import</button>
+            <button class="btn btn-secondary" onclick="document.getElementById('m3uText').value=''">Clear</button>
+          </div>
+          <div id="m3uResult" style="margin-top:20px"></div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div class="admin-section" id="sec-settings">
+          <div class="admin-section-title">⚙ Settings</div>
+          <div style="max-width:500px">
+            <div class="form-group">
+              <label class="form-label">Site Name</label>
+              <input class="form-input" id="setSiteName" value="Sayem TV"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Admin Password</label>
+              <input class="form-input" type="password" id="setPassword" placeholder="New password"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Featured Channel (for hero banner)</label>
+              <select class="form-input" id="setFeatured"></select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cache Status</label>
+              <button class="btn btn-secondary btn-sm" onclick="refreshCache()">🔄 Refresh Cache</button>
+            </div>
+            <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+          </div>
+        </div>
+
+        <!-- LOGS -->
+        <div class="admin-section" id="sec-logs">
+          <div class="admin-section-title">📋 Activity Logs</div>
+          <div style="display:flex;gap:10px;margin-bottom:16px">
+            <button class="btn btn-secondary btn-sm" onclick="clearLogs()">🗑 Clear Logs</button>
+          </div>
+          <div id="logsList"></div>
+        </div>
+
+      </div><!-- admin-content -->
+    </div><!-- admin-layout -->
+
+    <!-- Admin mobile nav -->
+    <div class="admin-mobile-menu" id="adminMobileMenu">
+      <button class="admin-mob-btn active" data-sec="dashboard" onclick="adminNav('dashboard')">📊 Dash</button>
+      <button class="admin-mob-btn" data-sec="channels" onclick="adminNav('channels')">📺 Ch</button>
+      <button class="admin-mob-btn" data-sec="categories" onclick="adminNav('categories')">🗂 Cat</button>
+      <button class="admin-mob-btn" data-sec="movies" onclick="adminNav('movies')">🎬 Movies</button>
+      <button class="admin-mob-btn" data-sec="m3u" onclick="adminNav('m3u')">📥 M3U</button>
+      <button class="admin-mob-btn" data-sec="settings" onclick="adminNav('settings')">⚙ Set</button>
+      <button class="admin-mob-btn" data-sec="logs" onclick="adminNav('logs')">📋 Log</button>
+      <button class="admin-mob-btn" onclick="adminLogout()">⇦ Exit</button>
+    </div>
+  </div><!-- adminDash -->
+
+</div><!-- adminPanel -->
+
+<!-- ====== APP SCRIPTS ====== -->
+<script>
+// ============================================================
+//   SAYEM TV — CORE APPLICATION
+// ============================================================
+
+// ---- STATE ----
+const state = {
+  currentPage: 'home',
+  currentChannel: null,
+  prevPage: 'home',
+  miniPlayerVisible: false,
+  theme: 'dark',
+  watchHistory: [],
+  player: null,
+  banners: [],
+  heroBannerIndex: 0,
+  heroBannerTimer: null,
+};
+
+// ---- SAMPLE DATA (simulates DB) ----
+let DB = {
+  categories: [
+    {id:1, name:'Sports', icon:'⚽', type:'live'},
+    {id:2, name:'News', icon:'📰', type:'live'},
+    {id:3, name:'Entertainment', icon:'🎭', type:'live'},
+    {id:4, name:'Music', icon:'🎵', type:'live'},
+    {id:5, name:'Kids', icon:'🧸', type:'live'},
+    {id:6, name:'Action', icon:'💥', type:'movie'},
+    {id:7, name:'Drama', icon:'🎭', type:'movie'},
+    {id:8, name:'Comedy', icon:'😂', type:'movie'},
+  ],
+  channels: [
+    {id:1, name:'Sony Sports 1 HD', cat:1, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'⚽', type:'live', views:12400, added:Date.now()-3600000},
+    {id:2, name:'ESPN Live', cat:1, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🏈', type:'live', views:9800, added:Date.now()-7200000},
+    {id:3, name:'Sky Sports HD', cat:1, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🏀', type:'live', views:8700, added:Date.now()-10800000},
+    {id:4, name:'BBC News 24', cat:2, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'📺', type:'live', views:6500, added:Date.now()-14400000},
+    {id:5, name:'CNN International', cat:2, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🌍', type:'live', views:5400, added:Date.now()-18000000},
+    {id:6, name:'Al Jazeera English', cat:2, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🗞', type:'live', views:4300, added:Date.now()-21600000},
+    {id:7, name:'Star Plus', cat:3, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'⭐', type:'live', views:7200, added:Date.now()-25200000},
+    {id:8, name:'Zee TV HD', cat:3, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'📺', type:'live', views:6100, added:Date.now()-28800000},
+    {id:9, name:'MTV Live', cat:4, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🎵', type:'live', views:5000, added:Date.now()-32400000},
+    {id:10, name:'Cartoon Network', cat:5, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🧸', type:'live', views:4100, added:Date.now()-36000000},
+    {id:11, name:'beIN Sports 1', cat:1, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'⚽', type:'live', views:9200, added:Date.now()-39600000},
+    {id:12, name:'Fox Sports', cat:1, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🦊', type:'live', views:8100, added:Date.now()-43200000},
+  ],
+  movies: [
+    {id:1, name:'The Dark Knight', cat:6, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🦇', year:2008, type:'movie', views:45000, added:Date.now()-86400000},
+    {id:2, name:'Avengers: Endgame', cat:6, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🦸', year:2019, type:'movie', views:62000, added:Date.now()-172800000},
+    {id:3, name:'Inception', cat:6, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🌀', year:2010, type:'movie', views:38000, added:Date.now()-259200000},
+    {id:4, name:'The Godfather', cat:7, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🤵', year:1972, type:'movie', views:29000, added:Date.now()-345600000},
+    {id:5, name:'Home Alone', cat:8, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🏠', year:1990, type:'movie', views:21000, added:Date.now()-432000000},
+    {id:6, name:'Interstellar', cat:6, url:'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8', emoji:'🚀', year:2014, type:'movie', views:52000, added:Date.now()-518400000},
+  ],
+  banners: [
+    {id:1, title:'Sony Sports 1 HD', subtitle:'Watch live sports 24/7 — football, cricket, tennis & more', channelId:1, badge:'LIVE', active:true},
+    {id:2, title:'Champions League Live', subtitle:'UEFA Champions League — all matches, all goals, live on Sayem TV', channelId:11, badge:'HOT', active:true},
+    {id:3, title:'Avengers: Endgame', subtitle:'The ultimate Marvel epic — watch free now', channelId:null, movieId:2, badge:'NEW', active:true},
+  ],
+  settings: {siteName:'Sayem TV', featuredChannelId:1},
+  logs: [
+    {msg:'Admin logged in', type:'green', time: new Date(Date.now()-60000).toLocaleTimeString()},
+    {msg:'M3U file imported — 12 channels added', type:'yellow', time: new Date(Date.now()-120000).toLocaleTimeString()},
+    {msg:'Channel "Sony Sports 1 HD" added', type:'green', time: new Date(Date.now()-180000).toLocaleTimeString()},
+    {msg:'Cache refreshed', type:'yellow', time: new Date(Date.now()-240000).toLocaleTimeString()},
+  ],
+};
+
+// Load from localStorage if available
+function loadDB() {
+  try {
+    const saved = localStorage.getItem('sayemtv_db');
+    if (saved) DB = JSON.parse(saved);
+    const hist = localStorage.getItem('sayemtv_history');
+    if (hist) state.watchHistory = JSON.parse(hist);
+  } catch(e) {}
+}
+function saveDB() {
+  try { localStorage.setItem('sayemtv_db', JSON.stringify(DB)); } catch(e) {}
+}
+function saveHistory() {
+  try { localStorage.setItem('sayemtv_history', JSON.stringify(state.watchHistory)); } catch(e) {}
+}
+
+// ---- ROUTING ----
+function navigateTo(page, data) {
+  state.prevPage = state.currentPage;
+  state.currentPage = page;
+
+  // Update nav links
+  document.querySelectorAll('.nav-link').forEach(el => {
+    el.classList.toggle('active', el.dataset.page === page);
+  });
+
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+  const el = document.getElementById('page-' + page);
+  if (el) el.classList.add('active');
+
+  // Render page content
+  if (page === 'home') renderHome();
+  else if (page === 'live') renderLivePage();
+  else if (page === 'movies') renderMoviesPage();
+  else if (page === 'sports') renderSportsPage();
+  else if (page === 'trending') renderTrending();
+  else if (page === 'recent') renderRecent();
+  else if (page === 'search') renderSearch();
+  else if (page === 'player' && data) renderPlayer(data);
+  else if (page === 'category' && data) renderCategoryPage(data);
+
+  window.scrollTo(0,0);
+}
+
+// ---- HELPERS ----
+function getCatName(id) {
+  const c = DB.categories.find(c=>c.id===id);
+  return c ? c.name : 'Uncategorized';
+}
+function getCatIcon(id) {
+  const c = DB.categories.find(c=>c.id===id);
+  return c ? c.icon : '📺';
+}
+function formatViews(n) {
+  if (n>=1000000) return (n/1000000).toFixed(1)+'M';
+  if (n>=1000) return (n/1000).toFixed(1)+'K';
+  return n;
+}
+function timeAgo(ts) {
+  const d = Date.now() - ts;
+  if (d < 3600000) return Math.floor(d/60000)+'m ago';
+  if (d < 86400000) return Math.floor(d/3600000)+'h ago';
+  return Math.floor(d/86400000)+'d ago';
+}
+
+// ---- CARD BUILDER ----
+function buildCard(item, isMovie=false) {
+  const div = document.createElement('div');
+  div.className = 'channel-card';
+  div.onclick = () => playItem(item);
+  const isLive = item.type==='live';
+  div.innerHTML = `
+    <div class="card-thumb">
+      <span style="font-size:2.8rem">${item.emoji||'📺'}</span>
+      ${isLive?`<div class="card-live-badge"><span class="live-dot"></span> LIVE</div>`:''}
+    </div>
+    <div class="card-body">
+      <div class="card-title">${item.name}</div>
+      <div class="card-meta">
+        <span class="card-cat">${getCatName(item.cat)}</span>
+        <span>${isMovie?(item.year||''):'👁 '+formatViews(item.views||0)}</span>
+        ${!isMovie?`<span style="font-size:0.72rem;color:var(--sage)">${timeAgo(item.added)}</span>`:''}
+      </div>
+    </div>
+  `;
+  return div;
+}
+
+function playItem(item) {
+  // Record history
+  const existing = state.watchHistory.findIndex(h=>h.id===item.id && h.type===item.type);
+  if (existing!==-1) state.watchHistory.splice(existing,1);
+  state.watchHistory.unshift({...item, playedAt: Date.now(), progress: Math.random()*80+10});
+  if (state.watchHistory.length > 20) state.watchHistory.pop();
+  saveHistory();
+  navigateTo('player', item);
+}
+
+// ---- HOME ----
+function renderHome() {
+  renderHeroBanner();
+  renderContinueWatching();
+  renderHomeLive();
+  renderHomeMovies();
+  renderHomeSports();
+  renderTicker();
+}
+
+function renderHeroBanner() {
+  const banners = DB.banners.filter(b=>b.active);
+  if (!banners.length) return;
+
+  state.banners = banners;
+  if (state.heroBannerIndex >= banners.length) state.heroBannerIndex = 0;
+  const b = banners[state.heroBannerIndex];
+
+  const channel = b.channelId ? DB.channels.find(c=>c.id===b.channelId) : null;
+  const movie = b.movieId ? DB.movies.find(m=>m.id===b.movieId) : null;
+  const item = channel||movie;
+
+  document.getElementById('heroTitle').textContent = b.title;
+  document.getElementById('heroDesc').textContent = b.subtitle;
+
+  const dots = document.getElementById('heroNav');
+  dots.innerHTML = banners.map((_, i) =>
+    `<div class="hero-dot ${i===state.heroBannerIndex?'active':''}" onclick="goToBanner(${i})"></div>`
+  ).join('');
+
+  if (state.heroBannerTimer) clearInterval(state.heroBannerTimer);
+  state.heroBannerTimer = setInterval(() => {
+    state.heroBannerIndex = (state.heroBannerIndex+1) % banners.length;
+    renderHeroBanner();
+  }, 5000);
+
+  window.watchFeatured = () => { if (item) playItem(item); };
+}
+
+function goToBanner(i) {
+  if(state.heroBannerTimer) clearInterval(state.heroBannerTimer);
+  state.heroBannerIndex = i;
+  renderHeroBanner();
+}
+
+function renderContinueWatching() {
+  const bar = document.getElementById('continueBar');
+  const list = document.getElementById('continueList');
+  if (!state.watchHistory.length) { bar.style.display='none'; return; }
+  bar.style.display = '';
+  list.innerHTML = '';
+  state.watchHistory.slice(0,10).forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'continue-item';
+    div.onclick = () => playItem(item);
+    div.innerHTML = `
+      <div class="continue-thumb">${item.emoji||'📺'}</div>
+      <div class="continue-prog"><div class="continue-prog-fill" style="width:${item.progress||50}%"></div></div>
+      <div class="continue-name">${item.name}</div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+function renderHomeLive() {
+  const pills = document.getElementById('homeCatPills');
+  const grid = document.getElementById('liveGrid');
+  const liveCats = [...new Set(DB.channels.map(c=>c.cat))];
+  let activeCat = 'all';
+
+  function draw() {
+    grid.innerHTML = '';
+    const filtered = activeCat==='all' ? DB.channels.slice(0,8) : DB.channels.filter(c=>c.cat===activeCat).slice(0,8);
+    if (!filtered.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📡</div><div class="empty-title">No channels yet</div></div>'; return; }
+    filtered.forEach(ch => grid.appendChild(buildCard(ch)));
+  }
+
+  pills.innerHTML = `<button class="cat-pill active" onclick="setHomeCat('all', this)">All</button>` +
+    liveCats.map(id=>`<button class="cat-pill" onclick="setHomeCat(${id}, this)">${getCatIcon(id)} ${getCatName(id)}</button>`).join('');
+
+  window.setHomeCat = (cat, btn) => {
+    activeCat = cat;
+    pills.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    draw();
+  };
+  draw();
+}
+
+function renderHomeMovies() {
+  const grid = document.getElementById('moviesGridHome');
+  grid.innerHTML = '';
+  DB.movies.slice(0,6).forEach(m => grid.appendChild(buildCard(m, true)));
+}
+
+function renderHomeSports() {
+  const grid = document.getElementById('sportsGridHome');
+  grid.innerHTML = '';
+  DB.channels.filter(c=>getCatName(c.cat).toLowerCase()==='sports').slice(0,4).forEach(ch => grid.appendChild(buildCard(ch)));
+}
+
+function renderTicker() {
+  const inner = document.getElementById('tickerInner');
+  const allItems = [...DB.channels.slice(0,8), ...DB.movies.slice(0,4)];
+  const text = allItems.map(i=>`<span class="ticker-item"><span class="ticker-dot"></span>${i.name} ${i.type==='live'?'— LIVE NOW':i.year?`(${i.year})`:''}</span>`).join('');
+  inner.innerHTML = text + text; // double for seamless loop
+}
+
+// ---- LIVE PAGE ----
+function renderLivePage() {
+  const pills = document.getElementById('liveCatPills');
+  const grid = document.getElementById('livePageGrid');
+  const liveCats = [...new Set(DB.channels.map(c=>c.cat))];
+  let activeCat = 'all';
+
+  function draw() {
+    grid.innerHTML = '';
+    const filtered = activeCat==='all' ? DB.channels : DB.channels.filter(c=>c.cat===activeCat);
+    if (!filtered.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📡</div><div class="empty-title">No channels</div></div>'; return; }
+    filtered.forEach(ch => grid.appendChild(buildCard(ch)));
+  }
+
+  pills.innerHTML = `<button class="cat-pill active" onclick="setLiveCat('all',this)">All Channels</button>` +
+    liveCats.map(id=>`<button class="cat-pill" onclick="setLiveCat(${id},this)">${getCatIcon(id)} ${getCatName(id)}</button>`).join('');
+
+  window.setLiveCat = (cat,btn) => {
+    activeCat = cat;
+    pills.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    draw();
+  };
+  draw();
+}
+
+// ---- MOVIES PAGE ----
+function renderMoviesPage() {
+  const pills = document.getElementById('movieCatPills');
+  const grid = document.getElementById('moviesPageGrid');
+  const movieCats = [...new Set(DB.movies.map(m=>m.cat))];
+  let activeCat = 'all';
+
+  function draw() {
+    grid.innerHTML = '';
+    const filtered = activeCat==='all' ? DB.movies : DB.movies.filter(m=>m.cat===activeCat);
+    if (!filtered.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🎬</div><div class="empty-title">No movies yet</div></div>'; return; }
+    filtered.forEach(m => grid.appendChild(buildCard(m, true)));
+  }
+
+  pills.innerHTML = `<button class="cat-pill active" onclick="setMovieCat('all',this)">All Movies</button>` +
+    movieCats.map(id=>`<button class="cat-pill" onclick="setMovieCat(${id},this)">${getCatIcon(id)} ${getCatName(id)}</button>`).join('');
+
+  window.setMovieCat = (cat,btn) => {
+    activeCat = cat;
+    pills.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    draw();
+  };
+  draw();
+}
+
+// ---- SPORTS PAGE ----
+function renderSportsPage() {
+  const grid = document.getElementById('sportsPageGrid');
+  grid.innerHTML = '';
+  const sports = DB.channels.filter(c=>getCatName(c.cat).toLowerCase().includes('sport'));
+  if (!sports.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">⚽</div><div class="empty-title">No sports channels</div></div>'; return; }
+  sports.forEach(ch => grid.appendChild(buildCard(ch)));
+}
+
+// ---- TRENDING ----
+function renderTrending() {
+  const grid = document.getElementById('trendingGrid');
+  grid.innerHTML = '';
+  const all = [...DB.channels, ...DB.movies].sort((a,b)=>(b.views||0)-(a.views||0));
+  all.forEach((item,i) => {
+    const card = buildCard(item, item.type==='movie');
+    const badge = document.createElement('div');
+    badge.style.cssText = `position:absolute;top:8px;right:8px;background:var(--yellow);color:#000;border:var(--border);padding:2px 8px;font-family:var(--font-head);font-weight:800;font-size:0.75rem;`;
+    badge.textContent = '#' + (i+1);
+    card.querySelector('.card-thumb').appendChild(badge);
+    grid.appendChild(card);
+  });
+}
+
+// ---- RECENT ----
+function renderRecent() {
+  const grid = document.getElementById('recentGrid');
+  grid.innerHTML = '';
+  const all = [...DB.channels, ...DB.movies].sort((a,b)=>b.added-a.added);
+  if (!all.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🆕</div><div class="empty-title">Nothing added yet</div></div>'; return; }
+  all.forEach(item => grid.appendChild(buildCard(item, item.type==='movie')));
+}
+
+// ---- SEARCH ----
+function renderSearch() {
+  const tags = document.getElementById('tagCloud');
+  tags.innerHTML = DB.categories.map(c=>`<button class="tag" onclick="doSearch('${c.name}')">${c.icon} ${c.name}</button>`).join('');
+  doSearch('');
+}
+
+function doSearch(q) {
+  q = q.toLowerCase().trim();
+  const grid = document.getElementById('searchGrid');
+  const title = document.getElementById('searchResultTitle');
+  grid.innerHTML = '';
+  const all = [...DB.channels, ...DB.movies];
+  const filtered = q ? all.filter(i => i.name.toLowerCase().includes(q) || getCatName(i.cat).toLowerCase().includes(q)) : all;
+  title.innerHTML = q ? `Search: "<span style="color:var(--yellow)">${q}</span>" — ${filtered.length} results` : `All Content <span class="tag">${all.length} items</span>`;
+  if (!filtered.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🔍</div><div class="empty-title">No results for "'+q+'"</div><div class="empty-sub">Try a different search term</div></div>'; return; }
+  filtered.forEach(item => grid.appendChild(buildCard(item, item.type==='movie')));
+}
+
+function handleNavSearch(e) {
+  if (e.key === 'Enter') {
+    const q = e.target.value;
+    navigateTo('search');
+    setTimeout(() => {
+      document.getElementById('searchBigInput').value = q;
+      doSearch(q);
+    }, 50);
+  }
+}
+
+// ---- CATEGORY PAGE ----
+function renderCategoryPage(catId) {
+  const cat = DB.categories.find(c=>c.id===catId);
+  if (!cat) return;
+  document.getElementById('catPageIcon').textContent = cat.icon;
+  document.getElementById('catPageName').textContent = cat.name;
+  const items = cat.type==='movie' ? DB.movies.filter(m=>m.cat===catId) : DB.channels.filter(c=>c.cat===catId);
+  document.getElementById('catPageCount').textContent = items.length + (cat.type==='movie'?' movies':' channels');
+  const grid = document.getElementById('catPageGrid');
+  grid.innerHTML = '';
+  if (!items.length) { grid.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📂</div><div class="empty-title">No content in this category</div></div>'; return; }
+  items.forEach(item => grid.appendChild(buildCard(item, cat.type==='movie')));
+}
+
+// ---- PLAYER ----
+let videoPlayer = null;
+function renderPlayer(item) {
+  state.currentChannel = item;
+
+  document.getElementById('playerTitle').textContent = item.name;
+  document.getElementById('playerCat').textContent = getCatName(item.cat);
+  document.getElementById('playerLiveBadge').style.display = item.type==='live' ? 'inline-flex' : 'none';
+
+  // Init video.js
+  if (videoPlayer) {
+    try { videoPlayer.dispose(); } catch(e) {}
+    document.getElementById('playerBox').innerHTML = '<video id="mainVideo" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" style="width:100%;height:100%;"></video>';
+  }
+
+  try {
+    videoPlayer = videojs('mainVideo', {
+      controls: true,
+      autoplay: true,
+      preload: 'auto',
+      fluid: true,
+      responsive: true,
+    });
+    if (item.url && (item.url.includes('.m3u8') || item.url.includes('m3u'))) {
+      videoPlayer.src({ src: item.url, type: 'application/x-mpegURL' });
+    } else {
+      videoPlayer.src({ src: item.url || '', type: 'video/mp4' });
+    }
+  } catch(e) {
+    document.getElementById('playerBox').innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:center;height:100%;background:#0a0f0b;flex-direction:column;gap:16px;">
+        <div style="font-size:4rem">${item.emoji||'📺'}</div>
+        <div style="font-family:var(--font-head);font-size:1.2rem;color:var(--yellow)">${item.name}</div>
+        <div style="color:var(--sage);font-size:0.85rem">Stream: ${item.url||'No stream URL'}</div>
+        <div style="color:var(--sage);font-size:0.78rem">HLS stream — Video.js required in full deployment</div>
+      </div>`;
+  }
+
+  // Related
+  const related = document.getElementById('relatedList');
+  related.innerHTML = '';
+  const relItems = item.type==='movie'
+    ? DB.movies.filter(m=>m.id!==item.id && m.cat===item.cat).slice(0,8)
+    : DB.channels.filter(c=>c.id!==item.id && c.cat===item.cat).slice(0,8);
+
+  if (!relItems.length) {
+    related.innerHTML = '<div style="color:var(--sage);font-size:0.82rem">No related content</div>';
+  } else {
+    relItems.forEach(ri => {
+      const div = document.createElement('div');
+      div.className = 'related-card';
+      div.onclick = () => playItem(ri);
+      div.innerHTML = `
+        <div class="related-thumb">${ri.emoji||'📺'}</div>
+        <div class="related-info">
+          <div class="related-name">${ri.name}</div>
+          <div class="related-cat">${getCatName(ri.cat)} ${ri.type==='live'?'• LIVE':ri.year?'• '+ri.year:''}</div>
+        </div>`;
+      related.appendChild(div);
+    });
+  }
+
+  // Update mini player title
+  document.getElementById('miniTitle').textContent = item.name;
+
+  logActivity(`Watching: ${item.name}`, 'yellow');
+}
+
+function goBackFromPlayer() {
+  // If video is playing, convert to mini player
+  if (videoPlayer && state.currentChannel) {
+    showMiniPlayer();
+  }
+  navigateTo(state.prevPage !== 'player' ? state.prevPage : 'home');
+}
+
+function showMiniPlayer() {
+  const mp = document.getElementById('miniPlayer');
+  const mv = document.getElementById('miniVideo');
+  mp.classList.add('visible');
+  state.miniPlayerVisible = true;
+  if (state.currentChannel) {
+    mv.src = state.currentChannel.url || '';
+  }
+  if (videoPlayer) { try { videoPlayer.pause(); } catch(e) {} }
+}
+
+function closeMiniPlayer() {
+  document.getElementById('miniPlayer').classList.remove('visible');
+  state.miniPlayerVisible = false;
+  const mv = document.getElementById('miniVideo');
+  mv.pause();
+  mv.src = '';
+}
+
+function expandPlayer() {
+  closeMiniPlayer();
+  if (state.currentChannel) navigateTo('player', state.currentChannel);
+}
+
+function togglePiP() {
+  const v = document.getElementById('mainVideo');
+  if (v && document.pictureInPictureElement) {
+    document.exitPictureInPicture();
+  } else if (v && v.requestPictureInPicture) {
+    v.requestPictureInPicture().catch(()=>showToast('PiP not supported in this browser','error'));
+  } else {
+    showMiniPlayer();
+  }
+}
+
+function toggleFullscreen() {
+  const box = document.getElementById('playerBox');
+  if (document.fullscreenElement) { document.exitFullscreen(); }
+  else { box.requestFullscreen && box.requestFullscreen(); }
+}
+
+function shareChannel() {
+  if (state.currentChannel) {
+    const text = `Watch ${state.currentChannel.name} on Sayem TV`;
+    if (navigator.share) {
+      navigator.share({title: text, url: window.location.href}).catch(()=>{});
+    } else {
+      navigator.clipboard?.writeText(window.location.href).then(()=>showToast('Link copied!','success')).catch(()=>showToast('Copy the URL manually','info'));
+    }
+  }
+}
+
+// ---- THEME ----
+function toggleTheme() {
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', state.theme);
+  document.querySelector('.btn-icon').textContent = state.theme==='dark'?'🌙':'☀️';
+}
+
+// ---- TOAST ----
+function showToast(msg, type='info') {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = `toast toast-${type}`;
+  t.textContent = msg;
+  c.appendChild(t);
+  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateX(100%)'; setTimeout(()=>t.remove(), 300); }, 3000);
+}
+
+// ---- ADMIN ----
+let adminLoggedIn = false;
+
+// Check if on admin URL
+function checkAdminRoute() {
+  if (window.location.hash === '#/secure-admin-8x92' || window.location.search.includes('admin')) {
+    showAdminPanel();
+  }
+}
+
+function showAdminPanel() {
+  document.getElementById('publicSite').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  if (!adminLoggedIn) {
+    document.getElementById('adminLogin').style.display = '';
+    document.getElementById('adminDash').style.display = 'none';
+  }
+}
+
+function doAdminLogin() {
+  const u = document.getElementById('adminUser').value;
+  const p = document.getElementById('adminPass').value;
+  if (u === 'admin' && p === 'admin123') {
+    adminLoggedIn = true;
+    document.getElementById('adminLogin').style.display = 'none';
+    document.getElementById('adminDash').style.display = 'block';
+    logActivity('Admin logged in', 'green');
+    renderAdminDash();
+    showToast('Welcome back, Admin!', 'success');
+  } else {
+    showToast('Invalid credentials', 'error');
+    document.getElementById('adminPass').style.outline = '2px solid #ff3b3b';
+  }
+}
+
+function adminLogout() {
+  adminLoggedIn = false;
+  document.getElementById('adminPanel').style.display = 'none';
+  document.getElementById('publicSite').style.display = 'block';
+  window.location.hash = '';
+}
+
+function adminNav(sec) {
+  document.querySelectorAll('.admin-nav-item, .admin-mob-btn').forEach(el => el.classList.toggle('active', el.dataset.sec === sec));
+  document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active'));
+  const s = document.getElementById('sec-' + sec);
+  if (s) s.classList.add('active');
+
+  if (sec==='dashboard') renderAdminDash();
+  else if (sec==='channels') renderAdminChannels();
+  else if (sec==='categories') renderAdminCats();
+  else if (sec==='movies') renderAdminMovies();
+  else if (sec==='banners') renderAdminBanners();
+  else if (sec==='logs') renderLogs();
+  else if (sec==='settings') renderSettings();
+}
+
+// ---- ADMIN DASHBOARD ----
+function renderAdminDash() {
+  const sg = document.getElementById('statsGrid');
+  sg.innerHTML = `
+    <div class="stat-card"><div class="stat-num">${DB.channels.length}</div><div class="stat-label">Live Channels</div></div>
+    <div class="stat-card"><div class="stat-num">${DB.movies.length}</div><div class="stat-label">Movies</div></div>
+    <div class="stat-card"><div class="stat-num">${DB.categories.length}</div><div class="stat-label">Categories</div></div>
+    <div class="stat-card"><div class="stat-num">${DB.banners.filter(b=>b.active).length}</div><div class="stat-label">Active Banners</div></div>
+    <div class="stat-card"><div class="stat-num">${state.watchHistory.length}</div><div class="stat-label">Watch History</div></div>
+    <div class="stat-card"><div class="stat-num">${DB.logs.length}</div><div class="stat-label">Log Entries</div></div>
+  `;
+
+  const rc = document.getElementById('dashRecentChannels');
+  rc.innerHTML = DB.channels.slice(0,5).map(c=>`
+    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #1a2a1e;align-items:center">
+      <span style="font-size:1.3rem">${c.emoji}</span>
+      <div style="flex:1"><div style="font-size:0.85rem;font-weight:700">${c.name}</div><div style="font-size:0.73rem;color:var(--sage)">${getCatName(c.cat)}</div></div>
+      <span style="font-size:0.7rem;color:var(--sage)">${timeAgo(c.added)}</span>
+    </div>`).join('');
+
+  const tc = document.getElementById('dashTopCats');
+  tc.innerHTML = DB.categories.map(c=>{
+    const count = DB.channels.filter(ch=>ch.cat===c.id).length + DB.movies.filter(m=>m.cat===c.id).length;
+    return `<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #1a2a1e;align-items:center">
+      <span style="font-size:1.2rem">${c.icon}</span>
+      <div style="flex:1;font-size:0.85rem;font-weight:700">${c.name}</div>
+      <span style="background:var(--yellow);color:#000;border:var(--border);padding:1px 8px;font-size:0.72rem;font-weight:700">${count} items</span>
+    </div>`;
+  }).join('');
+}
+
+// ---- ADMIN CHANNELS ----
+function renderAdminChannels() {
+  const q = (document.getElementById('adminChSearch')?.value||'').toLowerCase();
+  const tbody = document.getElementById('channelsTbody');
+  const filtered = q ? DB.channels.filter(c=>c.name.toLowerCase().includes(q)||getCatName(c.cat).toLowerCase().includes(q)) : DB.channels;
+  tbody.innerHTML = filtered.map((c,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td><span style="margin-right:6px">${c.emoji}</span>${c.name}</td>
+      <td>${getCatIcon(c.cat)} ${getCatName(c.cat)}</td>
+      <td style="font-family:monospace;font-size:0.75rem;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.url||'—'}</td>
+      <td><span class="card-live-badge" style="position:static;font-size:0.68rem"><span class="live-dot"></span>LIVE</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-primary btn-sm" onclick="openEditChannel(${c.id})">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteChannel(${c.id})">Del</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function openAddChannel() {
+  openModal('Add Channel', channelForm());
+}
+function openEditChannel(id) {
+  const c = DB.channels.find(ch=>ch.id===id);
+  if (!c) return;
+  openModal('Edit Channel', channelForm(c));
+}
+function channelForm(c={}) {
+  return `
+    <div class="form-group"><label class="form-label">Name</label><input class="form-input" id="chName" value="${c.name||''}"/></div>
+    <div class="form-group"><label class="form-label">Category</label>
+      <select class="form-input" id="chCat">${DB.categories.map(cat=>`<option value="${cat.id}" ${c.cat===cat.id?'selected':''}>${cat.icon} ${cat.name}</option>`).join('')}</select>
+    </div>
+    <div class="form-group"><label class="form-label">Stream URL (.m3u8)</label><input class="form-input" id="chUrl" value="${c.url||''}"/></div>
+    <div class="form-group"><label class="form-label">Emoji Icon</label><input class="form-input" id="chEmoji" value="${c.emoji||'📺'}" style="max-width:100px"/></div>
+    <button class="btn btn-primary" onclick="saveChannel(${c.id||0})">Save Channel</button>
+  `;
+}
+function saveChannel(id) {
+  const name = document.getElementById('chName').value.trim();
+  const cat = parseInt(document.getElementById('chCat').value);
+  const url = document.getElementById('chUrl').value.trim();
+  const emoji = document.getElementById('chEmoji').value.trim();
+  if (!name) { showToast('Name required','error'); return; }
+  if (id) {
+    const ch = DB.channels.find(c=>c.id===id);
+    if (ch) { ch.name=name; ch.cat=cat; ch.url=url; ch.emoji=emoji; }
+  } else {
+    DB.channels.push({id:Date.now(), name, cat, url, emoji, type:'live', views:0, added:Date.now()});
+  }
+  saveDB(); closeModal(); renderAdminChannels();
+  logActivity(`Channel "${name}" ${id?'updated':'added'}`, 'green');
+  showToast(`Channel ${id?'updated':'added'} successfully`, 'success');
+}
+function deleteChannel(id) {
+  const ch = DB.channels.find(c=>c.id===id);
+  if (!ch) return;
+  if (!confirm(`Delete "${ch.name}"?`)) return;
+  DB.channels = DB.channels.filter(c=>c.id!==id);
+  saveDB(); renderAdminChannels();
+  logActivity(`Channel "${ch.name}" deleted`, 'red');
+  showToast('Channel deleted','success');
+}
+
+// ---- ADMIN CATEGORIES ----
+function renderAdminCats() {
+  const tbody = document.getElementById('catsTbody');
+  tbody.innerHTML = DB.categories.map((c,i)=>{
+    const count = DB.channels.filter(ch=>ch.cat===c.id).length + DB.movies.filter(m=>m.cat===c.id).length;
+    return `<tr>
+      <td>${i+1}</td>
+      <td>${c.name}</td>
+      <td style="font-size:1.3rem">${c.icon}</td>
+      <td>${count}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-primary btn-sm" onclick="openEditCat(${c.id})">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteCat(${c.id})">Del</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+function openAddCategory() { openModal('Add Category', catForm()); }
+function openEditCat(id) {
+  const c = DB.categories.find(cat=>cat.id===id);
+  if (c) openModal('Edit Category', catForm(c));
+}
+function catForm(c={}) {
+  return `
+    <div class="form-group"><label class="form-label">Name</label><input class="form-input" id="catName" value="${c.name||''}"/></div>
+    <div class="form-group"><label class="form-label">Icon (emoji)</label><input class="form-input" id="catIcon" value="${c.icon||'📺'}" style="max-width:100px"/></div>
+    <div class="form-group"><label class="form-label">Type</label>
+      <select class="form-input" id="catType">
+        <option value="live" ${c.type==='live'?'selected':''}>Live TV</option>
+        <option value="movie" ${c.type==='movie'?'selected':''}>Movie</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="saveCat(${c.id||0})">Save Category</button>`;
+}
+function saveCat(id) {
+  const name = document.getElementById('catName').value.trim();
+  const icon = document.getElementById('catIcon').value.trim();
+  const type = document.getElementById('catType').value;
+  if (!name) { showToast('Name required','error'); return; }
+  if (id) {
+    const c = DB.categories.find(cat=>cat.id===id);
+    if (c) { c.name=name; c.icon=icon; c.type=type; }
+  } else {
+    DB.categories.push({id:Date.now(), name, icon, type});
+  }
+  saveDB(); closeModal(); renderAdminCats();
+  logActivity(`Category "${name}" ${id?'updated':'added'}`, 'green');
+  showToast(`Category ${id?'updated':'added'}`, 'success');
+}
+function deleteCat(id) {
+  const c = DB.categories.find(cat=>cat.id===id);
+  if (!c) return;
+  if (!confirm(`Delete category "${c.name}"?`)) return;
+  DB.categories = DB.categories.filter(cat=>cat.id!==id);
+  saveDB(); renderAdminCats();
+  showToast('Category deleted','success');
+}
+
+// ---- ADMIN MOVIES ----
+function renderAdminMovies() {
+  const tbody = document.getElementById('moviesTbody');
+  tbody.innerHTML = DB.movies.map((m,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td><span style="margin-right:6px">${m.emoji}</span>${m.name}</td>
+      <td>${getCatIcon(m.cat)} ${getCatName(m.cat)}</td>
+      <td>${m.year||'—'}</td>
+      <td style="font-family:monospace;font-size:0.75rem;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.url||'—'}</td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-primary btn-sm" onclick="openEditMovie(${m.id})">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteMovie(${m.id})">Del</button>
+      </div></td>
+    </tr>`).join('');
+}
+function openAddMovie() { openModal('Add Movie', movieForm()); }
+function openEditMovie(id) {
+  const m = DB.movies.find(mv=>mv.id===id);
+  if (m) openModal('Edit Movie', movieForm(m));
+}
+function movieForm(m={}) {
+  return `
+    <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="mvName" value="${m.name||''}"/></div>
+    <div class="form-group"><label class="form-label">Category</label>
+      <select class="form-input" id="mvCat">${DB.categories.map(c=>`<option value="${c.id}" ${m.cat===c.id?'selected':''}>${c.icon} ${c.name}</option>`).join('')}</select>
+    </div>
+    <div class="form-group"><label class="form-label">Year</label><input class="form-input" id="mvYear" value="${m.year||''}" type="number"/></div>
+    <div class="form-group"><label class="form-label">Stream URL</label><input class="form-input" id="mvUrl" value="${m.url||''}"/></div>
+    <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="mvEmoji" value="${m.emoji||'🎬'}" style="max-width:100px"/></div>
+    <button class="btn btn-primary" onclick="saveMovie(${m.id||0})">Save Movie</button>`;
+}
+function saveMovie(id) {
+  const name = document.getElementById('mvName').value.trim();
+  const cat = parseInt(document.getElementById('mvCat').value);
+  const year = parseInt(document.getElementById('mvYear').value)||null;
+  const url = document.getElementById('mvUrl').value.trim();
+  const emoji = document.getElementById('mvEmoji').value.trim();
+  if (!name) { showToast('Title required','error'); return; }
+  if (id) {
+    const m = DB.movies.find(mv=>mv.id===id);
+    if (m) { m.name=name; m.cat=cat; m.year=year; m.url=url; m.emoji=emoji; }
+  } else {
+    DB.movies.push({id:Date.now(), name, cat, year, url, emoji, type:'movie', views:0, added:Date.now()});
+  }
+  saveDB(); closeModal(); renderAdminMovies();
+  logActivity(`Movie "${name}" ${id?'updated':'added'}`, 'green');
+  showToast(`Movie ${id?'updated':'added'}`, 'success');
+}
+function deleteMovie(id) {
+  const m = DB.movies.find(mv=>mv.id===id);
+  if (!m || !confirm(`Delete "${m.name}"?`)) return;
+  DB.movies = DB.movies.filter(mv=>mv.id!==id);
+  saveDB(); renderAdminMovies();
+  showToast('Movie deleted','success');
+}
+
+// ---- ADMIN BANNERS ----
+function renderAdminBanners() {
+  const tbody = document.getElementById('bannersTbody');
+  tbody.innerHTML = DB.banners.map((b,i)=>`
+    <tr>
+      <td>${i+1}</td>
+      <td>${b.title}</td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${b.subtitle}</td>
+      <td>${b.channelId ? (DB.channels.find(c=>c.id===b.channelId)||{}).name||'—' : '—'}</td>
+      <td><span style="color:${b.active?'#4ade80':'#ff3b3b'};font-weight:700">${b.active?'✓ Active':'✗ Off'}</span></td>
+      <td><div style="display:flex;gap:4px">
+        <button class="btn btn-primary btn-sm" onclick="toggleBanner(${b.id})">${b.active?'Deactivate':'Activate'}</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteBanner(${b.id})">Del</button>
+      </div></td>
+    </tr>`).join('');
+}
+function openAddBanner() {
+  openModal('Add Banner', `
+    <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="bnTitle"/></div>
+    <div class="form-group"><label class="form-label">Subtitle</label><input class="form-input" id="bnSub"/></div>
+    <div class="form-group"><label class="form-label">Channel</label>
+      <select class="form-input" id="bnCh"><option value="">— None —</option>${DB.channels.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')}</select>
+    </div>
+    <button class="btn btn-primary" onclick="saveBanner()">Add Banner</button>
+  `);
+}
+function saveBanner() {
+  const title = document.getElementById('bnTitle').value.trim();
+  const subtitle = document.getElementById('bnSub').value.trim();
+  const chId = document.getElementById('bnCh').value ? parseInt(document.getElementById('bnCh').value) : null;
+  if (!title) { showToast('Title required','error'); return; }
+  DB.banners.push({id:Date.now(), title, subtitle, channelId:chId, active:true});
+  saveDB(); closeModal(); renderAdminBanners();
+  logActivity(`Banner "${title}" added`, 'green');
+  showToast('Banner added', 'success');
+}
+function toggleBanner(id) {
+  const b = DB.banners.find(bn=>bn.id===id);
+  if (b) { b.active = !b.active; saveDB(); renderAdminBanners(); showToast('Banner updated','success'); }
+}
+function deleteBanner(id) {
+  if (!confirm('Delete this banner?')) return;
+  DB.banners = DB.banners.filter(b=>b.id!==id);
+  saveDB(); renderAdminBanners();
+  showToast('Banner deleted','success');
+}
+
+// ---- M3U PARSER ----
+function handleM3UFile(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    document.getElementById('m3uText').value = ev.target.result;
+    showToast(`File "${file.name}" loaded`, 'success');
+  };
+  reader.readAsText(file);
+}
+function handleM3UDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('m3uText').value = ev.target.result;
+      showToast(`File "${file.name}" loaded`, 'success');
+    };
+    reader.readAsText(file);
+  }
+}
+
+function parseM3U() {
+  const text = document.getElementById('m3uText').value.trim();
+  if (!text) { showToast('No M3U content to parse','error'); return; }
+
+  const lines = text.split('\n').map(l=>l.trim());
+  let added = 0, catsCreated = 0;
+  const result = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.startsWith('#EXTINF')) {
+      const nameMatch = line.match(/,(.+)$/);
+      const groupMatch = line.match(/group-title="([^"]+)"/);
+      const name = nameMatch ? nameMatch[1].trim() : 'Unknown Channel';
+      const group = groupMatch ? groupMatch[1].trim() : 'Uncategorized';
+
+      // Find or create category
+      let cat = DB.categories.find(c=>c.name.toLowerCase()===group.toLowerCase());
+      if (!cat) {
+        cat = {id: Date.now()+Math.random(), name: group, icon: '📺', type:'live'};
+        DB.categories.push(cat);
+        catsCreated++;
+      }
+
+      // Next line should be the URL
+      const url = lines[i+1] && !lines[i+1].startsWith('#') ? lines[i+1] : '';
+      if (url) {
+        const existing = DB.channels.find(c=>c.name===name && c.cat===cat.id);
+        if (!existing) {
+          DB.channels.push({id:Date.now()+added, name, cat:cat.id, url, emoji:'📺', type:'live', views:0, added:Date.now()});
+          result.push({name, group});
+          added++;
+        }
+        i++; // skip url line
+      }
+    }
+  }
+
+  saveDB();
+  logActivity(`M3U imported: ${added} channels, ${catsCreated} new categories`, 'yellow');
+
+  const resDiv = document.getElementById('m3uResult');
+  resDiv.innerHTML = `
+    <div style="border:var(--border);box-shadow:var(--shadow-sm);overflow:hidden">
+      <div style="background:var(--yellow);color:#000;padding:10px 16px;font-family:var(--font-head);font-weight:800;border-bottom:var(--border)">
+        ✅ Import Complete — ${added} channels added, ${catsCreated} categories created
+      </div>
+      <div style="padding:16px;max-height:300px;overflow-y:auto">
+        ${result.map(r=>`<div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid #1a2a1e;font-size:0.83rem">
+          <span style="background:var(--yellow);color:#000;border:var(--border);padding:1px 6px;font-size:0.7rem;font-weight:700">${r.group}</span>
+          <span>${r.name}</span>
+        </div>`).join('')}
+        ${!result.length?'<div style="color:var(--sage)">No new channels found (duplicates skipped)</div>':''}
+      </div>
+    </div>`;
+  showToast(`Imported ${added} channels!`, 'success');
+}
+
+// ---- ADMIN SETTINGS ----
+function renderSettings() {
+  document.getElementById('setSiteName').value = DB.settings.siteName || 'Sayem TV';
+  const sel = document.getElementById('setFeatured');
+  sel.innerHTML = DB.channels.map(c=>`<option value="${c.id}" ${DB.settings.featuredChannelId===c.id?'selected':''}>${c.name}</option>`).join('');
+}
+function saveSettings() {
+  DB.settings.siteName = document.getElementById('setSiteName').value;
+  DB.settings.featuredChannelId = parseInt(document.getElementById('setFeatured').value)||1;
+  const newPass = document.getElementById('setPassword').value;
+  if (newPass) { /* in real app: hash and store */ }
+  saveDB();
+  logActivity('Settings saved', 'yellow');
+  showToast('Settings saved', 'success');
+}
+function refreshCache() {
+  logActivity('Cache refreshed', 'yellow');
+  showToast('Cache refreshed!', 'success');
+}
+
+// ---- LOGS ----
+function logActivity(msg, type='green') {
+  DB.logs.unshift({msg, type, time: new Date().toLocaleTimeString()});
+  if (DB.logs.length > 100) DB.logs.pop();
+  saveDB();
+}
+function renderLogs() {
+  const list = document.getElementById('logsList');
+  if (!DB.logs.length) { list.innerHTML='<div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">No logs yet</div></div>'; return; }
+  list.innerHTML = DB.logs.map(l=>`
+    <div class="log-item">
+      <div class="log-dot ${l.type}"></div>
+      <div><div style="font-size:0.85rem">${l.msg}</div><div class="log-time">${l.time}</div></div>
+    </div>`).join('');
+}
+function clearLogs() {
+  if (confirm('Clear all logs?')) { DB.logs=[]; saveDB(); renderLogs(); showToast('Logs cleared','success'); }
+}
+
+// ---- MODAL ----
+function openModal(title, body) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalBody').innerHTML = body;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// ---- KEYBOARD SHORTCUTS ----
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (e.ctrlKey && e.shiftKey && e.key === 'A') { // Ctrl+Shift+A → admin
+    showAdminPanel();
+  }
+});
+
+// ---- URL HASH ROUTING (for admin) ----
+window.addEventListener('hashchange', checkAdminRoute);
+
+// ---- INIT ----
+function init() {
+  loadDB();
+  checkAdminRoute();
+  renderHome();
+  renderTicker();
+}
+
+init();
+</script>
+
+<!-- Admin access hint (hidden in production) -->
+<!-- Access admin at: yoursite.com/#/secure-admin-8x92 -->
+
+</body>
+</html>
