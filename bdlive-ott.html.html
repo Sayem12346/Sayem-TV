@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050a0f">
+<title>BDLive – বাংলাদেশের সেরা লাইভ টিভি</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-0:#050a0f; --bg-1:#0b1520; --bg-2:#111d2c; --bg-3:#18263a; --bg-4:#1e2f47;
+  --accent:#00d4aa; --accent-dim:#009e80; --accent-glow:rgba(0,212,170,.14);
+  --red:#ff3b5c; --red-dim:rgba(255,59,92,.14);
+  --gold:#f5a623; --blue:#3b82f6;
+  --text-0:#eef4ff; --text-1:#94b0c8; --text-2:#4d6a84;
+  --border:rgba(255,255,255,.07); --border-hi:rgba(0,212,170,.25);
+  --sidebar-w:244px; --header-h:60px; --radius:12px; --radius-sm:8px;
+  --transition:.18s ease;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{font-family:'Inter',sans-serif;background:var(--bg-0);color:var(--text-0);min-height:100vh;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg-1)}
+::-webkit-scrollbar-thumb{background:var(--bg-4);border-radius:99px}
+img{display:block}
+
+/* ─── HEADER ─── */
+#hdr{
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);
+  background:rgba(5,10,15,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 14px;gap:10px;z-index:1000;
+}
+.logo{display:flex;align-items:center;gap:8px;flex-shrink:0;cursor:pointer}
+.logo-mark{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,#00d4aa 0%,#0077ff 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:13px;color:#fff;letter-spacing:-.5px;
+  box-shadow:0 0 16px rgba(0,212,170,.3);
+}
+.logo-name{font-size:17px;font-weight:800;background:linear-gradient(90deg,var(--accent),#60baff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-search{
+  flex:1;max-width:380px;margin:0 8px;
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg-2);border:1px solid var(--border);border-radius:99px;
+  padding:0 14px;height:36px;transition:border-color var(--transition);
+}
+.hdr-search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.hdr-search svg{opacity:.4;flex-shrink:0}
+.hdr-search input{background:none;border:none;outline:none;color:var(--text-0);font-size:13px;font-family:inherit;width:100%}
+.hdr-search input::placeholder{color:var(--text-2)}
+.live-pill{
+  display:flex;align-items:center;gap:5px;padding:4px 10px;
+  background:var(--red-dim);border:1px solid rgba(255,59,92,.3);
+  border-radius:99px;font-size:11px;font-weight:700;color:var(--red);
+  text-transform:uppercase;flex-shrink:0;cursor:default;
+}
+.pulse{width:6px;height:6px;background:var(--red);border-radius:50%;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+.vc{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-1);flex-shrink:0}
+.hdr-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
+.btn-sm{
+  padding:6px 13px;border-radius:99px;font-size:12px;font-weight:600;
+  cursor:pointer;border:none;transition:var(--transition);
+}
+.btn-outline{background:var(--bg-3);color:var(--text-0);border:1px solid var(--border)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-accent{background:var(--accent);color:#000}
+.btn-accent:hover{background:var(--accent-dim)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:6px;border-radius:8px;flex-shrink:0}
+.hamburger span{display:block;width:20px;height:2px;background:var(--text-1);border-radius:2px;transition:var(--transition)}
+
+/* ─── TICKER ─── */
+.ticker{
+  position:fixed;top:var(--header-h);left:var(--sidebar-w);right:0;height:34px;
+  background:var(--bg-1);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;padding:0 14px;z-index:900;overflow:hidden;
+  transition:left var(--transition);
+}
+.ticker-tag{flex-shrink:0;background:var(--red);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.06em}
+.ticker-scroll{flex:1;overflow:hidden;mask-image:linear-gradient(to right,transparent,black 5%,black 95%,transparent)}
+.ticker-inner{display:inline-flex;gap:48px;white-space:nowrap;font-size:12px;color:var(--text-1);animation:ticker 40s linear infinite}
+.ticker-inner span::before{content:'● ';color:var(--accent);font-size:8px;vertical-align:middle;margin-right:4px}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ─── SIDEBAR ─── */
+#sidebar{
+  position:fixed;top:var(--header-h);left:0;bottom:0;width:var(--sidebar-w);
+  background:var(--bg-1);border-right:1px solid var(--border);
+  overflow-y:auto;z-index:950;transition:transform var(--transition);
+  padding-bottom:20px;
+}
+.sb-section{padding:18px 14px 6px;font-size:10px;font-weight:700;color:var(--text-2);letter-spacing:.12em;text-transform:uppercase}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:9px;
+  margin:1px 6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text-1);
+  transition:background var(--transition),color var(--transition);user-select:none;
+}
+.nav-item:hover{background:var(--bg-2);color:var(--text-0)}
+.nav-item.active{background:var(--accent-glow);color:var(--accent)}
+.nav-item.active .ni{color:var(--accent)}
+.nav-bar{
+  position:absolute;left:0;width:3px;border-radius:0 3px 3px 0;background:var(--accent);
+  transition:top .2s ease,height .2s ease;pointer-events:none;
+}
+.ni{width:18px;text-align:center;font-size:15px;flex-shrink:0}
+.nb{
+  margin-left:auto;font-size:10px;font-weight:700;padding:1px 7px;border-radius:99px;
+  background:var(--bg-3);color:var(--text-1);min-width:22px;text-align:center;
+}
+.nb.live{background:var(--red-dim);color:var(--red)}
+.nb.accent{background:var(--accent-glow);color:var(--accent)}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:940;backdrop-filter:blur(2px)}
+
+/* ─── MAIN ─── */
+#main{
+  margin-left:var(--sidebar-w);margin-top:calc(var(--header-h) + 34px);
+  min-height:calc(100vh - var(--header-h) - 34px);
+}
+
+/* ─── PAGES ─── */
+.page{display:none;padding:22px 22px 90px;animation:fadeIn .2s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── HERO ─── */
+.hero{
+  position:relative;border-radius:16px;overflow:hidden;margin-bottom:28px;
+  background:linear-gradient(135deg,var(--bg-2) 0%,#091525 100%);
+  border:1px solid var(--border);padding:36px 36px 36px;
+  display:flex;align-items:center;justify-content:space-between;min-height:220px;
+}
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 75% 50%,rgba(0,212,170,.07) 0%,transparent 65%),
+             radial-gradient(ellipse at 20% 80%,rgba(0,120,255,.05) 0%,transparent 50%);
+  pointer-events:none;
+}
+.hero-left{position:relative;z-index:1;max-width:480px}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;
+  color:var(--accent);text-transform:uppercase;letter-spacing:.12em;
+  background:var(--accent-glow);border:1px solid rgba(0,212,170,.2);
+  padding:3px 10px;border-radius:99px;margin-bottom:12px;
+}
+.hero h1{font-size:clamp(20px,3.5vw,34px);font-weight:900;line-height:1.15;margin-bottom:10px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p{font-size:13.5px;color:var(--text-1);line-height:1.65;margin-bottom:20px;max-width:380px}
+.hero-stats{display:flex;gap:20px;flex-wrap:wrap}
+.hstat .n{font-size:20px;font-weight:900;color:var(--accent)}
+.hstat .l{font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em;margin-top:1px}
+.hero-right{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:8px;opacity:.35;flex-shrink:0}
+.hdeco-card{width:60px;height:44px;background:var(--bg-3);border-radius:9px;border:1px solid var(--border)}
+
+/* ─── SECTION HEADER ─── */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700}
+.sec-title::before{content:'';display:block;width:4px;height:17px;background:var(--accent);border-radius:2px;flex-shrink:0}
+.see-all{font-size:12px;color:var(--accent);cursor:pointer}
+.see-all:hover{text-decoration:underline}
+
+/* ─── FILTER TABS ─── */
+.ftabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:2px;overflow-x:auto;scrollbar-width:none}
+.ftabs::-webkit-scrollbar{display:none}
+.ftab{
+  padding:6px 14px;border-radius:99px;font-size:12px;font-weight:500;
+  cursor:pointer;border:1px solid var(--border);background:var(--bg-2);color:var(--text-1);
+  transition:var(--transition);white-space:nowrap;flex-shrink:0;
+}
+.ftab:hover{border-color:var(--accent);color:var(--accent)}
+.ftab.active{background:var(--accent);color:#000;border-color:var(--accent);font-weight:700}
+
+/* ─── CHANNEL GRID ─── */
+.ch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:14px}
+.ch-card{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;cursor:pointer;transition:border-color var(--transition),transform var(--transition),box-shadow var(--transition);
+  position:relative;
+}
+.ch-card:hover{border-color:var(--border-hi);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.ch-card:active{transform:translateY(-1px)}
+.ch-thumb{
+  aspect-ratio:16/9;background:var(--bg-3);position:relative;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.ch-thumb img{width:100%;height:100%;object-fit:contain;padding:10px}
+.ch-fallback{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:800;color:var(--accent);letter-spacing:-1px;
+}
+.ch-num-badge{
+  position:absolute;top:6px;left:6px;background:rgba(0,0,0,.72);
+  font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;color:var(--text-2);
+}
+.live-tag{
+  position:absolute;top:6px;right:6px;background:var(--red);
+  font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;color:#fff;
+  display:flex;align-items:center;gap:3px;text-transform:uppercase;
+}
+.live-tag::before{content:'';width:5px;height:5px;background:#fff;border-radius:50%;animation:pulse 1.2s ease-in-out infinite}
+.ch-info{padding:10px 12px 12px}
+.ch-name{font-size:13px;font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch-meta{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2)}
+.ch-qbadge{background:var(--accent-glow);color:var(--accent);font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px}
+.fav-btn{margin-left:auto;font-size:15px;cursor:pointer;transition:transform .15s;line-height:1}
+.fav-btn:hover{transform:scale(1.2)}
+.fav-active{animation:popFav .3s ease}
+@keyframes popFav{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)}}
+
+/* ─── PLAYER MODAL ─── */
+#playerModal{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);
+  z-index:2000;overflow-y:auto;
+}
+#playerModal.open{display:block}
+.pm-close{
+  position:fixed;top:12px;right:12px;z-index:2100;
+  width:38px;height:38px;background:rgba(255,255,255,.1);border:1px solid var(--border);
+  border-radius:50%;cursor:pointer;color:#fff;font-size:18px;line-height:1;
+  display:flex;align-items:center;justify-content:center;transition:background .15s;
+}
+.pm-close:hover{background:rgba(255,255,255,.2)}
+.pm-wrap{max-width:1140px;margin:0 auto;padding:0}
+.pm-stage{width:100%;aspect-ratio:16/9;background:#000;position:relative;overflow:hidden}
+#hlsVideo{width:100%;height:100%;background:#000;display:block}
+.pm-overlay{
+  display:none;position:absolute;inset:0;
+  align-items:center;justify-content:center;flex-direction:column;gap:12px;
+  background:rgba(0,0,0,.85);color:var(--text-1);text-align:center;padding:20px;
+}
+.pm-overlay.show{display:flex}
+.pm-overlay .ico{font-size:40px;margin-bottom:4px}
+.pm-overlay h3{font-size:16px;font-weight:700;color:var(--text-0)}
+.pm-overlay p{font-size:12px;max-width:300px;line-height:1.6}
+.pm-info{background:var(--bg-1);padding:16px 20px}
+.pm-ch-name{font-size:19px;font-weight:800;margin-bottom:6px}
+.pm-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-1);flex-wrap:wrap}
+.pm-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.pm-btn{
+  padding:8px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;
+  cursor:pointer;border:1px solid var(--border);background:var(--bg-2);color:var(--text-0);
+  transition:var(--transition);display:inline-flex;align-items:center;gap:5px;
+}
+.pm-btn:hover{border-color:var(--accent);color:var(--accent)}
+.pm-btn.primary{background:var(--accent);color:#000;border-color:var(--accent)}
+.pm-btn.primary:hover{background:var(--accent-dim)}
+.pm-related{padding:16px 20px 24px}
+.pm-related h3{font-size:11px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.rel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.rel-card{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-sm);
+  padding:10px 12px;cursor:pointer;transition:border-color var(--transition);
+  display:flex;align-items:center;gap:10px;
+}
+.rel-card:hover{border-color:var(--border-hi)}
+.rel-logo{
+  width:36px;height:36px;background:var(--bg-3);border-radius:7px;
+  display:flex;align-items:center;justify-content:center;font-size:11px;
+  font-weight:800;color:var(--accent);flex-shrink:0;overflow:hidden;
+}
+.rel-logo img{width:100%;height:100%;object-fit:contain;padding:4px}
+.rel-name{font-size:12px;font-weight:600;line-height:1.3}
+.rel-cat{font-size:10px;color:var(--text-2)}
+/* Loading spinner in player */
+.pm-spinner{
+  display:none;position:absolute;inset:0;background:rgba(0,0,0,.7);
+  align-items:center;justify-content:center;flex-direction:column;gap:10px;
+}
+.pm-spinner.show{display:flex}
+.spinner{width:40px;height:40px;border:3px solid var(--bg-3);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ─── ADMIN PANEL ─── */
+#adminPanel{display:none;position:fixed;inset:0;z-index:3000;background:var(--bg-0);overflow-y:auto}
+#adminPanel.open{display:block}
+.adm-hdr{
+  background:var(--bg-1);border-bottom:1px solid var(--border);
+  padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:10;
+}
+.adm-title{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
+.adm-title .accent{color:var(--accent)}
+.adm-hdr-right{display:flex;align-items:center;gap:8px}
+.adm-body{max-width:960px;margin:0 auto;padding:24px 20px}
+/* Admin Tabs */
+.adm-tabs{display:flex;gap:4px;padding:4px;background:var(--bg-2);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:24px;flex-wrap:wrap}
+.adm-tab{
+  flex:1;min-width:90px;padding:8px 10px;border-radius:9px;border:none;
+  background:none;color:var(--text-1);font-family:inherit;font-size:12px;
+  font-weight:600;cursor:pointer;transition:var(--transition);text-align:center;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+}
+.adm-tab:hover{color:var(--text-0)}
+.adm-tab.active{background:var(--accent);color:#000}
+.adm-section{display:none}
+.adm-section.active{display:block}
+/* Form */
+.fg{margin-bottom:16px}
+.fl{display:block;font-size:11px;font-weight:700;color:var(--text-1);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.fi,.fsel,.fta{
+  width:100%;background:var(--bg-2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text-0);font-family:inherit;
+  font-size:13px;padding:9px 13px;outline:none;transition:var(--transition);
+}
+.fi:focus,.fsel:focus,.fta:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.fsel option{background:var(--bg-1)}
+.fta{min-height:120px;resize:vertical;font-size:12px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+/* Stat cards */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:24px}
+.stat-card{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.sc-val{font-size:28px;font-weight:900;margin-bottom:2px}
+.sc-lbl{font-size:10px;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em}
+.sc-sub{font-size:10px;color:var(--text-2);margin-top:3px}
+/* Upload zone */
+.drop-zone{
+  border:2px dashed var(--border);border-radius:var(--radius);
+  padding:32px 20px;text-align:center;cursor:pointer;transition:var(--transition);
+  position:relative;background:var(--bg-2);
+}
+.drop-zone:hover,.drop-zone.dragging{border-color:var(--accent);background:var(--accent-glow)}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.drop-ico{font-size:36px;margin-bottom:10px}
+.drop-txt{font-size:14px;font-weight:600;margin-bottom:4px}
+.drop-sub{font-size:12px;color:var(--text-2)}
+/* Progress */
+.prog-wrap{margin-top:14px;display:none}
+.prog-bar{height:5px;background:var(--bg-3);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),#0077ff);border-radius:3px;width:0%;transition:width .3s}
+.prog-txt{font-size:12px;color:var(--text-1)}
+/* Parse result list */
+.parse-list{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:0;max-height:320px;overflow-y:auto;margin-top:14px;display:none}
+.parse-item{
+  display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:8px;
+  padding:9px 14px;border-bottom:1px solid var(--border);font-size:12px;
+}
+.parse-item:last-child{border-bottom:none}
+.pi-num{color:var(--text-2);font-size:10px;font-weight:700;text-align:center}
+.pi-name{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pi-cat{
+  font-size:10px;font-weight:600;padding:2px 7px;border-radius:99px;
+  background:var(--bg-3);color:var(--text-1);white-space:nowrap;
+}
+/* Channel table */
+.ch-tbl{width:100%;border-collapse:collapse}
+.ch-tbl th{padding:9px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em;border-bottom:2px solid var(--border)}
+.ch-tbl td{padding:11px 12px;font-size:12.5px;border-bottom:1px solid var(--border);vertical-align:middle}
+.ch-tbl tr:hover td{background:var(--bg-2)}
+.status-on{color:var(--accent);font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:4px}
+.status-on::before{content:'';width:5px;height:5px;background:var(--accent);border-radius:50%;display:inline-block}
+.status-off{color:var(--text-2);font-size:11px}
+.cat-chip{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:600;background:var(--bg-3);color:var(--text-1)}
+/* Buttons */
+.btn,.btn-danger,.btn-ghost{
+  padding:9px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;
+  cursor:pointer;border:none;font-family:inherit;transition:var(--transition);
+  display:inline-flex;align-items:center;gap:6px;
+}
+.btn{background:var(--accent);color:#000}
+.btn:hover{background:var(--accent-dim)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-danger:hover{background:#d93050}
+.btn-ghost{background:var(--bg-2);color:var(--text-0);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-sm2{padding:5px 10px;font-size:11px}
+/* Alert */
+.alert{padding:11px 14px;border-radius:var(--radius-sm);margin-bottom:14px;font-size:12.5px;display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+.alert-info{background:rgba(0,212,170,.09);border:1px solid rgba(0,212,170,.2);color:var(--accent)}
+.alert-warn{background:rgba(245,166,35,.09);border:1px solid rgba(245,166,35,.2);color:var(--gold)}
+.alert-err{background:rgba(255,59,92,.09);border:1px solid rgba(255,59,92,.2);color:var(--red)}
+
+/* ─── LOGIN MODAL ─── */
+#loginModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:4000;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#loginModal.open{display:flex}
+.login-box{background:var(--bg-1);border:1px solid var(--border);border-radius:18px;padding:32px;width:100%;max-width:370px;margin:16px;position:relative}
+.login-close{position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text-2);cursor:pointer;font-size:20px;line-height:1}
+.login-logo{text-align:center;margin-bottom:24px}
+.login-logo .logo-mark{margin:0 auto 10px;width:48px;height:48px;font-size:18px;box-shadow:0 0 24px rgba(0,212,170,.4)}
+.login-logo h2{font-size:19px;font-weight:800;margin-bottom:4px}
+.login-logo p{font-size:12.5px;color:var(--text-1)}
+
+/* ─── BOTTOM NAV ─── */
+#bnav{
+  display:none;position:fixed;bottom:0;left:0;right:0;
+  background:rgba(5,10,15,.97);backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);z-index:800;
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+.bnav-inner{display:flex;height:54px}
+.bn-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;cursor:pointer;color:var(--text-2);transition:color var(--transition);
+  font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;
+}
+.bn-item.active{color:var(--accent)}
+.bn-ico{font-size:20px;line-height:1}
+
+/* ─── EMPTY STATE ─── */
+.empty{text-align:center;padding:56px 20px;color:var(--text-2);grid-column:1/-1}
+.empty .ico{font-size:48px;margin-bottom:12px;opacity:.3}
+.empty h3{font-size:15px;font-weight:600;color:var(--text-1);margin-bottom:6px}
+.empty p{font-size:13px;line-height:1.65;max-width:280px;margin:0 auto}
+
+/* ─── TOAST ─── */
+#toast{
+  position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(12px);
+  background:var(--bg-4);border:1px solid var(--border);border-radius:10px;
+  padding:10px 20px;font-size:13px;z-index:5000;opacity:0;transition:.25s;
+  white-space:nowrap;pointer-events:none;max-width:calc(100vw - 32px);
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ─── EPG STRIP ─── */
+.epg-strip{
+  background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 18px;margin-bottom:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.epg-ch{font-size:13px;font-weight:700;color:var(--accent)}
+.epg-now{font-size:12px;color:var(--text-1);flex:1}
+.epg-time{font-size:11px;color:var(--text-2);flex-shrink:0}
+.epg-prog-bar{width:100%;height:3px;background:var(--bg-3);border-radius:2px;margin-top:8px;overflow:hidden}
+.epg-prog-fill{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width 1s}
+
+/* ─── REMOTE URL LOADER ─── */
+.url-loader{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.url-loader .fi{flex:1;min-width:200px}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:960px){
+  #sidebar{transform:translateX(-100%)}
+  #sidebar.open{transform:translateX(0)}
+  .sb-overlay.open{display:block}
+  #main{margin-left:0}
+  .hamburger{display:flex}
+  #bnav{display:block}
+  .page{padding-bottom:72px}
+  .ticker{left:0}
+  .hero{padding:20px}
+  .hero-right{display:none}
+}
+@media(max-width:480px){
+  .ch-grid{grid-template-columns:repeat(2,1fr)}
+  .hero h1{font-size:19px}
+  .adm-body{padding:12px}
+  .frow{grid-template-columns:1fr}
+}
+@media(min-width:1440px){
+  :root{--sidebar-w:264px}
+  .ch-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+}
+@media(min-width:1800px){
+  :root{--sidebar-w:280px;--header-h:68px}
+  .ch-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+  .ticker{top:var(--header-h)}
+}
+/* TV Mode */
+@media(min-width:1920px) and (pointer:coarse){
+  :root{--sidebar-w:300px;--header-h:72px}
+  body{font-size:16px}
+  .ch-card:hover{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="hdr">
+  <div class="hamburger" id="hamburger" onclick="toggleSidebar()" role="button" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+  <div class="logo" onclick="showPage('home')">
+    <div class="logo-mark">BD</div>
+    <span class="logo-name">BDLive</span>
+  </div>
+  <div class="hdr-search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Search channels…" autocomplete="off" oninput="handleSearch(this.value)">
+  </div>
+  <div class="live-pill"><span class="pulse"></span>LIVE</div>
+  <div class="vc">👁 <span id="vcNum">2.4K</span></div>
+  <div class="hdr-right">
+    <button class="btn-sm btn-outline" onclick="openLogin()">Sign In</button>
+    <button class="btn-sm btn-accent" onclick="openAdmin()">⚙ Admin</button>
+  </div>
+</header>
+
+<!-- TICKER -->
+<div class="ticker" id="ticker">
+  <span class="ticker-tag">LIVE</span>
+  <div class="ticker-scroll">
+    <div class="ticker-inner" id="tickerInner">
+      <span>BTV National – সরাসরি সম্প্রচার</span>
+      <span>T Sports HD – লাইভ ক্রিকেট</span>
+      <span>Somoy TV – সর্বশেষ সংবাদ</span>
+      <span>Jamuna TV – সর্বশেষ আপডেট</span>
+      <span>NTV – জাতীয় সংবাদ</span>
+      <span>Al Jazeera English – Live News</span>
+      <span>BBC World – Breaking News</span>
+      <span>BTV National – সরাসরি সম্প্রচার</span>
+      <span>T Sports HD – লাইভ ক্রিকেট</span>
+      <span>Somoy TV – সর্বশেষ সংবাদ</span>
+      <span>Jamuna TV – সর্বশেষ আপডেট</span>
+      <span>NTV – জাতীয় সংবাদ</span>
+      <span>Al Jazeera English – Live News</span>
+      <span>BBC World – Breaking News</span>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR OVERLAY -->
+<div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-section">Menu</div>
+  <div class="nav-item active" id="nav-home" onclick="showPage('home')"><span class="ni">🏠</span>Home</div>
+  <div class="nav-item" id="nav-live" onclick="showPage('live')"><span class="ni">📺</span>Live TV <span class="nb live" id="liveBadge">0</span></div>
+
+  <div class="sb-section">Categories</div>
+  <div class="nav-item" id="nav-bangladesh" onclick="showPage('bangladesh')"><span class="ni">🇧🇩</span>Bangladesh <span class="nb" id="nb-bangladesh">0</span></div>
+  <div class="nav-item" id="nav-sports" onclick="showPage('sports')"><span class="ni">⚽</span>Sports <span class="nb" id="nb-sports">0</span></div>
+  <div class="nav-item" id="nav-news" onclick="showPage('news')"><span class="ni">📰</span>News <span class="nb" id="nb-news">0</span></div>
+  <div class="nav-item" id="nav-kids" onclick="showPage('kids')"><span class="ni">🧒</span>Kids <span class="nb" id="nb-kids">0</span></div>
+  <div class="nav-item" id="nav-international" onclick="showPage('international')"><span class="ni">🌍</span>International <span class="nb" id="nb-international">0</span></div>
+  <div class="nav-item" id="nav-documentary" onclick="showPage('documentary')"><span class="ni">🎬</span>Documentary <span class="nb" id="nb-documentary">0</span></div>
+  <div class="nav-item" id="nav-english" onclick="showPage('english')"><span class="ni">🇬🇧</span>English <span class="nb" id="nb-english">0</span></div>
+  <div class="nav-item" id="nav-hindi" onclick="showPage('hindi')"><span class="ni">🇮🇳</span>Hindi <span class="nb" id="nb-hindi">0</span></div>
+
+  <div class="sb-section">My List</div>
+  <div class="nav-item" id="nav-favorites" onclick="showPage('favorites')"><span class="ni">❤️</span>Favorites <span class="nb accent" id="favBadge">0</span></div>
+  <div class="nav-item" id="nav-search" onclick="showPage('search')"><span class="ni">🔍</span>Search</div>
+
+  <div class="sb-section">Admin</div>
+  <div class="nav-item" onclick="openAdmin()"><span class="ni">⚙️</span>Admin Panel</div>
+
+  <div style="padding:14px 16px 4px;font-size:10px;color:var(--text-2);line-height:1.8">
+    © 2026 BDLive<br>HLS · M3U8 · 24/7 Live
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main id="main">
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="hero">
+      <div class="hero-left">
+        <div class="hero-eyebrow">🔴 Live Now</div>
+        <h1>বাংলাদেশের সেরা<br><em>লাইভ টিভি স্ট্রিম</em></h1>
+        <p>HLS/M3U8 সাপোর্টসহ সর্বোচ্চ মানের লাইভ স্ট্রিম — মোবাইল, ডেস্কটপ ও টিভিতে উপভোগ করুন।</p>
+        <div class="hero-stats">
+          <div class="hstat"><div class="n" id="totalCh">0</div><div class="l">Channels</div></div>
+          <div class="hstat"><div class="n">HD</div><div class="l">Quality</div></div>
+          <div class="hstat"><div class="n">24/7</div><div class="l">Live</div></div>
+          <div class="hstat"><div class="n">Free</div><div class="l">Access</div></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="hdeco-card"></div><div class="hdeco-card"></div>
+        <div class="hdeco-card"></div><div class="hdeco-card"></div>
+      </div>
+    </div>
+
+    <!-- EPG strip (demo) -->
+    <div class="epg-strip" id="epgStrip">
+      <div>
+        <div style="font-size:10px;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px">Now Playing</div>
+        <div class="epg-ch" id="epgCh">BTV National</div>
+        <div class="epg-now" id="epgProg">সন্ধ্যার সংবাদ (Evening News)</div>
+      </div>
+      <div style="flex:1">
+        <div class="epg-prog-bar"><div class="epg-prog-fill" id="epgFill"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px">
+          <span style="font-size:10px;color:var(--text-2)" id="epgStart">19:00</span>
+          <span style="font-size:10px;color:var(--text-2)" id="epgEnd">20:00</span>
+        </div>
+      </div>
+      <div class="epg-time" id="epgClock">00:00</div>
+    </div>
+
+    <div class="sec-hdr">
+      <div class="sec-title">All Channels</div>
+      <a class="see-all" onclick="showPage('live')">See All →</a>
+    </div>
+    <div class="ftabs" id="homeFilterTabs">
+      <div class="ftab active" onclick="homeFilter('All',this)">All</div>
+      <div class="ftab" onclick="homeFilter('Bangladesh',this)">🇧🇩 Bangladesh</div>
+      <div class="ftab" onclick="homeFilter('Sports',this)">⚽ Sports</div>
+      <div class="ftab" onclick="homeFilter('News',this)">📰 News</div>
+      <div class="ftab" onclick="homeFilter('Kids',this)">🧒 Kids</div>
+      <div class="ftab" onclick="homeFilter('International',this)">🌍 International</div>
+      <div class="ftab" onclick="homeFilter('Documentary',this)">🎬 Documentary</div>
+      <div class="ftab" onclick="homeFilter('English',this)">🇬🇧 English</div>
+      <div class="ftab" onclick="homeFilter('Hindi',this)">🇮🇳 Hindi</div>
+    </div>
+    <div class="ch-grid" id="homeGrid"></div>
+  </div>
+
+  <!-- LIVE TV -->
+  <div class="page" id="page-live">
+    <div class="sec-hdr"><div class="sec-title">📺 All Live Channels</div></div>
+    <div class="ch-grid" id="liveGrid"></div>
+  </div>
+
+  <!-- CATEGORY PAGES (generated dynamically) -->
+  <div class="page" id="page-bangladesh"><div class="sec-hdr"><div class="sec-title">🇧🇩 Bangladesh Channels</div></div><div class="ch-grid" id="bangladeshGrid"></div></div>
+  <div class="page" id="page-sports"><div class="sec-hdr"><div class="sec-title">⚽ Sports Channels</div></div><div class="ch-grid" id="sportsGrid"></div></div>
+  <div class="page" id="page-news"><div class="sec-hdr"><div class="sec-title">📰 News Channels</div></div><div class="ch-grid" id="newsGrid"></div></div>
+  <div class="page" id="page-kids"><div class="sec-hdr"><div class="sec-title">🧒 Kids Channels</div></div><div class="ch-grid" id="kidsGrid"></div></div>
+  <div class="page" id="page-international"><div class="sec-hdr"><div class="sec-title">🌍 International Channels</div></div><div class="ch-grid" id="internationalGrid"></div></div>
+  <div class="page" id="page-documentary"><div class="sec-hdr"><div class="sec-title">🎬 Documentary Channels</div></div><div class="ch-grid" id="documentaryGrid"></div></div>
+  <div class="page" id="page-english"><div class="sec-hdr"><div class="sec-title">🇬🇧 English Channels</div></div><div class="ch-grid" id="englishGrid"></div></div>
+  <div class="page" id="page-hindi"><div class="sec-hdr"><div class="sec-title">🇮🇳 Hindi Channels</div></div><div class="ch-grid" id="hindiGrid"></div></div>
+  <div class="page" id="page-favorites"><div class="sec-hdr"><div class="sec-title">❤️ My Favorites</div></div><div class="ch-grid" id="favoritesGrid"></div></div>
+  <div class="page" id="page-search"><div class="sec-hdr"><div class="sec-title" id="searchTitle">🔍 Search</div></div><div class="ch-grid" id="searchGrid"></div></div>
+
+  <footer style="padding:20px;text-align:center;font-size:11px;color:var(--text-2);border-top:1px solid var(--border);margin-top:40px">
+    © 2026 BDLive · Bangladesh's Premier Live TV Platform · HLS/M3U8 · All 24/7
+  </footer>
+</main>
+
+<!-- BOTTOM NAV -->
+<div id="bnav">
+  <div class="bnav-inner">
+    <div class="bn-item active" id="bn-home" onclick="showPage('home')"><div class="bn-ico">🏠</div>Home</div>
+    <div class="bn-item" id="bn-live" onclick="showPage('live')"><div class="bn-ico">📺</div>Live</div>
+    <div class="bn-item" id="bn-sports" onclick="showPage('sports')"><div class="bn-ico">⚽</div>Sports</div>
+    <div class="bn-item" id="bn-news" onclick="showPage('news')"><div class="bn-ico">📰</div>News</div>
+    <div class="bn-item" id="bn-favorites" onclick="showPage('favorites')"><div class="bn-ico">❤️</div>Saved</div>
+  </div>
+</div>
+
+<!-- PLAYER MODAL -->
+<div id="playerModal">
+  <button class="pm-close" onclick="closePlayer()" aria-label="Close">✕</button>
+  <div class="pm-wrap">
+    <div class="pm-stage">
+      <video id="hlsVideo" controls autoplay playsinline></video>
+      <div class="pm-spinner" id="pmSpinner"><div class="spinner"></div><span style="font-size:12px;color:var(--text-1)">Loading stream…</span></div>
+      <div class="pm-overlay" id="pmError">
+        <div class="ico">📡</div>
+        <h3>Stream Unavailable</h3>
+        <p>This channel may not be accessible from your network, or the stream URL is not set.</p>
+        <button class="pm-btn" onclick="retryStream()" style="margin-top:6px">🔄 Retry</button>
+        <button class="pm-btn" onclick="promptStreamURL()" style="margin-top:4px">🔗 Set Stream URL</button>
+      </div>
+    </div>
+    <div class="pm-info">
+      <div class="pm-ch-name" id="pmName">Channel Name</div>
+      <div class="pm-meta">
+        <span class="live-pill" style="font-size:10px"><span class="pulse"></span>LIVE</span>
+        <span id="pmCat">Category</span>
+        <span style="color:var(--accent);font-weight:700" id="pmQuality">HD</span>
+        <span style="color:var(--text-2)" id="pmChNum">CH 1</span>
+      </div>
+      <div class="pm-actions">
+        <button class="pm-btn primary" onclick="toggleFavCurrent()">❤️ <span id="pmFavTxt">Add Favorite</span></button>
+        <button class="pm-btn" onclick="copyURL()">🔗 Copy URL</button>
+        <button class="pm-btn" onclick="setStreamURL()">✏️ Set URL</button>
+        <button class="pm-btn" onclick="openExternal()">📲 External</button>
+      </div>
+    </div>
+    <div class="pm-related">
+      <h3>More in this category</h3>
+      <div class="rel-grid" id="relGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+  <div class="adm-hdr">
+    <div class="adm-title">⚙️ <span class="accent">BDLive</span> Admin</div>
+    <div class="adm-hdr-right">
+      <button class="btn-ghost btn-sm2" onclick="exportM3U()" id="exportBtn" style="display:none">⬇️ Export M3U</button>
+      <button class="btn-ghost btn-sm2" onclick="closeAdmin()">✕ Close</button>
+    </div>
+  </div>
+  <div class="adm-body">
+
+    <!-- Admin Login Gate -->
+    <div id="admGate">
+      <div style="max-width:340px;margin:48px auto;text-align:center">
+        <div style="font-size:52px;margin-bottom:10px">🔐</div>
+        <h2 style="font-size:20px;font-weight:800;margin-bottom:4px">Admin Access</h2>
+        <p style="font-size:13px;color:var(--text-1);margin-bottom:24px">Enter credentials to manage channels</p>
+        <div class="fg" style="text-align:left"><label class="fl">Username</label><input type="text" class="fi" id="admUser" value="admin" placeholder="admin"></div>
+        <div class="fg" style="text-align:left"><label class="fl">Password</label><input type="password" class="fi" id="admPass" value="admin123" placeholder="••••••••" onkeydown="if(event.key==='Enter')admLogin()"></div>
+        <div id="admErr" class="alert alert-err" style="display:none;text-align:left">Incorrect credentials. Try admin / admin123</div>
+        <button class="btn" style="width:100%;justify-content:center" onclick="admLogin()">Login to Admin Panel</button>
+        <p style="font-size:11px;color:var(--text-2);margin-top:10px">Default: admin / admin123</p>
+      </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admDash" style="display:none">
+      <div class="stat-grid" id="admStats"></div>
+      <div class="adm-tabs">
+        <button class="adm-tab active" onclick="admTab('m3u',this)">📁 M3U Import</button>
+        <button class="adm-tab" onclick="admTab('channels',this)">📺 Channels</button>
+        <button class="adm-tab" onclick="admTab('add',this)">➕ Add Channel</button>
+        <button class="adm-tab" onclick="admTab('settings',this)">⚙️ Settings</button>
+      </div>
+
+      <!-- M3U TAB -->
+      <div class="adm-section active" id="atab-m3u">
+        <div class="alert alert-info">💡 Upload an M3U/M3U8 file or paste its content. Channels will be auto-categorized by group-title tag.</div>
+
+        <!-- Remote URL loader -->
+        <div class="fg">
+          <label class="fl">Load M3U from Remote URL</label>
+          <div class="url-loader">
+            <input type="text" class="fi" id="m3uRemoteUrl" placeholder="https://example.com/playlist.m3u8">
+            <button class="btn" onclick="loadRemoteM3U()">⬇️ Fetch</button>
+          </div>
+        </div>
+
+        <div style="text-align:center;font-size:12px;color:var(--text-2);margin:4px 0 14px">— or upload a file —</div>
+
+        <div class="drop-zone" id="dropZone">
+          <input type="file" id="m3uFile" accept=".m3u,.m3u8,.txt" onchange="handleFile(this)">
+          <div class="drop-ico">📂</div>
+          <div class="drop-txt">Drop M3U / M3U8 file here</div>
+          <div class="drop-sub">Supports EXTINF, tvg-logo, group-title, tvg-name</div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+          <button class="btn" onclick="document.getElementById('m3uFile').click()">📁 Browse File</button>
+          <button class="btn-ghost" onclick="loadSample()">🧪 Load Sample</button>
+          <button class="btn-ghost" onclick="togglePasteArea()">📋 Paste Text</button>
+        </div>
+
+        <div id="pasteArea" style="display:none;margin-top:14px">
+          <label class="fl">Paste M3U content</label>
+          <textarea class="fta" id="pasteText" placeholder="#EXTM3U&#10;#EXTINF:-1 tvg-name=&quot;Channel&quot; group-title=&quot;Bangladesh&quot;,Channel Name&#10;http://example.com/stream.m3u8"></textarea>
+          <button class="btn" style="margin-top:8px" onclick="parseM3U(document.getElementById('pasteText').value)">Parse & Preview</button>
+        </div>
+
+        <div class="prog-wrap" id="progWrap">
+          <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+          <div class="prog-txt" id="progTxt">Parsing…</div>
+        </div>
+
+        <div class="parse-list" id="parseList"></div>
+
+        <div style="margin-top:12px;display:none;gap:8px" id="importBar">
+          <button class="btn" onclick="importChannels()">✅ Import All (<span id="importCount">0</span>)</button>
+          <button class="btn-ghost" onclick="clearParse()">🗑 Clear</button>
+        </div>
+      </div>
+
+      <!-- CHANNELS TAB -->
+      <div class="adm-section" id="atab-channels">
+        <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+          <input type="text" class="fi" id="tblSearch" placeholder="Filter channels…" style="max-width:220px" oninput="renderTable()">
+          <select class="fsel" id="tblCat" style="max-width:160px" onchange="renderTable()">
+            <option value="">All Categories</option>
+          </select>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <button class="btn-ghost btn-sm2" onclick="exportM3U()">⬇️ Export</button>
+            <button class="btn-danger btn-sm2" onclick="if(confirm('Delete all channels?'))clearAll()">🗑 Clear All</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="ch-tbl">
+            <thead><tr><th>#</th><th>Name</th><th>Category</th><th>Logo</th><th>URL</th><th>Actions</th></tr></thead>
+            <tbody id="tblBody"></tbody>
+          </table>
+          <div id="tblEmpty" class="empty" style="display:none"><div class="ico">📺</div><h3>No channels yet</h3><p>Upload an M3U file or add channels manually.</p></div>
+        </div>
+      </div>
+
+      <!-- ADD CHANNEL TAB -->
+      <div class="adm-section" id="atab-add">
+        <div class="alert alert-warn" id="editNote" style="display:none">✏️ Editing existing channel. <a href="#" onclick="cancelEdit();return false" style="color:var(--gold);text-decoration:underline">Cancel</a></div>
+        <div class="frow">
+          <div class="fg"><label class="fl">Channel Name *</label><input type="text" class="fi" id="fName" placeholder="e.g. BTV National"></div>
+          <div class="fg"><label class="fl">Category *</label>
+            <select class="fsel" id="fCat">
+              <option value="Bangladesh">🇧🇩 Bangladesh</option>
+              <option value="Sports">⚽ Sports</option>
+              <option value="News">📰 News</option>
+              <option value="Kids">🧒 Kids</option>
+              <option value="International">🌍 International</option>
+              <option value="Documentary">🎬 Documentary</option>
+              <option value="English">🇬🇧 English</option>
+              <option value="Hindi">🇮🇳 Hindi</option>
+              <option value="Other">📺 Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Stream URL (HLS / M3U8) *</label><input type="text" class="fi" id="fUrl" placeholder="https://example.com/live.m3u8"></div>
+        <div class="frow">
+          <div class="fg"><label class="fl">Logo URL</label><input type="text" class="fi" id="fLogo" placeholder="https://example.com/logo.png"></div>
+          <div class="fg"><label class="fl">Quality</label>
+            <select class="fsel" id="fQuality"><option>HD</option><option>FHD</option><option>SD</option><option>4K</option></select>
+          </div>
+        </div>
+        <input type="hidden" id="fEditId">
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" onclick="saveChannel()">💾 Save Channel</button>
+          <button class="btn-ghost" onclick="previewStream()">▶️ Preview</button>
+          <button class="btn-ghost" onclick="cancelEdit()">✕ Clear Form</button>
+        </div>
+      </div>
+
+      <!-- SETTINGS TAB -->
+      <div class="adm-section" id="atab-settings">
+        <div class="fg"><label class="fl">Site Name</label><input type="text" class="fi" id="stName" value="BDLive"></div>
+        <div class="frow">
+          <div class="fg"><label class="fl">New Admin Username</label><input type="text" class="fi" id="stUser" placeholder="Leave empty to keep current"></div>
+          <div class="fg"><label class="fl">New Admin Password</label><input type="password" class="fi" id="stPass" placeholder="Leave empty to keep current"></div>
+        </div>
+        <div class="fg"><label class="fl">Accent Color</label><input type="color" class="fi" id="stAccent" value="#00d4aa" style="height:40px;padding:4px 6px"></div>
+        <button class="btn" onclick="saveSettings()">💾 Save Settings</button>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
+          <h3 style="font-size:13px;font-weight:700;color:var(--red);margin-bottom:12px">Danger Zone</h3>
+          <button class="btn-danger" onclick="if(confirm('Delete ALL channels permanently?'))clearAll()">🗑 Delete All Channels</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal">
+  <div class="login-box">
+    <button class="login-close" onclick="closeLogin()">✕</button>
+    <div class="login-logo">
+      <div class="logo-mark">BD</div>
+      <h2>Welcome to BDLive</h2>
+      <p>Sign in to save favorites & history</p>
+    </div>
+    <div id="loginMsg" style="display:none;padding:8px 12px;border-radius:8px;font-size:12px;margin-bottom:12px"></div>
+    <div class="fg"><label class="fl">Username or Email</label><input type="text" class="fi" id="loginUser" placeholder="your@email.com"></div>
+    <div class="fg"><label class="fl">Password</label><input type="password" class="fi" id="loginPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="btn" style="width:100%;justify-content:center;margin-bottom:8px" onclick="doLogin()">Sign In</button>
+    <p style="font-size:11px;color:var(--text-2);text-align:center">Demo: any username + any password</p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- HLS.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.7/hls.min.js"></script>
+
+<script>
+'use strict';
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  DATA LAYER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const CREDS = {user:'admin',pass:'admin123'};
+let CHANNELS = [], PARSED = [], FAVORITES = [];
+let currentChannel = null, hlsInst = null, editId = null;
+let homeFilterActive = 'All';
+
+const CAT_ICONS = {
+  Bangladesh:'🇧🇩', Sports:'⚽', News:'📰', Kids:'🧒',
+  International:'🌍', Documentary:'🎬', English:'🇬🇧', Hindi:'🇮🇳', Other:'📺'
+};
+const CAT_PAGES = ['bangladesh','sports','news','kids','international','documentary','english','hindi'];
+
+function ls(k,v){
+  try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return v===undefined?null:null}
+}
+function loadData(){
+  CHANNELS = ls('bdl_ch')||[];
+  FAVORITES = ls('bdl_fav')||[];
+  if(!CHANNELS.length) loadDefaultChannels();
+}
+function saveChannels(){ ls('bdl_ch',CHANNELS) }
+function saveFavs(){ ls('bdl_fav',FAVORITES) }
+
+function loadDefaultChannels(){
+  CHANNELS = [
+    {id:1,name:'BTV National',category:'Bangladesh',url:'https://bbc-hls-live.akamaized.net/hls/live/2047400/bbcwshlssimulcast/master.m3u8',logo:'',quality:'HD'},
+    {id:2,name:'BTV Chattogram',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:3,name:'BTV Sangshad',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:4,name:'T Sports HD',category:'Sports',url:'',logo:'',quality:'HD'},
+    {id:5,name:'Asian TV',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:6,name:'ATN Bangla',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:7,name:'ATN News',category:'News',url:'',logo:'',quality:'HD'},
+    {id:8,name:'Jamuna TV',category:'News',url:'',logo:'',quality:'HD'},
+    {id:9,name:'NTV Bangladesh',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:10,name:'Somoy TV',category:'News',url:'',logo:'',quality:'HD'},
+    {id:11,name:'Channel 24',category:'News',url:'',logo:'',quality:'HD'},
+    {id:12,name:'Independent TV',category:'News',url:'',logo:'',quality:'HD'},
+    {id:13,name:'RTV',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:14,name:'Maasranga TV',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:15,name:'Bangla Vision',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:16,name:'Desh TV',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:17,name:'GTV',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:18,name:'Channel i',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:19,name:'Ekattor TV',category:'News',url:'',logo:'',quality:'HD'},
+    {id:20,name:'My TV',category:'Bangladesh',url:'',logo:'',quality:'HD'},
+    {id:21,name:'Cartoon Network',category:'Kids',url:'',logo:'',quality:'HD'},
+    {id:22,name:'Nickelodeon',category:'Kids',url:'',logo:'',quality:'HD'},
+    {id:23,name:'Disney Channel',category:'Kids',url:'',logo:'',quality:'HD'},
+    {id:24,name:'BBC World',category:'International',url:'https://bbc-hls-live.akamaized.net/hls/live/2047400/bbcwshlssimulcast/master.m3u8',logo:'',quality:'HD'},
+    {id:25,name:'Al Jazeera English',category:'International',url:'https://live-hls-web-aje.getaj.net/AJE/01.m3u8',logo:'',quality:'HD'},
+    {id:26,name:'CNN International',category:'International',url:'',logo:'',quality:'HD'},
+    {id:27,name:'Star Sports 1',category:'Sports',url:'',logo:'',quality:'HD'},
+    {id:28,name:'Sony Sports',category:'Sports',url:'',logo:'',quality:'HD'},
+    {id:29,name:'Star Jalsha',category:'Hindi',url:'',logo:'',quality:'HD'},
+    {id:30,name:'Zee TV',category:'Hindi',url:'',logo:'',quality:'HD'},
+    {id:31,name:'Colors TV',category:'Hindi',url:'',logo:'',quality:'HD'},
+    {id:32,name:'Sony Entertainment',category:'Hindi',url:'',logo:'',quality:'HD'},
+    {id:33,name:'Discovery Channel',category:'Documentary',url:'',logo:'',quality:'HD'},
+    {id:34,name:'National Geographic',category:'Documentary',url:'',logo:'',quality:'HD'},
+    {id:35,name:'Animal Planet',category:'Documentary',url:'',logo:'',quality:'HD'},
+    {id:36,name:'History Channel',category:'Documentary',url:'',logo:'',quality:'HD'},
+    {id:37,name:'BBC Earth',category:'Documentary',url:'',logo:'',quality:'HD'},
+    {id:38,name:'Sky News',category:'English',url:'',logo:'',quality:'HD'},
+    {id:39,name:'Fox News',category:'English',url:'',logo:'',quality:'HD'},
+    {id:40,name:'CNBC',category:'English',url:'',logo:'',quality:'HD'},
+  ];
+  saveChannels();
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  NAV
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function showPage(p){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.bn-item').forEach(el=>el.classList.remove('active'));
+  const pg=document.getElementById('page-'+p);
+  if(pg) pg.classList.add('active');
+  const nv=document.getElementById('nav-'+p);
+  if(nv) nv.classList.add('active');
+  const bn=document.getElementById('bn-'+p);
+  if(bn) bn.classList.add('active');
+  renderPage(p);
+  if(window.innerWidth<960) closeSidebar();
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sbOverlay').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbOverlay').classList.remove('open');
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  RENDER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function chCard(ch){
+  const fav=FAVORITES.includes(ch.id);
+  const init=ch.name.split(' ').map(w=>w[0]).join('').substring(0,3).toUpperCase();
+  const logoHtml=ch.logo
+    ? `<img src="${ch.logo}" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'">`
+    : '';
+  const fallStyle=ch.logo?'display:none;':'display:flex;';
+  return `<div class="ch-card" onclick="openCh(${ch.id})">
+    <div class="ch-thumb">
+      ${logoHtml}
+      <div class="ch-fallback" style="${fallStyle}position:absolute;inset:0;align-items:center;justify-content:center">${init}</div>
+      <span class="ch-num-badge">CH ${ch.id}</span>
+      <span class="live-tag">LIVE</span>
+    </div>
+    <div class="ch-info">
+      <div class="ch-name">${ch.name}</div>
+      <div class="ch-meta">
+        ${CAT_ICONS[ch.category]||'📺'} ${ch.category}
+        <span class="ch-qbadge">${ch.quality||'HD'}</span>
+        <span class="fav-btn ${fav?'fav-active':''}" onclick="event.stopPropagation();toggleFav(${ch.id},this)">${fav?'❤️':'🤍'}</span>
+      </div>
+    </div>
+  </div>`;
+}
+function emptyHtml(label){
+  return `<div class="empty"><div class="ico">📺</div><h3>No ${label} channels</h3><p>Add channels via Admin → M3U Upload or Add Channel.</p></div>`;
+}
+function renderGrid(id,list){
+  const el=document.getElementById(id);
+  if(!el) return;
+  el.innerHTML=list.length?list.map(chCard).join(''):emptyHtml('');
+}
+function renderPage(p){
+  if(p==='home'){renderHome();return;}
+  if(p==='live'){renderGrid('liveGrid',CHANNELS);return;}
+  if(p==='favorites'){renderFavs();return;}
+  if(p==='search') return;
+  const catMap={bangladesh:'Bangladesh',sports:'Sports',news:'News',kids:'Kids',international:'International',documentary:'Documentary',english:'English',hindi:'Hindi'};
+  const cat=catMap[p];
+  if(cat) renderGrid(p+'Grid',CHANNELS.filter(c=>c.category===cat));
+}
+function renderHome(){
+  const list=homeFilterActive==='All'?CHANNELS:CHANNELS.filter(c=>c.category===homeFilterActive);
+  renderGrid('homeGrid',list);
+  document.getElementById('totalCh').textContent=CHANNELS.length;
+}
+function homeFilter(cat,el){
+  homeFilterActive=cat;
+  document.querySelectorAll('#homeFilterTabs .ftab').forEach(t=>t.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderHome();
+}
+function renderFavs(){
+  const list=CHANNELS.filter(c=>FAVORITES.includes(c.id));
+  const g=document.getElementById('favoritesGrid');
+  g.innerHTML=list.length?list.map(chCard).join(''):`<div class="empty"><div class="ico">❤️</div><h3>No favorites yet</h3><p>Tap the 🤍 on any channel to save it here.</p></div>`;
+}
+function updateBadges(){
+  document.getElementById('liveBadge').textContent=CHANNELS.length;
+  document.getElementById('totalCh').textContent=CHANNELS.length;
+  document.getElementById('favBadge').textContent=FAVORITES.length;
+  const cats=['Bangladesh','Sports','News','Kids','International','Documentary','English','Hindi'];
+  cats.forEach(c=>{
+    const nb=document.getElementById('nb-'+c.toLowerCase());
+    if(nb) nb.textContent=CHANNELS.filter(ch=>ch.category===c).length;
+  });
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  SEARCH
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function handleSearch(q){
+  if(!q.trim()){return;}
+  const r=CHANNELS.filter(c=>c.name.toLowerCase().includes(q.toLowerCase())||c.category.toLowerCase().includes(q.toLowerCase()));
+  document.getElementById('searchTitle').textContent=`🔍 "${q}" — ${r.length} result${r.length!==1?'s':''}`;
+  renderGrid('searchGrid',r);
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-search').classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('nav-search').classList.add('active');
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  PLAYER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function openCh(id){
+  const ch=CHANNELS.find(c=>c.id===id);
+  if(!ch) return;
+  currentChannel=ch;
+  document.getElementById('pmName').textContent=ch.name;
+  document.getElementById('pmCat').textContent=(CAT_ICONS[ch.category]||'')+' '+ch.category;
+  document.getElementById('pmQuality').textContent=ch.quality||'HD';
+  document.getElementById('pmChNum').textContent='CH '+ch.id;
+  document.getElementById('pmFavTxt').textContent=FAVORITES.includes(ch.id)?'Remove Fav':'Add Favorite';
+  playStream(ch.url);
+
+  // Related
+  const rel=CHANNELS.filter(c=>c.category===ch.category&&c.id!==ch.id).slice(0,10);
+  document.getElementById('relGrid').innerHTML=rel.map(rc=>{
+    const init=rc.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const logoHtml=rc.logo?`<img src="${rc.logo}" alt="" onerror="this.style.display='none'">`:'';
+    return `<div class="rel-card" onclick="openCh(${rc.id})">
+      <div class="rel-logo">${logoHtml||init}</div>
+      <div><div class="rel-name">${rc.name}</div><div class="rel-cat">${rc.category}</div></div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('playerModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function playStream(url){
+  const video=document.getElementById('hlsVideo');
+  const err=document.getElementById('pmError');
+  const spin=document.getElementById('pmSpinner');
+  err.classList.remove('show');
+  spin.classList.add('show');
+  if(hlsInst){hlsInst.destroy();hlsInst=null;}
+  if(!url){spin.classList.remove('show');err.classList.add('show');return;}
+
+  if(Hls.isSupported()){
+    hlsInst=new Hls({enableWorker:true,lowLatencyMode:true,backBufferLength:90});
+    hlsInst.loadSource(url);
+    hlsInst.attachMedia(video);
+    hlsInst.on(Hls.Events.MANIFEST_PARSED,()=>{spin.classList.remove('show');video.play().catch(()=>{});});
+    hlsInst.on(Hls.Events.ERROR,(_,d)=>{if(d.fatal){spin.classList.remove('show');err.classList.add('show');}});
+  } else if(video.canPlayType('application/vnd.apple.mpegurl')){
+    video.src=url;
+    spin.classList.remove('show');
+    video.play().catch(()=>{});
+  } else {
+    spin.classList.remove('show');
+    err.classList.add('show');
+  }
+}
+function retryStream(){if(currentChannel)playStream(currentChannel.url);}
+function closePlayer(){
+  document.getElementById('playerModal').classList.remove('open');
+  document.body.style.overflow='';
+  if(hlsInst){hlsInst.destroy();hlsInst=null;}
+  document.getElementById('hlsVideo').src='';
+  document.getElementById('pmError').classList.remove('show');
+  document.getElementById('pmSpinner').classList.remove('show');
+}
+function toggleFav(id,el){
+  const idx=FAVORITES.indexOf(id);
+  if(idx===-1){FAVORITES.push(id);el.textContent='❤️';el.classList.add('fav-active');showToast('❤️ Added to favorites');}
+  else{FAVORITES.splice(idx,1);el.textContent='🤍';el.classList.remove('fav-active');showToast('Removed from favorites');}
+  saveFavs();
+  document.getElementById('favBadge').textContent=FAVORITES.length;
+}
+function toggleFavCurrent(){
+  if(!currentChannel) return;
+  const idx=FAVORITES.indexOf(currentChannel.id);
+  if(idx===-1){FAVORITES.push(currentChannel.id);document.getElementById('pmFavTxt').textContent='Remove Fav';showToast('❤️ Added to favorites');}
+  else{FAVORITES.splice(idx,1);document.getElementById('pmFavTxt').textContent='Add Favorite';showToast('Removed from favorites');}
+  saveFavs();
+  document.getElementById('favBadge').textContent=FAVORITES.length;
+}
+function copyURL(){
+  if(!currentChannel) return;
+  navigator.clipboard.writeText(currentChannel.url||'No URL set').then(()=>showToast('🔗 URL copied!')).catch(()=>showToast('Copy failed'));
+}
+function openExternal(){
+  if(!currentChannel?.url){showToast('No stream URL available');return;}
+  window.open('vlc://'+currentChannel.url,'_blank');
+}
+function setStreamURL(){
+  if(!currentChannel) return;
+  const u=prompt('Enter stream URL for '+currentChannel.name+':',currentChannel.url||'');
+  if(u!==null){
+    const idx=CHANNELS.findIndex(c=>c.id===currentChannel.id);
+    if(idx>-1){CHANNELS[idx].url=u;currentChannel.url=u;saveChannels();}
+    playStream(u);
+    showToast('Stream URL updated!');
+  }
+}
+function promptStreamURL(){ setStreamURL(); }
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  ADMIN
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function openAdmin(){document.getElementById('adminPanel').classList.add('open');document.body.style.overflow='hidden';}
+function closeAdmin(){document.getElementById('adminPanel').classList.remove('open');document.body.style.overflow='';}
+
+function admLogin(){
+  const u=document.getElementById('admUser').value;
+  const p=document.getElementById('admPass').value;
+  if(u===CREDS.user&&p===CREDS.pass){
+    document.getElementById('admGate').style.display='none';
+    document.getElementById('admDash').style.display='block';
+    document.getElementById('exportBtn').style.display='inline-flex';
+    renderStats();renderTable();populateCatFilter();
+  } else {
+    const e=document.getElementById('admErr');
+    e.style.display='flex';
+    setTimeout(()=>e.style.display='none',3000);
+  }
+}
+function admTab(name,el){
+  document.querySelectorAll('.adm-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.adm-section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('atab-'+name).classList.add('active');
+  if(name==='channels')renderTable();
+}
+function renderStats(){
+  const cats={};
+  CHANNELS.forEach(c=>cats[c.category]=(cats[c.category]||0)+1);
+  document.getElementById('admStats').innerHTML=`
+    <div class="stat-card"><div class="sc-val" style="color:var(--accent)">${CHANNELS.length}</div><div class="sc-lbl">Total Channels</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--text-0)">${cats['Bangladesh']||0}</div><div class="sc-lbl">Bangladesh</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--red)">${cats['Sports']||0}</div><div class="sc-lbl">Sports</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--text-0)">${cats['News']||0}</div><div class="sc-lbl">News</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--gold)">${FAVORITES.length}</div><div class="sc-lbl">Favorites</div></div>
+    <div class="stat-card"><div class="sc-val" style="color:var(--blue)">${CHANNELS.filter(c=>c.url).length}</div><div class="sc-lbl">With URL</div></div>
+  `;
+}
+function renderTable(){
+  const q=(document.getElementById('tblSearch')?.value||'').toLowerCase();
+  const cat=document.getElementById('tblCat')?.value||'';
+  let list=CHANNELS;
+  if(q) list=list.filter(c=>c.name.toLowerCase().includes(q)||c.category.toLowerCase().includes(q));
+  if(cat) list=list.filter(c=>c.category===cat);
+  const tbody=document.getElementById('tblBody');
+  const empty=document.getElementById('tblEmpty');
+  if(!list.length){tbody.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  tbody.innerHTML=list.map(ch=>`<tr>
+    <td style="color:var(--text-2);font-size:11px">${ch.id}</td>
+    <td style="font-weight:600">${ch.name}</td>
+    <td><span class="cat-chip">${CAT_ICONS[ch.category]||''} ${ch.category}</span></td>
+    <td><span style="font-size:11px">${ch.logo?'✅':'—'}</span></td>
+    <td>${ch.url?'<span class="status-on">Active</span>':'<span class="status-off">No URL</span>'}</td>
+    <td style="display:flex;gap:5px">
+      <button class="btn-ghost btn-sm2" onclick="editCh(${ch.id})">✏️</button>
+      <button class="btn-danger btn-sm2" onclick="deleteCh(${ch.id})">🗑</button>
+    </td>
+  </tr>`).join('');
+}
+function populateCatFilter(){
+  const cats=[...new Set(CHANNELS.map(c=>c.category))];
+  const sel=document.getElementById('tblCat');
+  sel.innerHTML='<option value="">All Categories</option>'+cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+}
+function saveChannel(){
+  const name=document.getElementById('fName').value.trim();
+  const cat=document.getElementById('fCat').value;
+  const url=document.getElementById('fUrl').value.trim();
+  const logo=document.getElementById('fLogo').value.trim();
+  const quality=document.getElementById('fQuality').value;
+  const eid=document.getElementById('fEditId').value;
+  if(!name){showToast('⚠️ Channel name is required');return;}
+  if(eid){
+    const i=CHANNELS.findIndex(c=>c.id===parseInt(eid));
+    if(i>-1) CHANNELS[i]={...CHANNELS[i],name,category:cat,url,logo,quality};
+    cancelEdit();showToast('✅ Channel updated!');
+  } else {
+    const maxId=CHANNELS.reduce((m,c)=>Math.max(m,c.id),0);
+    CHANNELS.push({id:maxId+1,name,category:cat,url,logo,quality});
+    showToast('✅ Channel added!');
+  }
+  saveChannels();renderStats();updateBadges();renderPage('home');renderHome();
+}
+function editCh(id){
+  const ch=CHANNELS.find(c=>c.id===id);
+  if(!ch) return;
+  document.getElementById('fName').value=ch.name;
+  document.getElementById('fCat').value=ch.category;
+  document.getElementById('fUrl').value=ch.url||'';
+  document.getElementById('fLogo').value=ch.logo||'';
+  document.getElementById('fQuality').value=ch.quality||'HD';
+  document.getElementById('fEditId').value=ch.id;
+  document.getElementById('editNote').style.display='flex';
+  admTab('add',document.querySelectorAll('.adm-tab')[2]);
+}
+function cancelEdit(){
+  document.getElementById('fEditId').value='';
+  document.getElementById('editNote').style.display='none';
+  ['fName','fUrl','fLogo'].forEach(i=>document.getElementById(i).value='');
+}
+function deleteCh(id){
+  if(!confirm('Delete this channel?')) return;
+  CHANNELS=CHANNELS.filter(c=>c.id!==id);
+  saveChannels();renderTable();renderStats();updateBadges();renderPage('home');renderHome();
+  showToast('Channel deleted');
+}
+function clearAll(){
+  CHANNELS=[];saveChannels();renderTable();renderStats();updateBadges();renderPage('home');renderHome();showToast('All channels cleared');
+}
+function previewStream(){
+  const url=document.getElementById('fUrl').value.trim();
+  const name=document.getElementById('fName').value.trim()||'Preview';
+  if(!url){showToast('Enter a stream URL first');return;}
+  currentChannel={id:0,name,category:'Preview',url,quality:'HD'};
+  closeAdmin();
+  document.getElementById('pmName').textContent=name;
+  document.getElementById('pmCat').textContent='Preview';
+  document.getElementById('pmQuality').textContent='Test';
+  document.getElementById('pmChNum').textContent='Test';
+  playStream(url);
+  document.getElementById('playerModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function exportM3U(){
+  let m3u='#EXTM3U\n';
+  CHANNELS.forEach(ch=>{
+    m3u+=`#EXTINF:-1 tvg-name="${ch.name}" tvg-logo="${ch.logo||''}" group-title="${ch.category}",${ch.name}\n`;
+    m3u+=(ch.url||'#')+'\n';
+  });
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([m3u],{type:'application/x-mpegurl'}));
+  a.download='bdlive_channels.m3u';a.click();
+}
+function saveSettings(){
+  const nm=document.getElementById('stName').value;
+  const nu=document.getElementById('stUser').value;
+  const np=document.getElementById('stPass').value;
+  const ac=document.getElementById('stAccent').value;
+  if(nu) CREDS.user=nu;
+  if(np) CREDS.pass=np;
+  if(nm) document.querySelector('.logo-name').textContent=nm;
+  document.documentElement.style.setProperty('--accent',ac);
+  showToast('✅ Settings saved!');
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  M3U PARSER
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function togglePasteArea(){
+  const a=document.getElementById('pasteArea');
+  a.style.display=a.style.display==='none'?'block':'none';
+}
+function handleFile(inp){
+  const f=inp.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=e=>parseM3U(e.target.result);
+  r.readAsText(f);
+}
+async function loadRemoteM3U(){
+  const url=document.getElementById('m3uRemoteUrl').value.trim();
+  if(!url){showToast('Enter a remote URL first');return;}
+  showToast('⬇️ Fetching M3U…');
+  try{
+    const res=await fetch(url);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const text=await res.text();
+    parseM3U(text);
+  } catch(e){
+    showToast('❌ Could not fetch URL: '+e.message);
+  }
+}
+function parseM3U(text){
+  const prog=document.getElementById('progWrap');
+  const fill=document.getElementById('progFill');
+  const ptxt=document.getElementById('progTxt');
+  prog.style.display='block';
+  PARSED=[];
+  const lines=text.split('\n').map(l=>l.trim()).filter(l=>l);
+  let cur=null,count=0;
+  const total=Math.max(lines.filter(l=>l.startsWith('#EXTINF')).length,1);
+  lines.forEach(ln=>{
+    if(ln.startsWith('#EXTINF')){
+      const nm=ln.match(/,(.+)$/);
+      const tvgN=ln.match(/tvg-name="([^"]+)"/)?.[1];
+      const logo=ln.match(/tvg-logo="([^"]+)"/)?.[1]||'';
+      const group=ln.match(/group-title="([^"]+)"/)?.[1]||'Other';
+      cur={name:(tvgN||(nm?.[1])||'Channel').trim(),logo,category:autoCategory(group,tvgN||nm?.[1]||''),quality:'HD'};
+    } else if(cur&&!ln.startsWith('#')){
+      cur.url=ln.trim(); PARSED.push(cur); cur=null;
+      count++; const pct=Math.round(count/total*100);
+      fill.style.width=pct+'%';
+      ptxt.textContent=`Parsed ${count} channels…`;
+    }
+  });
+  fill.style.width='100%';
+  ptxt.textContent=`✅ Found ${PARSED.length} channels`;
+  showParseList();
+}
+function autoCategory(group,name){
+  const s=((group||'')+(name||'')).toLowerCase();
+  if(/sport|cricket|football|soccer|tennis|golf|t20|odi|ipl|bpl|premier.?league/i.test(s)) return 'Sports';
+  if(/news|barta|samachar|khabar|sambol|24.?ghanta/i.test(s)) return 'News';
+  if(/kids|cartoon|children|disney|nickelodeon|baby|junior/i.test(s)) return 'Kids';
+  if(/hindi|bollywood|zee.?tv|star.?plus|colors|sony.?ent/i.test(s)) return 'Hindi';
+  if(/bbc|cnn|fox.?news|sky|nbc|abc|al.?jazeera|bloomberg|france.?24|dw /i.test(s)) return 'International';
+  if(/documentary|discovery|national.?geo|animal|history|science/i.test(s)) return 'Documentary';
+  if(/english|gb |uk /i.test(s)) return 'English';
+  if(/bangladesh|btv|ntv|rtv|jamuna|somoy|channel.?i|atn|desh.?tv|maasranga|bangla.?vision|ekattor|my.?tv|gtv|time.?television/i.test(s)) return 'Bangladesh';
+  if(/bangla|bd/i.test(s)) return 'Bangladesh';
+  return group||'Bangladesh';
+}
+function showParseList(){
+  const list=document.getElementById('parseList');
+  const bar=document.getElementById('importBar');
+  document.getElementById('importCount').textContent=PARSED.length;
+  list.style.display='block';
+  bar.style.display='flex';
+  list.innerHTML=PARSED.length===0
+    ?'<div class="empty"><div class="ico">📭</div><h3>No channels found</h3><p>Check M3U format: needs #EXTINF lines followed by stream URLs.</p></div>'
+    :PARSED.map((ch,i)=>`<div class="parse-item"><span class="pi-num">${i+1}</span><span class="pi-name">${ch.name}</span><span class="pi-cat">${CAT_ICONS[ch.category]||'📺'} ${ch.category}</span></div>`).join('');
+}
+function importChannels(){
+  if(!PARSED.length) return;
+  const maxId=CHANNELS.reduce((m,c)=>Math.max(m,c.id),0);
+  PARSED.forEach((ch,i)=>CHANNELS.push({id:maxId+i+1,...ch}));
+  saveChannels();updateBadges();renderPage('home');renderHome();renderStats();populateCatFilter();
+  showToast(`✅ Imported ${PARSED.length} channels!`);
+  clearParse();
+}
+function clearParse(){
+  PARSED=[];
+  document.getElementById('parseList').style.display='none';
+  document.getElementById('progWrap').style.display='none';
+  document.getElementById('importBar').style.display='none';
+  document.getElementById('progFill').style.width='0%';
+}
+function loadSample(){
+  const s=`#EXTM3U
+#EXTINF:-1 tvg-name="BTV National" tvg-logo="" group-title="Bangladesh",BTV National
+https://bbc-hls-live.akamaized.net/hls/live/2047400/bbcwshlssimulcast/master.m3u8
+#EXTINF:-1 tvg-name="Al Jazeera English" tvg-logo="" group-title="International",Al Jazeera English
+https://live-hls-web-aje.getaj.net/AJE/01.m3u8
+#EXTINF:-1 tvg-name="BBC World" tvg-logo="" group-title="International",BBC World
+https://bbc-hls-live.akamaized.net/hls/live/2047400/bbcwshlssimulcast/master.m3u8
+#EXTINF:-1 tvg-name="T Sports HD" tvg-logo="" group-title="Sports",T Sports HD
+http://example.com/tsports.m3u8
+#EXTINF:-1 tvg-name="Somoy TV" tvg-logo="" group-title="News",Somoy TV
+http://example.com/somoy.m3u8
+#EXTINF:-1 tvg-name="Cartoon Network" tvg-logo="" group-title="Kids",Cartoon Network
+http://example.com/cn.m3u8
+#EXTINF:-1 tvg-name="Star Jalsha" tvg-logo="" group-title="Hindi",Star Jalsha
+http://example.com/jalsha.m3u8
+#EXTINF:-1 tvg-name="Discovery Channel" tvg-logo="" group-title="Documentary",Discovery Channel
+http://example.com/discovery.m3u8`;
+  parseM3U(s);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  DRAG & DROP
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const dz=document.getElementById('dropZone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragging')});
+dz.addEventListener('dragleave',()=>dz.classList.remove('dragging'));
+dz.addEventListener('drop',e=>{
+  e.preventDefault();dz.classList.remove('dragging');
+  const f=e.dataTransfer.files[0];
+  if(f){const r=new FileReader();r.onload=ev=>parseM3U(ev.target.result);r.readAsText(f);}
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  LOGIN
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function openLogin(){document.getElementById('loginModal').classList.add('open');}
+function closeLogin(){document.getElementById('loginModal').classList.remove('open');}
+function doLogin(){
+  const u=document.getElementById('loginUser').value.trim();
+  if(!u){showToast('Please enter a username');return;}
+  const msg=document.getElementById('loginMsg');
+  msg.style.display='block';
+  msg.style.background='rgba(0,212,170,.1)';
+  msg.style.color='var(--accent)';
+  msg.textContent='✅ Welcome, '+u+'! You\'re now signed in.';
+  setTimeout(closeLogin,1600);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  EPG CLOCK
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function updateEPG(){
+  const now=new Date();
+  const hh=String(now.getHours()).padStart(2,'0');
+  const mm=String(now.getMinutes()).padStart(2,'0');
+  document.getElementById('epgClock').textContent=hh+':'+mm;
+  const pct=((now.getMinutes()*60+now.getSeconds())/(60*60))*100;
+  document.getElementById('epgFill').style.width=pct+'%';
+  // Rotate EPG data based on hour
+  const progs=[
+    'সকালের সংবাদ','আবহাওয়া','বিজ্ঞান প্রতিবেদন','মধ্যাহ্নের সংবাদ',
+    'বিনোদন বার্তা','বিকালের সংবাদ','সন্ধ্যার সংবাদ','রাতের সংবাদ','আলোচনা অনুষ্ঠান','লাইভ ক্রিকেট'
+  ];
+  document.getElementById('epgProg').textContent=progs[now.getHours()%progs.length];
+  document.getElementById('epgStart').textContent=hh+':00';
+  document.getElementById('epgEnd').textContent=String((now.getHours()+1)%24).padStart(2,'0')+':00';
+  // Rotate featured channel
+  const chs=CHANNELS.slice(0,8);
+  if(chs.length) document.getElementById('epgCh').textContent=chs[now.getMinutes()%chs.length].name;
+}
+setInterval(updateEPG,1000);
+updateEPG();
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  VIEWER COUNT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+function updateVC(){
+  const n=1800+Math.floor(Math.random()*1200);
+  document.getElementById('vcNum').textContent=n>=1000?(n/1000).toFixed(1)+'K':n;
+}
+setInterval(updateVC,5000);
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  TOAST
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  KEYBOARD SHORTCUTS
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if(document.getElementById('playerModal').classList.contains('open')){closePlayer();return;}
+    if(document.getElementById('adminPanel').classList.contains('open')){closeAdmin();return;}
+    if(document.getElementById('loginModal').classList.contains('open')){closeLogin();return;}
+  }
+  if((e.key==='/'||e.key==='f')&&!e.ctrlKey&&!e.metaKey&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+});
+
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  INIT
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+loadData();
+renderHome();
+updateBadges();
+</script>
+</body>
+</html>
